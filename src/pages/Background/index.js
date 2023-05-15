@@ -1,1 +1,0 @@
-console.log('NetflixGPT> Background script started!')
