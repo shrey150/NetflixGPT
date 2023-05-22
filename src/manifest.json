@@ -13,7 +13,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*", "<all_urls>"],
+      "matches": ["https://www.netflix.com/watch/*"],
       "js": ["contentScript.bundle.js"],
       "css": ["content.styles.css"]
     }
@@ -25,6 +25,9 @@
     }
   ],
   "permissions": [
-    "webRequest"
+    "webRequest",
+    "activeTab",
+    "tabs",
+    "storage"
   ]
 }

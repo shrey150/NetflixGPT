@@ -1,6 +1,10 @@
-import { printLine } from './modules/print';
+console.log('NetflixGPT> Content script started!')
 
-console.log('Content script works!');
-console.log('Must reload extension for modifications to take effect.');
+const fetchTitleData = async (titleId: string) => {
+    console.log('NetflixGPT> Fetching title data');
+    const res = await fetch(`https://www.netflix.com/nq/website/memberapi/vaf4f97f3/metadata?movieid=${titleId}`);
+    console.log('NetflixGPT>', await res.json());
+}
 
-printLine("Using the 'printLine' function from the Print Module");
+const titleId = window.location.href.split('watch/')[1];
+fetchTitleData(titleId);
