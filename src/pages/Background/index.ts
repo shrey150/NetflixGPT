@@ -36,3 +36,14 @@ Your answer:
 `;
 
 console.log(LLM_prompt);
+
+// inject content script on Netflix watch pages
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, _) => {
+    if (changeInfo.url?.includes('netflix.com/watch')) {
+        console.log('NetflixGPT> Injecting content script!')
+        chrome.scripting.executeScript({
+            target: { tabId },
+            files: ['contentScript.bundle.js']
+        });
+    }
+});

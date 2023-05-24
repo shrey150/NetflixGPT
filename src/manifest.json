@@ -2,6 +2,9 @@
   "manifest_version": 3,
   "name": "NetflixGPT",
   "description": "A chatbot companion for Q&A during Netflix episodes",
+  "host_permissions": [
+    "https://www.netflix.com/watch/*" 
+  ],
   "options_page": "options.html",
   "background": { "service_worker": "background.bundle.js" },
   "action": {
@@ -28,6 +31,7 @@
     "webRequest",
     "activeTab",
     "tabs",
-    "storage"
+    "storage",
+    "scripting"
   ]
 }
