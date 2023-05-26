@@ -1,42 +1,27 @@
-import React, {useState, ChangeEvent} from 'react'
+import React, {useState} from 'react'
 
-interface boxProps {
-    words: string;
+interface ChatBoxProps {
+  question?: string;
+  onClick?: any;
 }
 
-export const ChatBox = ({words}: boxProps) => {
-    const [text, setText] = useState(words);
-    const [isEditing, setIsEditing] = useState(false);
+export const ChatBox = ({question, onClick}: ChatBoxProps) => {
+    const [text, setText] = useState(question ?? '');
 
-    const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setText(event.target.value);
+    const handleTextChange = (e: any) => {
+      setText(e.target.value);
     };
 
-    const handleTextDoubleClick = () => {
-      setIsEditing(true);
-    };
-
-    const handleTextBlur = () => {
-      if (title.trim() === '') {
-        setText(words);
-      }
-      setIsEditing(false);
-    };
-
-    return(
-        <div className='chat_div'>
-            {isEditing ? (
-          <input className=''
-            type="text"
-            value={text}
-            onChange={handleTextChange}
-            onBlur={handleTextBlur}
-            autoFocus
-          />
-        ) : (
-          <h1 className='' onDoubleClick={handleTextDoubleClick}>{text}</h1>
-      )}
-          <button type='button' className=''>Enter</button>
-        </div>
+    return (
+      <div className='chat_div'>
+        <input className=''
+          type="text"
+          value={text}
+          onChange={handleTextChange}
+          autoFocus
+          placeholder='Type here'
+        />
+        <button type='button' onClick={() => { onClick(text) }}>Enter</button>
+      </div>
     )
 }
