@@ -19,7 +19,7 @@ export const ChatBox = ({question, onClick}: ChatBoxProps) => {
           value={text}
           onChange={handleTextChange}
           autoFocus
-          placeholder='     Type Here'
+          placeholder='Type Here'
         />
         <button type='button' className='enter_btn' onClick={() => { onClick(text) }}>Enter</button>
       </div>

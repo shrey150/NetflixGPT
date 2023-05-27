@@ -33,7 +33,7 @@ code {
 }
 
 .text_field{
-@apply w-full rounded-full
+@apply w-full rounded-full px-5
 }
 .enter_btn {
 @apply rounded-full border border-black bg-white py-2 px-6 text-black transition-all hover:bg-black hover:text-white text-center text-sm;
