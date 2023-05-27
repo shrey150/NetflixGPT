@@ -14,14 +14,14 @@ export const ChatBox = ({question, onClick}: ChatBoxProps) => {
 
     return (
       <div className='chat_div'>
-        <input className=''
+        <input className='text_field'
           type="text"
           value={text}
           onChange={handleTextChange}
           autoFocus
-          placeholder='Type here'
+          placeholder='     Type Here'
         />
-        <button type='button' onClick={() => { onClick(text) }}>Enter</button>
+        <button type='button' className='enter_btn' onClick={() => { onClick(text) }}>Enter</button>
       </div>
     )
 }

@@ -21,18 +21,21 @@ const Popup = () => {
   }
 
   return (
-      <div>
-        <p>🔥 Firebase status: {JSON.stringify(status)}</p>
-        <p>🌴 PaLM status: {data?.status?.state}</p>
-        <p>
-          {
-            data?.response ?? (
-              data?.status
-                ? 'Processing...'
-                : 'Queued.'
-            )
-          }
-       </p>
+      <div className='page'>
+        <div className='flex-grow'/>
+        <div className='answer_div'>
+          <p>🔥 Firebase status: {JSON.stringify(status)}</p>
+          <p>🌴 PaLM status: {data?.status?.state}</p>
+          <p>
+            {
+              data?.response ?? (
+                data?.status
+                  ? 'Processing...'
+                  : 'Queued.'
+              )
+            }
+        </p>
+       </div>
         <ChatBox onClick={fetchAnswer} />
       </div>
   );
