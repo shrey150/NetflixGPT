@@ -62,18 +62,18 @@ const Popup = () => {
 
   return (
       <div className='page'>
+          <button
+            type='button'
+            className='enter_btn my-3'
+            onClick={() => watchState.setTitleInfo(SAMPLE_TITLE_INFO)}
+          >
+            [DEBUG] Reset watch state (BCS S2E4)
+          </button>
         <div className='flex-grow'/>
         <div className='answer_div'>
           <p>🔥 Firebase status: {JSON.stringify(status)}</p>
           <p>🌴 PaLM status: {data?.status?.state}</p>
           <p>🐻 Watch status: {JSON.stringify(watchState)}</p>
-          <button
-            type='button'
-            className='enter_btn'
-            onClick={() => useWatchState.setState(SAMPLE_TITLE_INFO)}
-          >
-            [DEBUG] Reset watch state (BCS S2E4)
-          </button>
           <p>
             {
               data?.response ?? (

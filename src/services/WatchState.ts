@@ -10,6 +10,7 @@ export interface TitleInfo {
 }
   
 export interface TitleActions {
+  setTitleInfo: (titleInfo: TitleInfo) => void;
   fetchTitleInfo: (titleId: string) => Promise<void>;
 }
   
@@ -145,6 +146,10 @@ export const useWatchState = create(
     season_num: -1,
     ep_num: -1,
     summary: '',
+
+    setTitleInfo: ({title, ep_title, season_num, ep_num, summary}) => set({
+      title, ep_title, season_num, ep_num, summary
+    }),
 
     fetchTitleInfo: async (titleId) => {
       console.log('NetflixGPT> Fetching title info')
