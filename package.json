@@ -17,7 +17,9 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1",
-    "reactfire": "^4.2.2"
+    "reactfire": "^4.2.2",
+    "shared-zustand": "^2.0.0",
+    "zustand": "^4.3.8"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
