@@ -20,21 +20,6 @@ code {
     monospace;
 }
 
-.page {
-  @apply flex flex-col items-center bg-gradient-to-r from-black to-white to-red-900
-}
-
-.chat_div {
-  @apply  m-8 w-full flex flex-row  opacity-75 p-5 rounded-lg space-x-4 font-bold
-}
-
-.answer_div {
-@apply p-5 rounded-lg opacity-75 text-white font-bold
-}
-
-.text_field{
-@apply w-full rounded-full px-5
-}
-.enter_btn {
-@apply rounded-full border border-black bg-white py-2 px-6 text-black transition-all hover:bg-black hover:text-white text-center text-sm;
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
