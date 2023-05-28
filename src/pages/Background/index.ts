@@ -1,5 +1,6 @@
 console.log('NetflixGPT> Background script started!')
 
+// allow Storage API to be access by content script
 chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
 
 // inject content script on Netflix watch pages

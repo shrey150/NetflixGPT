@@ -93,7 +93,6 @@ const Popup = () => {
     Your answer:\n\n
     `
   );
-
   
   
   return (
