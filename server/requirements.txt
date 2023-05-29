@@ -3,3 +3,5 @@ openai
 google-search-results
 wikipedia
 langchain
+pywikibot
+mwparserfromhell
