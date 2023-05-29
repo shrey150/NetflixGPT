@@ -1,6 +1,11 @@
 node_modules
 build
 
+*.pyc
+
+apicache-py3
+throttle.ctrl
+
 # misc
 .DS_Store
 .env
