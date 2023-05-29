@@ -96,7 +96,7 @@ const Popup = () => {
   
   
   return (
-      <div className='flex flex-col  items-center bg-gradient-to-r from-red-800 to-red-900 h-screen overflow-hidden'>
+      <div className='flex flex-col  items-cente bg-stone-800 h-screen overflow-hidden'>
         <div className='p-2 rounded-lg opacity-75 text-white font-bold'>
           <p>🔥 Firebase status: {JSON.stringify(status)}</p>
           <p>🌴 PaLM status: {data?.status?.state}</p>

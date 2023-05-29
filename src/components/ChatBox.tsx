@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import { SearchButton } from './SearchButton';
 
 interface ChatBoxProps {
   question?: string;
@@ -13,18 +14,20 @@ export const ChatBox = ({question, onClick}: ChatBoxProps) => {
     };
 
     return (
-      <div className='w-screen flex flex-row opacity-75 p-5 rounded-lg space-x-4 font-bold'>
-        <input className='w-full rounded-full px-5'
-          type="text"
-          value={text}
-          onChange={handleTextChange}
-          autoFocus
-          placeholder='Type Here'
-        />
-        <button type='button'
-                className='rounded-full border border-black bg-white py-2 px-6 text-black transition-all hover:bg-black hover:text-white text-center text-sm'
-                onClick={() => { onClick(text) }}
-                >Enter</button>
+      <div className='w-screen flex flex-col items-center justify-center p-5 rounded-lg font-bold'>
+        <div className='flex flex-row p-4 bg-gray-600 rounded-full'>
+          <input className='border-none bg-transparent outline-none text-white' 
+            style={{width: 436, height: 64,}}
+            type="text"
+            value={text}
+            onChange={handleTextChange}
+            autoFocus></input>
+          <img className="" src="src/assets/img/icon_search.png"/>
+        </div>
+        <button type='button' className='grow' onClick={() => { onClick(text) }}>
+          <SearchButton/>
+        </button>
       </div>
     )
 }
+
