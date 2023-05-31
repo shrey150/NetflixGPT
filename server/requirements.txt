@@ -5,3 +5,5 @@ wikipedia
 langchain
 pywikibot
 mwparserfromhell
+fastapi
+uvicorn
