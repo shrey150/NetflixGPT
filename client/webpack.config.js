@@ -73,6 +73,9 @@ var options = {
               sourceMap: true,
             },
           },
+          {
+            loader: 'postcss-loader',
+          },
         ],
       },
       {
@@ -105,23 +108,6 @@ var options = {
             },
           },
         ],
-      },
-      {
-        test: /\.(js|jsx)$/,
-        use: [
-          {
-            loader: 'source-map-loader',
-          },
-          {
-            loader: require.resolve('babel-loader'),
-            options: {
-              plugins: [
-                isDevelopment && require.resolve('react-refresh/babel'),
-              ].filter(Boolean),
-            },
-          },
-        ],
-        exclude: /node_modules/,
       },
     ],
   },
