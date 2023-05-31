@@ -96,8 +96,8 @@ const Popup = () => {
   
   
   return (
-      <div className='flex flex-col  items-cente bg-stone-800 h-screen overflow-hidden'>
-        <div className='p-2 rounded-lg opacity-75 text-white font-bold'>
+      <div className='flex flex-col items-center bg-stone-800 h-screen overflow-hidden'>
+        <div className='p-2 rounded-lg opacity-75 text-white font-bold' style={{maxWidth:400, maxHeight:500}}>
           <p>🔥 Firebase status: {JSON.stringify(status)}</p>
           <p>🌴 PaLM status: {data?.status?.state}</p>
           <p>🐻 Watch status: {JSON.stringify(watchState)}</p>
@@ -110,7 +110,7 @@ const Popup = () => {
             [DEBUG] Reset watch state (BCS S2E4)
           </button>
        </div>
-       <div ref={divRef} className='peer grow flex-col text-white font-bold overflow-y-auto m-4 p-4 border-2 border-black/0 rounded-lg no-scrollbar hover:border-black/100'>
+       <div ref={divRef} className='peer grow flex-col text-white font-bold overflow-y-auto m-4 p-4 border-2 border-black/0 rounded-lg no-scrollbar hover:border-white/100'>
               <p>
                 {
                   data?.response ?? (
