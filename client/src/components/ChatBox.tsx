@@ -22,7 +22,7 @@ export const ChatBox = ({question, onClick}: ChatBoxProps) => {
             value={text}
             onChange={handleTextChange}
             autoFocus></input>
-          <img className="" src="src/assets/img/icon_search.png"/>
+          <img src="icon_search.png"/>
         </div>
         <button type='button' className='grow' onClick={() => { onClick(text) }}>
           <SearchButton/>

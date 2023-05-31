@@ -56,82 +56,73 @@ var options = {
   },
   module: {
     rules: [
-      // {
-      //   // look for .css or .scss files
-      //   test: /\.(css|scss)$/,
-      //   // in the `src` directory
-      //   use: [
-      //     {
-      //       loader: 'style-loader',
-      //     },
-      //     {
-      //       loader: 'css-loader',
-      //     },
-      //     {
-      //       loader: 'sass-loader',
-      //       options: {
-      //         sourceMap: true,
-      //       },
-      //     },
-      //   ],
-      // },
-      // {
-      //   test: new RegExp('.(' + fileExtensions.join('|') + ')$'),
-      //   type: 'asset/resource',
-      //   exclude: /node_modules/,
-      //   // loader: 'file-loader',
-      //   // options: {
-      //   //   name: '[name].[ext]',
-      //   // },
-      // },
-      // {
-      //   test: /\.html$/,
-      //   loader: 'html-loader',
-      //   exclude: /node_modules/,
-      // },
-      // {
-      //   test: /\.(ts|tsx)$/,
-      //   exclude: /node_modules/,
-      //   use: [
-      //     {
-      //       loader: require.resolve('ts-loader'),
-      //       options: {
-      //         getCustomTransformers: () => ({
-      //           before: [isDevelopment && ReactRefreshTypeScript()].filter(
-      //             Boolean
-      //           ),
-      //         }),
-      //         transpileOnly: isDevelopment,
-      //       },
-      //     },
-      //   ],
-      // },
-      // {
-      //   test: /\.(js|jsx)$/,
-      //   use: [
-      //     {
-      //       loader: 'source-map-loader',
-      //     },
-      //     {
-      //       loader: require.resolve('babel-loader'),
-      //       options: {
-      //         plugins: [
-      //           isDevelopment && require.resolve('react-refresh/babel'),
-      //         ].filter(Boolean),
-      //       },
-      //     },
-      //   ],
-      //   exclude: /node_modules/,
-      // },
       {
-        test: /\.tsx?$/,
-        use: "ts-loader",
-        exclude: /node_modules/
-    },
-    {
-        test: /\.css$/,
-        use: ["style-loader", "css-loader", "postcss-loader"]
-    }
+        // look for .css or .scss files
+        test: /\.(css|scss)$/,
+        // in the `src` directory
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'css-loader',
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+        ],
+      },
+      {
+        test: new RegExp('.(' + fileExtensions.join('|') + ')$'),
+        type: 'asset/resource',
+        exclude: /node_modules/,
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]',
+        },
+      },
+      {
+        test: /\.html$/,
+        loader: 'html-loader',
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.(ts|tsx)$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: require.resolve('ts-loader'),
+            options: {
+              getCustomTransformers: () => ({
+                before: [isDevelopment && ReactRefreshTypeScript()].filter(
+                  Boolean
+                ),
+              }),
+              transpileOnly: isDevelopment,
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(js|jsx)$/,
+        use: [
+          {
+            loader: 'source-map-loader',
+          },
+          {
+            loader: require.resolve('babel-loader'),
+            options: {
+              plugins: [
+                isDevelopment && require.resolve('react-refresh/babel'),
+              ].filter(Boolean),
+            },
+          },
+        ],
+        exclude: /node_modules/,
+      },
     ],
   },
   resolve: {
@@ -188,6 +179,15 @@ var options = {
       patterns: [
         {
           from: 'src/assets/img/icon-34.png',
+          to: path.join(__dirname, 'build'),
+          force: true,
+        },
+      ],
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'src/assets/img/icon_search.png',
           to: path.join(__dirname, 'build'),
           force: true,
         },
