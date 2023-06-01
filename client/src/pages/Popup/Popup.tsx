@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { doc, setDoc } from 'firebase/firestore';
 import { useFirestore, useFirestoreDocData } from 'reactfire';
-import { ChatBox } from '../../components/ChatBox';
+import {ChatBox} from '../../components/ChatBox';
 import { SAMPLE_TITLE_INFO, TitleInfo, useWatchState } from '../../services/WatchState';
-
 
 
 //Actively checks if the answer is too big for the answer box and displays a lil jawn if it needs to be scrolled
@@ -38,11 +37,16 @@ const Overflow = (): [React.RefObject<HTMLDivElement>, boolean] => {
 
 
 
+
+
 const Popup = () => {
   const userRef = doc(useFirestore(), 'users/shrey');
   const { status, data } = useFirestoreDocData(userRef);
   const watchState = useWatchState();  
-  const [divRef, isOver] = Overflow();
+  const [divRef, isOver] = Overflow()
+  const [firstClick, setFirstClick] = useState(false)
+
+
   // sync chrome storage -> React state
   useEffect(() => {
     chrome.storage.onChanged.addListener(handleSyncWatchState);
@@ -96,8 +100,11 @@ const Popup = () => {
   
   
   return (
-      <div className='flex flex-col items-center bg-stone-800 h-screen overflow-hidden'>
-        <div className='p-2 rounded-lg opacity-75 text-white font-bold' style={{maxWidth:400, maxHeight:500}}>
+      <div className='flex flex-col items-center bg-stone-900 h-screen overflow-hidden'>
+        <div className={firstClick ? 'w-1/2 h-1/2' : 'max-h-full'}>
+          <img src="NetflixGPT.png"/>
+        </div>
+        <div className={firstClick ? 'flex flex-col items-center p-2 rounded-lg opacity-75 text-white font-bold' : 'hidden'} style={{maxWidth:400, maxHeight:500}}>
           <p>🔥 Firebase status: {JSON.stringify(status)}</p>
           <p>🌴 PaLM status: {data?.status?.state}</p>
           <p>🐻 Watch status: {JSON.stringify(watchState)}</p>
@@ -110,7 +117,7 @@ const Popup = () => {
             [DEBUG] Reset watch state (BCS S2E4)
           </button>
        </div>
-       <div ref={divRef} className='peer grow flex-col text-white font-bold overflow-y-auto m-4 p-4 border-2 border-black/0 rounded-lg no-scrollbar hover:border-white/100'>
+       <div ref={divRef} className={firstClick ? 'peer grow max-w-full flex-col text-white text-center font-bold overflow-y-auto m-4 p-4 border-2 border-black/0 rounded-lg no-scrollbar hover:border-white/100' : 'hidden'}>
               <p>
                 {
                   data?.response ?? (
@@ -122,7 +129,12 @@ const Popup = () => {
             </p>
         </div>
         <h1 className={isOver ? 'peer-hover:opacity-100 transition-opacity duration-300 text-xl text-white' : 'opacity-0' }>▼</h1>
-        <ChatBox onClick={(q: string) => fetchAnswer(q, watchState)} />
+        <ChatBox 
+          onClick={(q: string) => fetchAnswer(q, watchState)} 
+          firstClick={firstClick} 
+          setFirstClick={setFirstClick}
+        />
+        <h1 className ={firstClick ? 'hidden' : 'text-xl font-bold text-white text-center p-4' }>Search anything about your favorite show and get an answer with ZERO spoilers!</h1>
       </div>
   );
 };
