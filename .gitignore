@@ -3,6 +3,8 @@ build
 
 *.pyc
 
+zip
+
 apicache-py3
 throttle.ctrl
 
