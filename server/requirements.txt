@@ -7,3 +7,5 @@ pywikibot
 mwparserfromhell
 fastapi
 uvicorn
+chromadb
+tiktoken
