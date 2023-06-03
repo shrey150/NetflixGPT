@@ -18,20 +18,19 @@ class Database():
             persist_directory=PERSIST_DIR
         )
 
-    def has(self, info: TitleInfo):
-        print(self.vecstore.get())
+    def get_all(self):
+        data = self.vecstore.get()
+        return list(zip(data['ids'], data['documents'], data['metadatas']))
 
-    def add(self, text: str, info: TitleInfo):
+
+    def add(self, text: str, info: dict):
+        texts = self.splitter.split_text(text)
         self.vecstore.add_texts(
-            texts=self.splitter.split_text(text),
-            metadata=info,
+            texts=texts,
+            metadatas=[info]*len(texts),
         )
         self.vecstore.persist()
 
     def search(self, query: str):
         docs = self.vecstore.similarity_search(query)
-
-        if DEBUG:
-            for chunk in docs: print(chunk, '\n')
-
         return list(set(map(lambda x: x.page_content, docs)))

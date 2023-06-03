@@ -21,15 +21,20 @@ scraper = Scraper()
 db = Database()
 prompt = load_prompt("data/prompt.json")
 
+@app.get("/get_all")
+async def get_all():
+    data = db.get_all()
+    return {"data": data}
+
 @app.get("/ask")
 async def ask(payload: TitleQuestion):
     # generate dict representing TitleInfo
     info = payload.dict()
     info.pop("question")
-    
-    db.has(info)
 
-    scraper.fetch_wikipedia(payload.title, payload.ep_title)
+    summary = scraper.fetch_wikipedia(payload.title, payload.ep_title)
+    db.add(summary, info)
+
     texts = db.search(payload.question)
 
     context = prompt.format(

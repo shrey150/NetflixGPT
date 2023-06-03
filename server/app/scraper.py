@@ -29,7 +29,6 @@ class Scraper():
 
             if heading and len(heading) > 0:
                 heading_text = heading[0].title.strip() if heading else ""
-                print(heading_text)
 
                 # TODO: consider using LLM to pick the heading that best fits plot summary
                 # OR pass the entire section into LLM to find content best matching plot summary
@@ -44,17 +43,3 @@ class Scraper():
     def fetch_fandom(self, title, ep_title, sub):
         site = pywikibot.Site("en", sub)
         return self.fetch_plot(site, title, ep_title)
-    
-if __name__ == "__main__":
-    scraper = Scraper()
-    # wiki_res = scraper.fetch_wikipedia(title, ep_title)
-    # if wiki_res is not None:
-    #     print(wiki_res)
-    #     exit()
-
-    # print('No Wikipedia result, fetching from Fandom')
-
-    fandom_res = scraper.fetch_fandom(title, ep_title, "suits")
-    if fandom_res is not None:
-        print(fandom_res)
-        exit()
