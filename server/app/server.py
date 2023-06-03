@@ -7,29 +7,19 @@ from langchain.schema import (
     HumanMessage,
     SystemMessage
 )
-from scraper import Scraper
-import uvicorn
+
+from app.models import TitleQuestion
+from app.scraper import Scraper
+from app.db import Database
 
 from dotenv import load_dotenv
-
-from server.src.db import Database
-load_dotenv("../../.env")
+load_dotenv('../.env')
 
 app = FastAPI()
 llm = ChatOpenAI(model="gpt-3.5-turbo")
 scraper = Scraper()
 db = Database()
-prompt = load_prompt("../../data/template.json")
-
-class TitleInfo(BaseModel):
-    title: str
-    ep_title: str
-    season_num: int
-    ep_num: int
-    summary: str
-
-class TitleQuestion(TitleInfo):
-    question: str
+prompt = load_prompt("data/prompt.json")
 
 @app.get("/ask")
 async def ask(payload: TitleQuestion):
@@ -39,15 +29,15 @@ async def ask(payload: TitleQuestion):
     
     db.has(info)
 
-    #scraper.fetch_wikipedia(payload.title, payload.ep_title)
-    #texts = db.search(payload.question)
+    scraper.fetch_wikipedia(payload.title, payload.ep_title)
+    texts = db.search(payload.question)
 
     context = prompt.format(
         title=payload.title,
         ep_title=payload.ep_title,
         season_num=payload.season_num,
         ep_num=payload.ep_num,
-        summary=payload.summary,
+        summary='\n'.join(texts)
     )
 
     answer = llm([
@@ -56,6 +46,3 @@ async def ask(payload: TitleQuestion):
     ])
 
     return {"answer": answer.content}
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)

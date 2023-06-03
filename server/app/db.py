@@ -1,7 +1,7 @@
 from langchain.embeddings import HuggingFaceEmbeddings 
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
-from server.src.server import TitleInfo
+from app.models import TitleInfo
 
 from dotenv import load_dotenv
 load_dotenv("../../.env")

@@ -1,5 +1,5 @@
 {
     "_type": "prompt",
     "input_variables": ["title", "ep_title", "season_num", "ep_num", "summary"],
-    "template_path": "prompt.txt"
+    "template_path": "data/prompt.txt"
 }

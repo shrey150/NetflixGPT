@@ -1,12 +1,12 @@
 node_modules
 build
+zip
 
 *.pyc
 
-zip
-
 apicache-py3
 throttle.ctrl
+server/db
 
 # misc
 .DS_Store

@@ -1,6 +1,5 @@
 import pywikibot
 from pywikibot import pagegenerators, config
-from langchain.chat_models import ChatOpenAI
 import mwparserfromhell
 
 title = 'Suits'
