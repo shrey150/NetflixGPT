@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { doc, setDoc } from 'firebase/firestore';
-import { useFirestore, useFirestoreDocData } from 'reactfire';
+import { useCallableFunctionResponse, useFirestore, useFirestoreDocData } from 'reactfire';
 import {ChatBox} from '../../components/ChatBox';
 import { SAMPLE_TITLE_INFO, TitleInfo, useWatchState } from '../../services/WatchState';
-
+import {useAutoAnimate} from '@formkit/auto-animate/react';
 
 //Actively checks if the answer is too big for the answer box and displays a lil jawn if it needs to be scrolled
 const Overflow = (): [React.RefObject<HTMLDivElement>, boolean] => {
@@ -36,16 +36,13 @@ const Overflow = (): [React.RefObject<HTMLDivElement>, boolean] => {
 };
 
 
-
-
-
 const Popup = () => {
   const userRef = doc(useFirestore(), 'users/shrey');
   const { status, data } = useFirestoreDocData(userRef);
   const watchState = useWatchState();  
   const [divRef, isOver] = Overflow()
   const [firstClick, setFirstClick] = useState(false)
-
+  const [parent, enableAnimations] = useAutoAnimate()
 
   // sync chrome storage -> React state
   useEffect(() => {
@@ -100,11 +97,11 @@ const Popup = () => {
   
   
   return (
-      <div className='flex flex-col items-center bg-stone-900 h-screen overflow-hidden'>
-        <div className={firstClick ? 'w-1/2 h-1/2' : 'max-h-full'}>
+      <div className={firstClick ? 'flex flex-col items-center bg-stone-900 h-screen overflow-hidden' : 'flex flex-col items-center bg-stone-900 h-screen overflow-hidden'}>
+        <div className={firstClick ? 'hover:scale-105 hover:ease-in-out scale-75 duration-500 max-h-1/2 max-w-1/2' : 'grow mt-10'}>
           <img src="NetflixGPT.png"/>
         </div>
-        <div className={firstClick ? 'flex flex-col items-center p-2 rounded-lg opacity-75 text-white font-bold' : 'hidden'} style={{maxWidth:400, maxHeight:500}}>
+        <div className={firstClick ? 'hidden flex-col items-center p-2 rounded-lg opacity-75 text-white font-bold' : 'hidden'}>
           <p>🔥 Firebase status: {JSON.stringify(status)}</p>
           <p>🌴 PaLM status: {data?.status?.state}</p>
           <p>🐻 Watch status: {JSON.stringify(watchState)}</p>
@@ -117,7 +114,7 @@ const Popup = () => {
             [DEBUG] Reset watch state (BCS S2E4)
           </button>
        </div>
-       <div ref={divRef} className={firstClick ? 'peer grow max-w-full flex-col text-white text-center font-bold overflow-y-auto m-4 p-4 border-2 border-black/0 rounded-lg no-scrollbar hover:border-white/100' : 'hidden'}>
+       <div ref={divRef} className={firstClick ? 'peer duration-300 peer max-w-full p-2 flex-col text-white text-center font-bold overflow-y-auto m-4 border-2 border-black/0 rounded-lg no-scrollbar hover:border-white/100' : 'hidden'}>
               <p>
                 {
                   data?.response ?? (
@@ -128,13 +125,16 @@ const Popup = () => {
                 }
             </p>
         </div>
-        <h1 className={isOver ? 'peer-hover:opacity-100 transition-opacity duration-300 text-xl text-white' : 'opacity-0' }>▼</h1>
-        <ChatBox 
-          onClick={(q: string) => fetchAnswer(q, watchState)} 
-          firstClick={firstClick} 
-          setFirstClick={setFirstClick}
-        />
-        <h1 className ={firstClick ? 'hidden' : 'text-xl font-bold text-white text-center p-4' }>Search anything about your favorite show and get an answer with ZERO spoilers!</h1>
+        <h1 className={isOver ? 'peer-hover:opacity-100 opacity-0 peer-hover:animate-bounce text-xl text-white' : 'opacity-0' }>▼</h1>
+        <div ref={parent} className={firstClick ? 'm-auto self-end duration-500' : 'absolute my-48'}>
+          <ChatBox 
+            onClick={(q: string) => fetchAnswer(q, watchState)} 
+            firstClick={firstClick} 
+            setFirstClick={setFirstClick}
+            enableAnimations ={enableAnimations}
+          />
+          <h1 className ={firstClick ? 'hidden' : 'text-xl font-bold text-white text-center p-4' }>Search anything about your favorite show and get an answer with ZERO spoilers!</h1>
+        </div>
       </div>
   );
 };
