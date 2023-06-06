@@ -32,10 +32,13 @@ async def ask(payload: TitleQuestion):
     info = payload.dict()
     info.pop("question")
 
-    summary = scraper.fetch_wikipedia(payload.title, payload.ep_title)
+    # TODO only scrape if not already in DB
+    summary = scraper.fetch(payload.title, payload.ep_title)
     db.add(summary, info)
 
     texts = db.search(payload.question)
+
+    print('Context:', texts)
 
     context = prompt.format(
         title=payload.title,
