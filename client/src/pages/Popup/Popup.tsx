@@ -65,12 +65,12 @@ const Popup = () => {
   }, []);
 
 
-  const fetchAnswer = async (question: string, titleInfo: TitleInfo) => {
+  const fetchAnswer = async (question: string) => {
     try {
-      await setDoc(userRef, { question: generatePrompt(question, titleInfo) });
-      console.log('Document written successfully!');
+      watchState.setLoading(true);
+      await watchState.ask(question);
     } catch (error) {
-      console.error('Error writing document:', error);
+      console.error('Error fetching answer:', error);
     }
   }
 
@@ -114,21 +114,22 @@ const Popup = () => {
             [DEBUG] Reset watch state (BCS S2E4)
           </button>
        </div>
-       <div ref={divRef} className={firstClick ? 'peer duration-300 peer max-w-full p-2 flex-col text-white text-center font-bold overflow-y-auto m-4 border-2 border-black/0 rounded-lg no-scrollbar hover:border-white/100' : 'hidden'}>
+       <div ref={divRef} className={firstClick ? 'peer duration-300 peer max-w-full p-2 flex-col font-semibold text-lg text-white text-center overflow-y-auto m-4 border-2 border-black/0 rounded-lg no-scrollbar hover:border-white/100' : 'hidden'}>
               <p>
                 {
-                  data?.response ?? (
-                    data?.status
-                      ? 'Processing...'
-                      : 'Queued.'
-                  )
+                  // data?.response ?? (
+                  //   data?.status
+                  //     ? 'Processing...'
+                  //     : 'Queued.'
+                  // )
+                  !watchState.loading ? watchState.answer || 'Ask a question!' : 'Queued...'
                 }
             </p>
         </div>
         <h1 className={isOver ? 'peer-hover:opacity-100 opacity-0 peer-hover:animate-bounce text-xl text-white' : 'opacity-0' }>▼</h1>
         <div ref={parent} className={firstClick ? 'm-auto self-end duration-500' : 'absolute my-48'}>
           <ChatBox 
-            onClick={(q: string) => fetchAnswer(q, watchState)} 
+            onClick={(q: string) => fetchAnswer(q)} 
             firstClick={firstClick} 
             setFirstClick={setFirstClick}
             enableAnimations ={enableAnimations}

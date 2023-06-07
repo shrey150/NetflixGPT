@@ -9,11 +9,18 @@ export interface TitleInfo {
   summary: string;
   subtitles: string[];
 }
+
+export interface WatchProps {
+  answer: string;
+  loading: boolean;
+}
   
 export interface TitleActions {
   setTitleInfo: (titleInfo: TitleInfo) => void;
   fetchTitleInfo: (titleId: string) => Promise<void>;
   addSubtitles: (subtitle: string) => void;
+  ask: (question: string) => Promise<void>;
+  setLoading: (status: boolean) => void;
 }
   
 export interface NetflixPayload {
@@ -142,13 +149,15 @@ const findEpisodeById = (payload: NetflixPayload, id: number) => {
 }
   
 export const useWatchState = create(
-  immer<TitleInfo & TitleActions>((set, get) => ({
+  immer<TitleInfo & TitleActions & WatchProps>((set, get) => ({
     title: '',
     ep_title: '',
     season_num: -1,
     ep_num: -1,
     summary: '',
     subtitles: [],
+    answer: '',
+    loading: false,
 
     setTitleInfo: ({title, ep_title, season_num, ep_num, summary}) => set({
       title, ep_title, season_num, ep_num, summary
@@ -178,9 +187,38 @@ export const useWatchState = create(
 
     addSubtitles: (subtitle) => set((state) => ({
       subtitles: [...new Set([...state.subtitles, subtitle])]
-    }))
+    })),
+    
+    ask: async (question: string) => {
+      console.log('Asking...');
+      const res = await fetch('http://localhost:8000/ask', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          title: get().title,
+          ep_title: get().ep_title,
+          season_num: get().season_num,
+          ep_num: get().ep_num,
+          summary: get().summary,
+          question
+        })
+      });
+
+      const {answer} = await res.json();
+      console.log('Answer', answer);
+      set({ answer, loading: false });
+    },
+
+    setLoading: (loading) => set({ loading })
+
   }))
 )
+
+//ask function
+
+
 
 // sync React state -> chrome storage
 useWatchState.subscribe(watchState => {

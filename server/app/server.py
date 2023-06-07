@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import load_prompt
 from pydantic import BaseModel
@@ -38,7 +39,15 @@ async def fetch_plot(payload: ScrapePayload):
     scraper._fetch_plot(pywikibot.Site(payload.sub, payload.site), f'\"{payload.search_term}\"')
 # debugging
 
-@app.get("/ask")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.post("/ask")
 async def ask(payload: TitleQuestion):
     # generate dict representing TitleInfo
     info = payload.dict()
