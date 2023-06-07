@@ -65,20 +65,13 @@ class Scraper():
         page = next(search_results)
         print('Scraping page: ', page.title())
 
-        # remove the "{{good article}}\n part of page.text"
-        # page.text = page.text.split("\}\}\n")[1]
         wikicode = mwparserfromhell.parse(page.text)
 
-        # write a regex that checks for any of the heading names
+        # Still doesn't work for Ozymandias
         pattern = r"\s*(?i:Plot|Summary|Main\s+story)\s*"
         sections = wikicode.get_sections(matches=pattern,include_lead=True)
-    
-        # sections = [(section, section.filter_headings()) for section in wikicode.get_sections()]
-        # sections = list(filter(lambda x: x[1] is not None and len(x[1]) > 0, sections))
-        # sections = [(section.strip_code().strip(), heading[0].title.strip()) for (section, heading) in sections]
-        # sections = list(filter(lambda x: x[1] in heading_names, sections))
        
         if len(sections) > 0:
-            plot = max(sections, key=lambda x: len(x[1]))
-            print(f'Found plot section (\"{plot[1]}\"): ', plot[0])
-            return plot[0]
+            plot = max(sections, key=lambda x: len(x))
+            print(f'Found plot section: \n\"{plot}\"')
+            return plot
