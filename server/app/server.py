@@ -7,6 +7,7 @@ from langchain.schema import (
     HumanMessage,
     SystemMessage
 )
+import pywikibot
 
 from app.models import TitleQuestion
 from app.scraper import Scraper
@@ -25,6 +26,17 @@ prompt = load_prompt("data/prompt.json")
 async def get_all():
     data = db.get_all()
     return {"data": data}
+
+# debugging
+class ScrapePayload(BaseModel):
+    sub: str
+    site: str
+    search_term: str
+
+@app.get("/scrape/fetch_plot")
+async def fetch_plot(payload: ScrapePayload):
+    scraper._fetch_plot(pywikibot.Site(payload.sub, payload.site), f'\"{payload.search_term}\"')
+# debugging
 
 @app.get("/ask")
 async def ask(payload: TitleQuestion):

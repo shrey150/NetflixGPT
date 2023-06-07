@@ -10,3 +10,4 @@ uvicorn
 chromadb
 tiktoken
 sentence_transformers
+urllib3==1.26.6
