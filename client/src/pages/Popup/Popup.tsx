@@ -98,10 +98,13 @@ const Popup = () => {
   
   return (
       <div className={firstClick ? 'flex flex-col items-center bg-stone-900 h-screen overflow-hidden' : 'flex flex-col items-center bg-stone-900 h-screen overflow-hidden'}>
-        <div className={firstClick ? 'hover:scale-105 hover:ease-in-out scale-75 duration-500 max-h-1/2 max-w-1/2' : 'grow mt-10'}>
+        <div className={firstClick ? 'flex flex-col items-center justify-center hover:scale-105 hover:ease-in-out scale-75 duration-500 max-h-1/2 max-w-1/2' : 'grow mt-10'}>
           <img src="NetflixGPT.png"/>
         </div>
-        <div className={firstClick ? 'hidden flex-col items-center p-2 rounded-lg opacity-75 text-white font-bold' : 'hidden'}>
+        <div className = {firstClick ? 'flex flex-col items-center justify-center duration-500' : 'hidden'} >
+          <hr color='white' className='w-48'/>
+        </div>
+        {/* <div className={firstClick ? 'hidden flex-col items-center p-2 rounded-lg opacity-75 text-white font-bold' : 'hidden'}>
           <p>🔥 Firebase status: {JSON.stringify(status)}</p>
           <p>🌴 PaLM status: {data?.status?.state}</p>
           <p>🐻 Watch status: {JSON.stringify(watchState)}</p>
@@ -113,28 +116,31 @@ const Popup = () => {
           >
             [DEBUG] Reset watch state (BCS S2E4)
           </button>
-       </div>
-       <div ref={divRef} className={firstClick ? 'peer duration-300 peer max-w-full p-2 flex-col font-semibold text-lg text-white text-center overflow-y-auto m-4 border-2 border-black/0 rounded-lg no-scrollbar hover:border-white/100' : 'hidden'}>
-              <p>
-                {
-                  // data?.response ?? (
-                  //   data?.status
-                  //     ? 'Processing...'
-                  //     : 'Queued.'
-                  // )
-                  !watchState.loading ? watchState.answer || 'Ask a question!' : 'Queued...'
-                }
-            </p>
+       </div> */}
+       <div className={firstClick ? 'grow flex flex-col items-center justify-center' : 'hidden'}>
+        <div ref={divRef} className={firstClick ? 'peer duration-700  max-w-full p-2 font-semibold text-lg text-white text-center overflow-y-auto m-4 border-2 border-black/0 rounded-lg no-scrollbar hover:border-white/100' : 'hidden'}>
+                <p>
+                  {
+                    // data?.response ?? (
+                    //   data?.status
+                    //     ? 'Processing...'
+                    //     : 'Queued.'
+                    // )
+                    !watchState.loading ? watchState.answer || 'Ask a question!' : 'Queued...'
+                  }
+              </p>
+          </div>
         </div>
         <h1 className={isOver ? 'peer-hover:opacity-100 opacity-0 peer-hover:animate-bounce text-xl text-white' : 'opacity-0' }>▼</h1>
-        <div ref={parent} className={firstClick ? 'm-auto self-end duration-500' : 'absolute my-48'}>
+        <div ref={parent} className={firstClick ? 'flex flex-col justify-center items-center m-auto self-end duration-500' : 'absolute my-48'}>
+          <hr className={firstClick ? 'w-48' : 'hidden'}/>
           <ChatBox 
             onClick={(q: string) => fetchAnswer(q)} 
             firstClick={firstClick} 
             setFirstClick={setFirstClick}
             enableAnimations ={enableAnimations}
           />
-          <h1 className ={firstClick ? 'hidden' : 'text-xl font-bold text-white text-center p-4' }>Search anything about your favorite show and get an answer with ZERO spoilers!</h1>
+          <h1 color='white' className ={firstClick ? 'hidden' : 'text-xl font-bold text-white text-center p-4' }>Search anything about your favorite show and get an answer with ZERO spoilers!</h1>
         </div>
       </div>
   );
