@@ -31,6 +31,6 @@ class Database():
         )
         self.vecstore.persist()
 
-    def search(self, query: str):
-        docs = self.vecstore.similarity_search(query)
+    def search(self, query: str, info: dict):
+        docs = self.vecstore.similarity_search(query, filter={'title': info['title']})
         return list(set(map(lambda x: x.page_content, docs)))

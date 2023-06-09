@@ -59,7 +59,7 @@ async def ask(payload: TitleQuestion):
     
     # TODO only scrape if not already in DB
     db.add(payload.summary, info)
-    texts = db.search(payload.question)
+    texts = db.search(payload.question, {'title': payload.title})
 
     print('Context:', texts)
 
