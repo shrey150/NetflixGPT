@@ -24,7 +24,7 @@ class Database():
 
 
     def add(self, text: str, info: dict):
-        texts = self.splitter.split_text(text)
+        texts = self.splitter.split_text(str(text))
         self.vecstore.add_texts(
             texts=texts,
             metadatas=[info]*len(texts),

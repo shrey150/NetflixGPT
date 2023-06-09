@@ -1,3 +1,4 @@
+from typing import Union
 from pydantic import BaseModel
 
 class TitleInfo(BaseModel):
@@ -5,7 +6,7 @@ class TitleInfo(BaseModel):
     ep_title: str
     season_num: int
     ep_num: int
-    summary: str
+    summary: Union[str, None]
 
 class TitleQuestion(TitleInfo):
     question: str

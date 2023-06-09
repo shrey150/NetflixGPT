@@ -52,11 +52,13 @@ async def ask(payload: TitleQuestion):
     # generate dict representing TitleInfo
     info = payload.dict()
     info.pop("question")
+    info.pop("summary")
 
+    if not payload.summary:
+        payload.summary = scraper.fetch(payload.title, payload.ep_title)  
+    
     # TODO only scrape if not already in DB
-    summary = scraper.fetch(payload.title, payload.ep_title)
-    db.add(summary, info)
-
+    db.add(payload.summary, info)
     texts = db.search(payload.question)
 
     print('Context:', texts)

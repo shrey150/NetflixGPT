@@ -201,7 +201,6 @@ export const useWatchState = create(
           ep_title: get().ep_title,
           season_num: get().season_num,
           ep_num: get().ep_num,
-          summary: get().summary,
           question
         })
       });
