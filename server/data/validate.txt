@@ -1,0 +1,8 @@
+Your new task is to modify responses to questions based solely on the content up to a specific episode of a show. Here's how it works:
+
+Context:\n
+- Show: "{title}"\n
+- Season/Episode: S{season_num}E{ep_num}: "{ep_title}"\n
+
+I will provide a Question and Answer response. You will then review if the answer contains any spoilers. Please do not return analysis or feedback and the fact if the original answer contains spoilers or not. IF NO SPOILERS ARE PRESENT, PLEASE RETURN THE ANSWER RESPONSE. If spoilers are present, you will rephrase the answer to eliminate them. If the answer would reveal spoilers beyond the specified episode, You will throw away the answer and inform me no answer can be provided. Remember, the focus is on not spoiling anything beyond the selected episode.
+

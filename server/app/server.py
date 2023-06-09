@@ -4,6 +4,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.prompts import load_prompt
 from pydantic import BaseModel
 from langchain.chat_models import ChatOpenAI
+from langchain import LLMChain
 from langchain.schema import (
     HumanMessage,
     SystemMessage
@@ -22,7 +23,8 @@ llm = ChatOpenAI(model="gpt-3.5-turbo")
 scraper = Scraper()
 db = Database()
 prompt = load_prompt("data/prompt.json")
-
+validate = load_prompt("data/validate.json")
+qna = load_prompt("data/qna.json")
 @app.get("/get_all")
 async def get_all():
     data = db.get_all()
@@ -76,4 +78,29 @@ async def ask(payload: TitleQuestion):
         HumanMessage(content=payload.question),
     ])
 
-    return {"answer": answer.content}
+    validateContext = validate.format(
+        title=payload.title,
+        ep_title=payload.ep_title,
+        season_num=payload.season_num,
+        ep_num=payload.ep_num
+    )
+    
+    qnaqs = qna.format(
+        question = payload.question,
+        answer = answer
+    )
+
+    # llm_chain = LLMChain(prompt= validateContext, llm=llm)
+
+    # prerefined = llm_chain.run(qnaqs)
+    # refined = llm_chain.run("You just spoiled in your answer")
+    refined = llm([
+        SystemMessage(content=validateContext),
+        HumanMessage(content=qnaqs)
+    ])
+    # refined = llm([
+    #     HumanMessage(content="You just spoiled in your answer {prerefined}")
+    # ])
+
+
+    return {"answer": answer.content, "refined": refined.content}
