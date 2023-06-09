@@ -10,3 +10,6 @@ Context:\n
 - Show: "{title}"\n
 - Season/Episode: S{season_num}E{ep_num}: "{ep_title}"\n
 - Relevant info: "{summary}"\n\n
+{chat_history}
+Question: {question}
+Answer:

@@ -4,7 +4,8 @@ from langchain.chat_models import ChatOpenAI
 from langchain.prompts import load_prompt
 from pydantic import BaseModel
 from langchain.chat_models import ChatOpenAI
-from langchain import LLMChain
+from langchain.memory import ConversationBufferMemory
+from langchain import PromptTemplate, LLMChain
 from langchain.schema import (
     HumanMessage,
     SystemMessage
@@ -22,8 +23,13 @@ app = FastAPI()
 llm = ChatOpenAI(model="gpt-3.5-turbo")
 scraper = Scraper()
 db = Database()
-prompt = load_prompt("data/prompt.json")
-validate = load_prompt("data/validate.json")
+#prompt = load_prompt("data/prompt.json")
+prompttemplate = open("data/prompt.txt","r").read()
+prompt = PromptTemplate(
+    input_variables= ["title", "ep_title", "season_num", "ep_num", "summary", "question", "chat_history"],
+    template = prompttemplate
+)
+memory = ConversationBufferMemory(memory_key="chat_history")
 qna = load_prompt("data/qna.json")
 @app.get("/get_all")
 async def get_all():
@@ -70,13 +76,27 @@ async def ask(payload: TitleQuestion):
         ep_title=payload.ep_title,
         season_num=payload.season_num,
         ep_num=payload.ep_num,
-        summary='\n'.join(texts)
+        summary='\n'.join(texts),
+        question = "{question}",
+        chat_history = "{chat_history}"
     )
+    llm_chain = LLMChain(
+        prompt = PromptTemplate(input_variables=["chat_history", "question"], template = context),
+        llm = llm,
+        verbose = True,
+        memory = memory
+    )
+    
+    llm_chain.predict(question = payload.question)
+    
+    validateQ = "Please modify the answer to make sure it doesnt contain any spoilers, or just return that you cannot answer the question without revealing spoilers"\
+    
+    return {llm_chain.predict(question = validateQ)}
 
-    answer = llm([
-        SystemMessage(content=context),
-        HumanMessage(content=payload.question),
-    ])
+    # answer = llm([
+    #     SystemMessage(content=context),
+    #     HumanMessage(content=payload.question),
+    # ])
 
     validateContext = validate.format(
         title=payload.title,
@@ -90,14 +110,14 @@ async def ask(payload: TitleQuestion):
         answer = answer
     )
 
-    # llm_chain = LLMChain(prompt= validateContext, llm=llm)
+    llm_chain = LLMChain(prompt= validateContext, llm=llm)
 
     # prerefined = llm_chain.run(qnaqs)
     # refined = llm_chain.run("You just spoiled in your answer")
-    refined = llm([
-        SystemMessage(content=validateContext),
-        HumanMessage(content=qnaqs)
-    ])
+    # refined = llm([
+    #     SystemMessage(content=validateContext),
+    #     HumanMessage(content=qnaqs)
+    # ])
     # refined = llm([
     #     HumanMessage(content="You just spoiled in your answer {prerefined}")
     # ])
