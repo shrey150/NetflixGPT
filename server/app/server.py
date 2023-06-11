@@ -45,7 +45,6 @@ class ScrapePayload(BaseModel):
 @app.get("/scrape/fetch_plot")
 async def fetch_plot(payload: ScrapePayload):
     scraper._fetch_plot(pywikibot.Site(payload.sub, payload.site), f'\"{payload.search_term}\"')
-# debugging
 
 app.add_middleware(
     CORSMiddleware,
@@ -62,21 +61,21 @@ async def ask(payload: TitleQuestion):
     info.pop("question")
     info.pop("summary")
 
-    if not payload.summary:
-        payload.summary = scraper.fetch(payload.title, payload.ep_title)  
-    
-    # TODO only scrape if not already in DB
-    db.add(payload.summary, info)
-    texts = db.search(payload.question, {'title': payload.title})
+    summary = payload.summary
+    if not payload.summary and not db.has(info):
+        summary = scraper.fetch(payload.title, payload.ep_title)  
+        db.add(summary, info)
 
-    print('Context:', texts)
+        texts = db.search(payload.question, {'title': payload.title})
+        summary = '\n'.join(texts)
+        print('Context:', texts)
 
     context = prompt.format(
         title=payload.title,
         ep_title=payload.ep_title,
         season_num=payload.season_num,
         ep_num=payload.ep_num,
-        summary='\n'.join(texts),
+        summary=summary,
         question = "{question}",
         chat_history = "{chat_history}"
     )
