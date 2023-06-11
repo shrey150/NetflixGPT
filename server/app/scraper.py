@@ -1,3 +1,4 @@
+import pickle
 import pywikibot
 from pywikibot import pagegenerators, config
 import mwparserfromhell
@@ -8,6 +9,7 @@ class Scraper():
     def __init__(self):
         config.family_files['netflix'] = 'https://netflix.fandom.com/api.php'
         self.searcher = SerpAPIWrapper()
+        self._load_sources_from_disk()
 
     def get_fandom_sub(self, title) -> str:
         data = self.searcher.results(f"{title} fandom")
@@ -16,6 +18,8 @@ class Scraper():
 
         api_url = f'https://{sub}.fandom.com/api.php'
         config.family_files[sub] = f'https://{sub}.fandom.com/api.php'
+        self.sources[title] = (sub, sub)
+        self._save_sources_to_disk()
         print('Added scraper source: ', api_url)
 
         # TODO: save all config familes to disk & load on startup
@@ -70,8 +74,33 @@ class Scraper():
         # Still doesn't work for Ozymandias
         pattern = r"\s*(?i:Plot|Summary|Main\s+story)\s*"
         sections = wikicode.get_sections(matches=pattern,include_lead=True)
+        sections = list(map(lambda section: section.strip_code().strip(), sections))
        
         if len(sections) > 0:
             plot = max(sections, key=lambda x: len(x))
             print(f'Found plot section: \n\"{plot}\"')
             return plot
+        
+    # looks for a file called sources.pickle, loads it in as a list of strings, and loops over it to populate config.family_files
+    def _load_sources_from_disk(self):
+        try:
+            with open('sources.pickle', 'rb') as f:
+                self.sources = pickle.load(f)
+                for show in self.sources:
+                    (family, sub) = self.sources[show]
+                    config.family_files[family] = f'https://{sub}.fandom.com/api.php'
+                    print('Loaded source: ', family)
+        except FileNotFoundError:
+            print('No sources.pickle found, creating new one.')
+            self.sources = {}
+            self._save_sources_to_disk()
+
+
+    def _save_sources_to_disk(self):
+        with open('sources.pickle', 'wb') as f:
+            pickle.dump(self.sources, f)
+            print('Saved sources to disk')
+
+
+    def __del__(self):
+        self._save_sources_to_disk()

@@ -88,7 +88,7 @@ async def ask(payload: TitleQuestion):
     
     llm_chain.predict(question = payload.question)
     
-    validateQ = "Please modify the answer to make sure it doesnt contain any spoilers, or just return that you cannot answer the question without revealing spoilers"\
+    validateQ = "Please modify the answer to make sure it doesn't contain any spoilers, or just return that you cannot answer the question without revealing spoilers"
     
     return {llm_chain.predict(question = validateQ)}
 

@@ -8,6 +8,7 @@ apicache-py3
 throttle.ctrl
 server/db
 server/db_cache.pickle
+server/sources.pickle
 
 # misc
 .DS_Store
