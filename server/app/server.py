@@ -26,7 +26,7 @@ db = Database()
 #prompt = load_prompt("data/prompt.json")
 prompttemplate = open("data/prompt.txt","r").read()
 prompt = PromptTemplate(
-    input_variables= ["title", "ep_title", "season_num", "ep_num", "summary", "question", "chat_history"],
+    input_variables= ["title","ep_title","season_num","ep_num","summary","chat_history","question"],
     template = prompttemplate
 )
 memory = ConversationBufferMemory(memory_key="chat_history")
@@ -97,30 +97,4 @@ async def ask(payload: TitleQuestion):
     #     SystemMessage(content=context),
     #     HumanMessage(content=payload.question),
     # ])
-
-    validateContext = validate.format(
-        title=payload.title,
-        ep_title=payload.ep_title,
-        season_num=payload.season_num,
-        ep_num=payload.ep_num
-    )
-    
-    qnaqs = qna.format(
-        question = payload.question,
-        answer = answer
-    )
-
-    llm_chain = LLMChain(prompt= validateContext, llm=llm)
-
-    # prerefined = llm_chain.run(qnaqs)
-    # refined = llm_chain.run("You just spoiled in your answer")
-    # refined = llm([
-    #     SystemMessage(content=validateContext),
-    #     HumanMessage(content=qnaqs)
-    # ])
-    # refined = llm([
-    #     HumanMessage(content="You just spoiled in your answer {prerefined}")
-    # ])
-
-
-    return {"answer": answer.content, "refined": refined.content}
+    # return {"answer": answer.content, "refined": refined.content}
