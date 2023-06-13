@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { doc, setDoc } from 'firebase/firestore';
-import { useCallableFunctionResponse, useFirestore, useFirestoreDocData } from 'reactfire';
+import { useFirestore, useFirestoreDocData } from 'reactfire';
 import {ChatBox} from '../../components/ChatBox';
-import { SAMPLE_TITLE_INFO, TitleInfo, useWatchState } from '../../services/WatchState';
+
 import {useAutoAnimate} from '@formkit/auto-animate/react';
+import { TitleInfo, useWatchState } from '../../services/WatchState';
 
 //Actively checks if the answer is too big for the answer box and displays a lil jawn if it needs to be scrolled
 const Overflow = (): [React.RefObject<HTMLDivElement>, boolean] => {
@@ -35,11 +36,10 @@ const Overflow = (): [React.RefObject<HTMLDivElement>, boolean] => {
   return [divRef, isOver];
 };
 
-
 const Popup = () => {
+  const watchState = useWatchState();
   const userRef = doc(useFirestore(), 'users/shrey');
   const { status, data } = useFirestoreDocData(userRef);
-  const watchState = useWatchState();  
   const [divRef, isOver] = Overflow()
   const [firstClick, setFirstClick] = useState(false)
   const [parent, enableAnimations] = useAutoAnimate()
@@ -58,7 +58,7 @@ const Popup = () => {
   // fetch title info from memory on page load
   useEffect(() => {
     const fetchWatchState = async () => {
-      useWatchState.setState((await chrome.storage.session.get("watchState")).watchState);
+      useWatchState.setState((await chrome.storage.session.get("watchState")).watchState ?? {});
     }
 
     fetchWatchState();
@@ -99,7 +99,7 @@ const Popup = () => {
   return (
       <div className={firstClick ? 'flex flex-col items-center bg-stone-900 h-screen overflow-hidden' : 'flex flex-col items-center bg-stone-900 h-screen overflow-hidden'}>
         <div className={firstClick ? 'flex flex-col items-center justify-center hover:scale-105 hover:ease-in-out scale-75 duration-500 max-h-1/2 max-w-1/2' : 'grow mt-10'}>
-          <img src="NetflixGPT.png"/>
+          <img src="NetflixGPT.png" alt="NetflixGPT Logo" />
         </div>
         <div className = {firstClick ? 'flex flex-col items-center justify-center duration-500' : 'hidden'} >
           <hr color='white' className='w-48'/>
@@ -118,17 +118,17 @@ const Popup = () => {
           </button>
        </div> */}
        <div className={firstClick ? 'grow flex flex-col items-center justify-center' : 'hidden'}>
-        <div ref={divRef} className={firstClick ? 'peer duration-700  max-w-full p-2 font-semibold text-lg text-white text-center overflow-y-auto m-4 border-2 border-black/0 rounded-lg no-scrollbar hover:border-white/100' : 'hidden'}>
-                <p>
-                  {
-                    // data?.response ?? (
-                    //   data?.status
-                    //     ? 'Processing...'
-                    //     : 'Queued.'
-                    // )
-                    !watchState.loading ? watchState.answer || 'Ask a question!' : 'Queued...'
-                  }
-              </p>
+          <div ref={divRef} className={firstClick ? 'peer duration-700  max-w-full p-2 font-semibold text-lg text-white text-center overflow-y-auto m-4 border-2 border-black/0 rounded-lg no-scrollbar hover:border-white/100' : 'hidden'}>
+            <p>
+              {
+                // data?.response ?? (
+                //   data?.status
+                //     ? 'Processing...'
+                //     : 'Queued.'
+                // )
+                !watchState?.loading ? watchState?.answer ?? 'Ask a question!' : 'Waiting...'
+              }
+            </p>
           </div>
         </div>
         <h1 className={isOver ? 'peer-hover:opacity-100 opacity-0 peer-hover:animate-bounce text-xl text-white' : 'opacity-0' }>▼</h1>
