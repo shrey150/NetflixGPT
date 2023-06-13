@@ -12,11 +12,12 @@ from langchain.schema import (
 )
 import pywikibot
 
-from app.models import TitleQuestion
+from app.models import TitleQuestion, TitleAnswer
 from app.scraper import Scraper
 from app.db import Database
 
 from dotenv import load_dotenv
+
 load_dotenv('../.env')
 
 app = FastAPI()
@@ -55,7 +56,7 @@ app.add_middleware(
 )
 
 @app.post("/ask")
-async def ask(payload: TitleQuestion):
+async def ask(payload: TitleQuestion) -> TitleAnswer:
     # generate dict representing TitleInfo
     info = payload.dict()
     info.pop("question")
@@ -86,11 +87,11 @@ async def ask(payload: TitleQuestion):
         memory = memory
     )
     
-    llm_chain.predict(question = payload.question)
+    return { "answer": llm_chain.predict(question=payload.question) }
     
-    validateQ = "Please modify the answer to make sure it doesn't contain any spoilers, or just return that you cannot answer the question without revealing spoilers"
+    # validateQ = "Please modify the answer to make sure it doesn't contain any spoilers, or just return that you cannot answer the question without revealing spoilers"
     
-    return {llm_chain.predict(question = validateQ)}
+    # return { "answer": llm_chain.predict(question = validateQ) }
 
     # answer = llm([
     #     SystemMessage(content=context),

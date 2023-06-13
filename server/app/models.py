@@ -10,3 +10,6 @@ class TitleInfo(BaseModel):
 
 class TitleQuestion(TitleInfo):
     question: str
+
+class TitleAnswer(BaseModel):
+    answer: str

@@ -215,10 +215,6 @@ export const useWatchState = create(
   }))
 )
 
-//ask function
-
-
-
 // sync React state -> chrome storage
 useWatchState.subscribe(watchState => {
   console.log("NetflixGPT> Syncing watch state...");
