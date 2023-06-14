@@ -63,9 +63,10 @@ async def ask(payload: TitleQuestion) -> TitleAnswer:
     info.pop("summary")
 
     summary = payload.summary
-    if not payload.summary and not db.has(info):
-        summary = scraper.fetch(payload.title, payload.ep_title)  
-        db.add(summary, info)
+    if not payload.summary:
+        if not db.has(info):
+            summary = scraper.fetch(payload.title, payload.ep_title)  
+            db.add(summary, info)
 
         texts = db.search(payload.question, {'title': payload.title})
         summary = '\n'.join(texts)
