@@ -4,26 +4,26 @@ import shutil
 import sys
 
 try:
-    from constants import DB_FOLDER, DB_PICKLE, SOURCES_PICKLE
+    from constants import *
 except ModuleNotFoundError:
     sys.path.append(path.join(path.dirname(__file__), '..'))
-    from constants import DB_FOLDER, DB_PICKLE, SOURCES_PICKLE
+    from constants import *
 
 try:
-    shutil.rmtree(DB_FOLDER)
-    print(f"The folder '{DB_FOLDER}' has been deleted successfully.")
+    shutil.rmtree(DB_PATH)
+    print(f"The folder '{DB_PATH}' has been deleted successfully.")
 except OSError as e:
     print(f"Error: {e.filename} - {e.strerror}")
 
 try:
-    os.remove(DB_PICKLE)
-    print(f"The file '{DB_PICKLE}' has been deleted successfully.")
+    os.remove(CACHE_PATH)
+    print(f"The file '{CACHE_PATH}' has been deleted successfully.")
 except OSError as e:
     print(f"Error: {e.filename} - {e.strerror}")
 
 try:
-    os.remove(SOURCES_PICKLE)
-    print(f"The file '{SOURCES_PICKLE}' has been deleted successfully.")
+    os.remove(SOURCES_PATH)
+    print(f"The file '{SOURCES_PATH}' has been deleted successfully.")
 except OSError as e:
     print(f"Error: {e.filename} - {e.strerror}")
 
