@@ -67,6 +67,7 @@ async def ask(payload: TitleQuestion) -> TitleAnswer:
     if not payload.summary:
         if not db.has(info):
             summary = scraper.fetch(payload.title, payload.ep_title)  
+            print('summary', summary)
             db.add(summary, info)
 
         texts = db.search(payload.question, {'title': payload.title})
@@ -88,13 +89,15 @@ async def ask(payload: TitleQuestion) -> TitleAnswer:
         verbose = True,
         memory = memory
     )
-    
+    # { "answer": llm_chain.predict(question=payload.question) }
     return { "answer": llm_chain.predict(question=payload.question) }
-    
-    # validateQ = "Please modify the answer to make sure it doesn't contain any spoilers, or just return that you cannot answer the question without revealing spoilers"
-    
+    # db.search
+
+    # validateQ = "Did your bum ass spoil anything "
+    # Take whatever response it gives you 
     # return { "answer": llm_chain.predict(question = validateQ) }
 
+    
     # answer = llm([
     #     SystemMessage(content=context),
     #     HumanMessage(content=payload.question),

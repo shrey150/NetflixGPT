@@ -39,6 +39,7 @@ class Database():
 
     def add(self, text: str, info: dict):
         texts = self.splitter.split_text(str(text))
+        print("These are texts", texts)
         self.vecstore.add_texts(
             texts=texts,
             metadatas=[info]*len(texts),
