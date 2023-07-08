@@ -17,21 +17,22 @@ from app.scraper import Scraper
 from app.db import Database
 
 from dotenv import load_dotenv
+from constants import *
 
-load_dotenv('../.env')
+load_dotenv(DOTENV_PATH)
 
 app = FastAPI()
 llm = ChatOpenAI(model="gpt-3.5-turbo")
 scraper = Scraper()
 db = Database()
 #prompt = load_prompt("data/prompt.json")
-prompttemplate = open("data/prompt.txt","r").read()
+prompttemplate = open(PROMPT_REG_TXT_PATH,"r").read()
 prompt = PromptTemplate(
     input_variables= ["title","ep_title","season_num","ep_num","summary","chat_history","question"],
     template = prompttemplate
 )
 memory = ConversationBufferMemory(memory_key="chat_history")
-qna = load_prompt("data/qna.json")
+#qna = load_prompt(PROMPT_QNA_JSON_PATH)
 @app.get("/get_all")
 async def get_all():
     data = db.get_all()

@@ -2,7 +2,9 @@ import uvicorn
 from app.server import app
 
 from dotenv import load_dotenv
-load_dotenv('../.env')
+from constants import *
+
+load_dotenv(DOTENV_PATH)
 
 def main():
     # TODO add envvars in prod

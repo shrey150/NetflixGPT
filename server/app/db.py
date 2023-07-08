@@ -6,11 +6,9 @@ from app.models import TitleInfo
 from app.utils import hash_dict
 
 from dotenv import load_dotenv
+from constants import *
 
-load_dotenv("../../.env")
-
-PERSIST_DIR = 'db'
-CACHE_PATH = 'db_cache.pickle'
+load_dotenv(DOTENV_PATH)
 DEBUG = True
 
 class Database():
@@ -19,7 +17,7 @@ class Database():
         self.splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=20)
         self.vecstore = Chroma(
             embedding_function=self.embedding,
-            persist_directory=PERSIST_DIR
+            persist_directory=DB_PATH
         )
 
         # load cache from CACHE_PATH if file exists; else, initialize empty cache
