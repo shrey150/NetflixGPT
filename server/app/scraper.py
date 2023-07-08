@@ -3,6 +3,7 @@ import pywikibot
 from pywikibot import pagegenerators, config
 import mwparserfromhell
 from langchain import SerpAPIWrapper
+import re
 
 from constants import *
 
@@ -72,14 +73,17 @@ class Scraper():
 
         wikicode = mwparserfromhell.parse(page.text)
 
-        # Still doesn't work for Ozymandias
+        # needed because mwparserfromhell just doesn't work
+        sanity_check = re.search(r"\s*(?i:Plot|Summary|Main\s+story)\s*", str(wikicode))
+
         pattern = r"\s*(?i:Plot|Summary|Main\s+story)\s*"
-        sections = wikicode.get_sections(matches=pattern,include_lead=True)
+        sections = wikicode.get_sections(matches=pattern, include_lead=True, include_headings=True)
         sections = list(map(lambda section: section.strip_code().strip(), sections))
        
-        if len(sections) > 0:
+        if len(sections) > 0 and sanity_check:
             plot = max(sections, key=lambda x: len(x))
-            print(f'Found plot section: \n\"{plot}\"')
+            print('Found plot section!')
+            # print(f'Found plot section: \n\"{plot}\"')
             return plot
         
     # looks for a file called sources.pickle, loads it in as a list of strings, and loops over it to populate config.family_files
