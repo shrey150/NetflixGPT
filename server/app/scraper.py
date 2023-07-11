@@ -65,7 +65,7 @@ class Scraper():
 
     # generic scraper that takes in specific site/search term format
     # returns the plot text if it finds it, otherwise returns None
-    def _fetch_plot(self, site, search_term, heading_names=['Plot', 'Synopsis', 'Summary']):
+    def _fetch_plot(self, site, search_term, heading_names=[]):
         search_results = pagegenerators.SearchPageGenerator(search_term, site=site, total=1)
 
         page = next(search_results)
