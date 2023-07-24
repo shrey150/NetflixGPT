@@ -5,6 +5,16 @@ import mwparserfromhell
 from langchain import SerpAPIWrapper
 import re
 
+from langchain.prompts import load_prompt
+from langchain.chat_models import ChatOpenAI
+from langchain.memory import ConversationBufferMemory
+from langchain.chains import ConversationChain
+from langchain import PromptTemplate, LLMChain
+
+from langchain.chat_models import ChatOpenAI
+# from langchain.chains import create_extraction_chain, create_extraction_chain_pydantic
+# from langchain.prompts import ChatPromptTemplate
+
 from constants import *
 
 class Scraper():
@@ -55,11 +65,45 @@ class Scraper():
             if len(results) > 0:
                 sources.append(max(results, key=len))
 
-        # return longest plot source
         if len(sources) > 0:
-            plot = max(sources, key=len)
-            print('Found plot:', plot)
-            return plot
+            abbreviated_sources = list(map(lambda source: source[:1000], sources))
+            print('Found sources:', abbreviated_sources)
+            prompt_template = """Given {ep_title} ({title}), the following is a discussion the relevancy of the sources to the episode.
+            Current Conversation: 
+            {chat_history}
+            Question: {question}
+            AI Response:
+            """
+            # prompt_template = "Out of the source snippets, which seems like the most relevant to {ep_title} ({title})?\n\n Sources:{sources}? Please respond with a number associated with the sources position in the list zero-indexed. If there is one source return 0, if there are no sources, return -1."
+            context = prompt_template.format(ep_title=ep_title, title=title, sources=abbreviated_sources, chat_history="{chat_history}", question="{question}")
+            prompt = PromptTemplate(template = context, input_variables=["chat_history", "question"])
+            llm = ChatOpenAI(model="gpt-3.5-turbo")
+            
+
+            llm_chain = LLMChain(llm = llm, verbose = True,  prompt = prompt, memory=ConversationBufferMemory(memory_key="chat_history"))
+            print(abbreviated_sources)
+            source_counter = 0
+            
+            for s in abbreviated_sources:
+                source = s
+                sQuestion = f"Does this source seem relevant to the episode? If yes, return 1. If no, return 0. Source:{source}"
+                answer = llm_chain.predict(question = sQuestion)
+                print('Found answer:', answer)
+                index = re.findall(r'\d+', answer)
+                if int(index[0]) == 1:
+                    return sources[source_counter]
+                source_counter += 1
+            return None
+
+        # return longest plot source
+
+        # if len(sources) > 0:
+        #     print('Found sources:', sources)
+        #     plot = max(sources, key=len)
+        #     print('Found plot:', plot)
+        #     return plot
+        
+
         
         # TODO finally try GPT search
 
@@ -72,6 +116,8 @@ class Scraper():
         print('Scraping page: ', page.title())
 
         wikicode = mwparserfromhell.parse(page.text)
+
+
 
         # needed because mwparserfromhell just doesn't work
         sanity_check = re.search(r"\s*(?i:Plot|Summary|Main\s+story)\s*", str(wikicode))
