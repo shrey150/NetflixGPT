@@ -8,6 +8,10 @@ class TitleInfo(BaseModel):
     ep_num: int
     summary: Union[str, None]
 
+class PageInfo(BaseModel):
+    title: str
+    summary: str
+
 class TitleQuestion(TitleInfo):
     question: str
 

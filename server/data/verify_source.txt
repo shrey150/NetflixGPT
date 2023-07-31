@@ -1,0 +1,15 @@
+You are a world class algorithm for validating the relevancy of a wiki article to a given TV episode.
+Return true if the article is relevant, false if not. Here is your info:
+
+Episode info:\n
+- Show title: "{title}"\n
+- Episode title: "{ep_title}"\n
+- Season number: {season_num}\n
+- Episode number: {ep_num}\n 
+- Relevant info: "{summary}"\n\n
+
+Page info:
+- Title: "{page_title}"
+- Summary: "{page_summary}"
+
+Answer (true or false):

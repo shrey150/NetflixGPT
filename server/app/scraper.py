@@ -5,17 +5,31 @@ import mwparserfromhell
 from langchain import SerpAPIWrapper
 import re
 
-from langchain.prompts import load_prompt
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
-from langchain.chains import ConversationChain
 from langchain import PromptTemplate, LLMChain
 
 from langchain.chat_models import ChatOpenAI
-# from langchain.chains import create_extraction_chain, create_extraction_chain_pydantic
-# from langchain.prompts import ChatPromptTemplate
+
+from langchain.prompts import ChatPromptTemplate, load_prompt
+from langchain.chains.openai_functions import create_openai_fn_chain
+from langchain.schema import SystemMessage, HumanMessage
+from langchain.prompts import HumanMessagePromptTemplate
 
 from constants import *
+from app.models import TitleInfo, PageInfo
+
+def verify_page_is_source(title_info: TitleInfo, page_info: PageInfo) -> bool:
+    """
+    Verifies that the page provided is a source for the given episode.
+    Returns true if the page is a valid source, false otherwise.
+
+    Args:
+        title_info: Info about the episode, including title, season number, episode number, episode title, and summary.
+        page_info: Info about the page, including title and summary.
+    """
+    return f"Checking if {page_info.title} is a valid and reputable source of information for '{title_info.ep_title}', the {title_info.ep_num}th episode of season {title_info.season_num} {title_info.title}. This is the summary of the page: {page_info.summary}"
+
 
 class Scraper():
     def __init__(self):
@@ -37,13 +51,13 @@ class Scraper():
         # TODO: save all config familes to disk & load on startup
         return sub
     
-    def fetch(self, title, ep_title) -> str:
+    def fetch(self, info: TitleInfo) -> str:
         search_terms = [
-            f"\"{ep_title}\"",
-            f"\"{ep_title} ({title})\"",
+            f"\"{info.ep_title}\"",
+            f"\"{info.ep_title} ({info.title})\"",
         ]
 
-        custom_sub = self.get_fandom_sub(title)
+        custom_sub = self.get_fandom_sub(info.title)
 
         sites = [
             pywikibot.Site(custom_sub, custom_sub),
@@ -59,7 +73,7 @@ class Scraper():
         # find most relevant plot section on each source
         for site in sites:
             print('Searching site: ', site)
-            results = list(map(lambda term: self._fetch_plot(site, term), search_terms))
+            results = list(map(lambda term: self._fetch_plot(site, term, info), search_terms))
             results = list(filter(lambda result: result is not None, results))
 
             if len(results) > 0:
@@ -107,30 +121,68 @@ class Scraper():
         
         # TODO finally try GPT search
 
+    def _get_lead(self, wikicode, chars=200):
+        return '\n'.join(map(lambda x: x.strip_code().strip(), wikicode.get_sections(include_lead=True)))[:chars]
+
     # generic scraper that takes in specific site/search term format
     # returns the plot text if it finds it, otherwise returns None
-    def _fetch_plot(self, site, search_term, heading_names=[]):
+    def _fetch_plot(self, site, search_term: str, info: TitleInfo, heading_names=[]):
         search_results = pagegenerators.SearchPageGenerator(search_term, site=site, total=1)
 
         page = next(search_results)
         print('Scraping page: ', page.title())
 
         wikicode = mwparserfromhell.parse(page.text)
+        lead = self._get_lead(wikicode)
 
+        
 
+        llm = ChatOpenAI(model="gpt-3.5-turbo")
+
+        verify_page = load_prompt("data/verify_source.json")
+
+        verifyContext = verify_page.format(
+            title=info.title,
+            ep_title=info.ep_title,
+            season_num=info.season_num,
+            ep_num=info.ep_num,
+            summary=info.summary,
+            page_title=page.title(),
+            summary=lead
+        )        
+
+        messages = [
+            SystemMessage(content= verifyContext)
+            
+        ]
+        llm(messages)
+
+        prompt_msgs = [
+            SystemMessage(content="You are a world class algorithm for validating the relevancy of a wiki article to a given TV episode."),
+            HumanMessage(
+                content="Make calls to the relevant function to determine if the page is a valid source for the episode. Return true or false"
+            ),
+            HumanMessagePromptTemplate.from_template("{input}"),
+            HumanMessage(content="Tips: Make sure to answer in the correct format"),
+        ]
+        prompt = ChatPromptTemplate(messages=prompt_msgs)
+
+        chain = create_openai_fn_chain([verify_page_is_source], llm, prompt, verbose=True)
+        ans = chain.run(f"Episode info: {info.json()}\nPage info: {PageInfo(title=page.title(), summary=lead).json()}")
+        print('Answer:', ans)
 
         # needed because mwparserfromhell just doesn't work
-        sanity_check = re.search(r"\s*(?i:Plot|Summary|Main\s+story)\s*", str(wikicode))
+        # sanity_check = re.search(r"\s*(?i:Plot|Summary|Main\s+story)\s*", str(wikicode))
 
-        pattern = r"\s*(?i:Plot|Summary|Main\s+story)\s*"
-        sections = wikicode.get_sections(matches=pattern, include_lead=True, include_headings=True)
-        sections = list(map(lambda section: section.strip_code().strip(), sections))
+        # pattern = r"\s*(?i:Plot|Summary|Main\s+story)\s*"
+        # sections = wikicode.get_sections(matches=pattern, include_lead=True, include_headings=True)
+        # sections = list(map(lambda section: section.strip_code().strip(), sections))
        
-        if len(sections) > 0 and sanity_check:
-            plot = max(sections, key=lambda x: len(x))
-            print('Found plot section!')
-            # print(f'Found plot section: \n\"{plot}\"')
-            return plot
+        # if len(sections) > 0 and sanity_check:
+        #     plot = max(sections, key=lambda x: len(x))
+        #     print('Found plot section!')
+        #     # print(f'Found plot section: \n\"{plot}\"')
+        #     return plot
         
     # looks for a file called sources.pickle, loads it in as a list of strings, and loops over it to populate config.family_files
     def _load_sources_from_disk(self):

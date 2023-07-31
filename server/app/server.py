@@ -83,15 +83,19 @@ async def ask(payload: TitleQuestion) -> TitleAnswer:
         question = "{question}",
         chat_history = "{chat_history}"
     )
+
     llm_chain = LLMChain(
         prompt = PromptTemplate(input_variables=["chat_history", "question"], template = context),
         llm = llm,
         verbose = True,
         memory = memory
     )
-    # { "answer": llm_chain.predict(question=payload.question) }
-    return { "answer": llm_chain.predict(question=payload.question) }
-    # db.search
+
+    answer = llm_chain.predict(question=payload.question)
+
+    print('Answer:', answer)
+
+    similar_texts = db.search(answer, {'title': payload.title })
 
     # validateQ = "Did your bum ass spoil anything "
     # Take whatever response it gives you 
