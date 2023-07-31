@@ -7,8 +7,10 @@ In your response, do not hallucinate any details that are factually incorrect or
 WARNING: DO NOT GIVE ANY SPOILERS. YOU WILL BE SHUT DOWN IF YOU DO\n\n
 
 Context:\n
-- Show: "{title}"\n
-- Season/Episode: S{season_num}E{ep_num}: "{ep_title}"\n
+- Show title: "{title}"\n
+- Episode title: "{ep_title}"\n
+- Season number: {season_num}\n
+- Episode number: {ep_num}\n 
 - Relevant info: "{summary}"\n\n
 {chat_history}
 Question: {question}
