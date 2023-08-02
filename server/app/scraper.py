@@ -148,28 +148,27 @@ class Scraper():
             ep_num=info.ep_num,
             summary=info.summary,
             page_title=page.title(),
-            summary=lead
+            page_summary=lead
         )        
 
         messages = [
             SystemMessage(content= verifyContext)
-            
         ]
-        llm(messages)
+        print('Answer', llm(messages, verbose=True))
 
-        prompt_msgs = [
-            SystemMessage(content="You are a world class algorithm for validating the relevancy of a wiki article to a given TV episode."),
-            HumanMessage(
-                content="Make calls to the relevant function to determine if the page is a valid source for the episode. Return true or false"
-            ),
-            HumanMessagePromptTemplate.from_template("{input}"),
-            HumanMessage(content="Tips: Make sure to answer in the correct format"),
-        ]
-        prompt = ChatPromptTemplate(messages=prompt_msgs)
+        # prompt_msgs = [
+        #     SystemMessage(content="You are a world class algorithm for validating the relevancy of a wiki article to a given TV episode."),
+        #     HumanMessage(
+        #         content="Make calls to the relevant function to determine if the page is a valid source for the episode. Return true or false"
+        #     ),
+        #     HumanMessagePromptTemplate.from_template("{input}"),
+        #     HumanMessage(content="Tips: Make sure to answer in the correct format"),
+        # ]
+        # prompt = ChatPromptTemplate(messages=prompt_msgs)
 
-        chain = create_openai_fn_chain([verify_page_is_source], llm, prompt, verbose=True)
-        ans = chain.run(f"Episode info: {info.json()}\nPage info: {PageInfo(title=page.title(), summary=lead).json()}")
-        print('Answer:', ans)
+        # chain = create_openai_fn_chain([verify_page_is_source], llm, prompt, verbose=True)
+        # ans = chain.run(f"Episode info: {info.json()}\nPage info: {PageInfo(title=page.title(), summary=lead).json()}")
+        # print('Answer:', ans)
 
         # needed because mwparserfromhell just doesn't work
         # sanity_check = re.search(r"\s*(?i:Plot|Summary|Main\s+story)\s*", str(wikicode))
