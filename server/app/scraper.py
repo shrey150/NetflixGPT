@@ -134,7 +134,9 @@ class Scraper():
 
         wikicode = mwparserfromhell.parse(page.text)
         lead = self._get_lead(wikicode)
-
+        print("lead", lead)
+        pattern = r"\s*(?i:Plot|Summary|Main\s+story)\s*"
+        print(wikicode.get_sections(matches=pattern, include_lead=True, include_headings=True))
         
 
         llm = ChatOpenAI(model="gpt-3.5-turbo")
@@ -150,11 +152,13 @@ class Scraper():
             page_title=page.title(),
             page_summary=lead
         )        
-
+        print(verifyContext)
         messages = [
             SystemMessage(content= verifyContext)
         ]
-        print('Answer', llm(messages, verbose=True))
+        print('Answer', llm(messages))
+        if llm(messages) == "True":
+            return wikicode.get_sections(matches=pattern, include_lead=True, include_headings=True)
 
         # prompt_msgs = [
         #     SystemMessage(content="You are a world class algorithm for validating the relevancy of a wiki article to a given TV episode."),

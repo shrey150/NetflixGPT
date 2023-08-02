@@ -16,6 +16,8 @@ except ModuleNotFoundError:
     from app.db import Database
 from suits_episodes import suits_db
 from dotenv import load_dotenv
+from app.models import TitleInfo, PageInfo
+
 
 load_dotenv('../.env')
 
@@ -23,8 +25,10 @@ db = Database()
 scraper = Scraper()
 for e in suits_db:
     if not db.has(e):
-            print(e)
-            summary = scraper.fetch(e.get("title"), e.get("ep_title"))  
+            #Convert dictionary e to TitleInfo object?
+            title_e = TitleInfo(**e)
+            print(e, type(e))
+            summary = scraper.fetch(title_e)  
             print('summary', summary)
             db.add(summary, e)
 
