@@ -66,7 +66,8 @@ async def ask(payload: TitleQuestion) -> TitleAnswer:
     summary = payload.summary
     if not payload.summary:
         if not db.has(info):
-            summary = scraper.fetch(payload.title, payload.ep_title)  
+            print(payload)
+            summary = scraper.fetch(payload)  
             print('summary', summary)
             db.add(summary, info)
 
@@ -92,10 +93,10 @@ async def ask(payload: TitleQuestion) -> TitleAnswer:
     )
 
     answer = llm_chain.predict(question=payload.question)
-
+    return {"answer": answer}
     print('Answer:', answer)
 
-    similar_texts = db.search(answer, {'title': payload.title })
+    # similar_texts = db.search(answer, {'title': payload.title })
 
     # validateQ = "Did your bum ass spoil anything "
     # Take whatever response it gives you 

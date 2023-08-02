@@ -73,41 +73,47 @@ class Scraper():
         # find most relevant plot section on each source
         for site in sites:
             print('Searching site: ', site)
-            results = list(map(lambda term: self._fetch_plot(site, term, info), search_terms))
-            results = list(filter(lambda result: result is not None, results))
+            for term in search_terms:
+                fetched_plot = self._fetch_plot(site, term, info)
+                if fetched_plot is not None:
+                    return fetched_plot
 
-            if len(results) > 0:
-                sources.append(max(results, key=len))
+            # results = list(map(lambda term: self._fetch_plot(site, term, info), search_terms))
+            # print("results", results)
+            # results = list(filter(lambda result: result is not None, results))
 
-        if len(sources) > 0:
-            abbreviated_sources = list(map(lambda source: source[:1000], sources))
-            print('Found sources:', abbreviated_sources)
-            prompt_template = """Given {ep_title} ({title}), the following is a discussion the relevancy of the sources to the episode.
-            Current Conversation: 
-            {chat_history}
-            Question: {question}
-            AI Response:
-            """
-            # prompt_template = "Out of the source snippets, which seems like the most relevant to {ep_title} ({title})?\n\n Sources:{sources}? Please respond with a number associated with the sources position in the list zero-indexed. If there is one source return 0, if there are no sources, return -1."
-            context = prompt_template.format(ep_title=ep_title, title=title, sources=abbreviated_sources, chat_history="{chat_history}", question="{question}")
-            prompt = PromptTemplate(template = context, input_variables=["chat_history", "question"])
-            llm = ChatOpenAI(model="gpt-3.5-turbo")
+            # if len(results) > 0:
+            #     sources.append(max(results, key=len))
+        
+        # if len(sources) > 0:
+        #     abbreviated_sources = list(map(lambda source: source[:1000], sources))
+        #     print('Found sources:', abbreviated_sources)
+        #     prompt_template = """Given {ep_title} ({title}), the following is a discussion the relevancy of the sources to the episode.
+        #     Current Conversation: 
+        #     {chat_history}
+        #     Question: {question}
+        #     AI Response:
+        #     """
+        #     # prompt_template = "Out of the source snippets, which seems like the most relevant to {ep_title} ({title})?\n\n Sources:{sources}? Please respond with a number associated with the sources position in the list zero-indexed. If there is one source return 0, if there are no sources, return -1."
+        #     context = prompt_template.format(ep_title=ep_title, title=title, sources=abbreviated_sources, chat_history="{chat_history}", question="{question}")
+        #     prompt = PromptTemplate(template = context, input_variables=["chat_history", "question"])
+        #     llm = ChatOpenAI(model="gpt-3.5-turbo")
             
 
-            llm_chain = LLMChain(llm = llm, verbose = True,  prompt = prompt, memory=ConversationBufferMemory(memory_key="chat_history"))
-            print(abbreviated_sources)
-            source_counter = 0
+        #     llm_chain = LLMChain(llm = llm, verbose = True,  prompt = prompt, memory=ConversationBufferMemory(memory_key="chat_history"))
+        #     print(abbreviated_sources)
+        #     source_counter = 0
             
-            for s in abbreviated_sources:
-                source = s
-                sQuestion = f"Does this source seem relevant to the episode? If yes, return 1. If no, return 0. Source:{source}"
-                answer = llm_chain.predict(question = sQuestion)
-                print('Found answer:', answer)
-                index = re.findall(r'\d+', answer)
-                if int(index[0]) == 1:
-                    return sources[source_counter]
-                source_counter += 1
-            return None
+        #     for s in abbreviated_sources:
+        #         source = s
+        #         sQuestion = f"Does this source seem relevant to the episode? If yes, return 1. If no, return 0. Source:{source}"
+        #         answer = llm_chain.predict(question = sQuestion)
+        #         print('Found answer:', answer)
+        #         index = re.findall(r'\d+', answer)
+        #         if int(index[0]) == 1:
+        #             return sources[source_counter]
+        #         source_counter += 1
+        #     return None
 
         # return longest plot source
 
@@ -156,8 +162,9 @@ class Scraper():
         messages = [
             SystemMessage(content= verifyContext)
         ]
-        print('Answer', llm(messages))
-        if llm(messages) == "True":
+        answer = llm(messages).content
+        print("Answer", answer)
+        if answer == "True" or answer == "true":
             return wikicode.get_sections(matches=pattern, include_lead=True, include_headings=True)
 
         # prompt_msgs = [
