@@ -20,6 +20,8 @@ def main():
         summary=None,
     )
 
+    scraper.get_fandom_sub(community_remedial_chaos_theory.title)
+
     # print(scraper._fetch_plot(pywikibot.Site("succession", "succession"), "Austerlitz"))
     # print(scraper._fetch_plot(pywikibot.Site("breakingbad", "breakingbad"), "Ozymandias"))
     print(scraper._fetch_plot(pywikibot.Site("community-sitcom", "community-sitcom"), "Remedial Chaos Theory", community_remedial_chaos_theory))
@@ -27,7 +29,7 @@ def main():
     # print the previous 3 lines using pywikibot.Site("en", "wikipedia")
     # print(scraper._fetch_plot(pywikibot.Site("en", "wikipedia"), "Austerlitz (Succession)"))
     # print(scraper._fetch_plot(pywikibot.Site("en", "wikipedia"), "Ozymandias (Breaking Bad)"))
-    print(scraper._fetch_plot(pywikibot.Site("en", "wikipedia"), "Remedial Chaos Theory (Community)"))
+    print(scraper._fetch_plot(pywikibot.Site("en", "wikipedia"), "Remedial Chaos Theory (Community)", community_remedial_chaos_theory))
 
     print(scraper.get_fandom_sub("community"))
 
