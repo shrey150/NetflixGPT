@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "netflixgpt"
+version = "0.1.0"
+description = ""
+authors = ["Shrey Pandya <shrey150@yahoo.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+python-dotenv = "^1.0.0"
+openai = "^0.27.8"
+google-search-results = "^2.4.2"
+wikipedia = "^1.4.0"
+langchain = "^0.0.253"
+pywikibot = "^8.3.0"
+mwparserfromhell = "^0.6.4"
+chromadb = "^0.4.5"
+fastapi = "0.99"
+uvicorn = "^0.23.2"
+tiktoken = "^0.4.0"
+sentence-transformers = "^2.2.2"
+urllib3 = "1.26.6"
+sqlalchemy = "^2.0.19"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
