@@ -17,3 +17,7 @@ class TitleQuestion(TitleInfo):
 
 class TitleAnswer(BaseModel):
     answer: str
+
+class SourcePayload(BaseModel):
+    source: str
+    data: dict

@@ -7,6 +7,8 @@ console.log('NetflixGPT> Content script started!')
 const titleId = window.location.href.split('watch/')[1];
 await useWatchState.getState().fetchTitleInfo(titleId);
 
+// check if title has been indexed
+
 console.log('NetflixGPT> Currently watching:', useWatchState.getState().title);
 
 listenForSubtitles();

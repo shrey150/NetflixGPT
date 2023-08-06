@@ -12,12 +12,14 @@ from langchain.schema import (
 )
 import pywikibot
 
-from app.models import TitleQuestion, TitleAnswer
+from app.models import TitleQuestion, TitleAnswer, SourcePayload
 from app.scraper import Scraper
 from app.db import Database
 
 from dotenv import load_dotenv
 from constants import *
+
+import json
 
 load_dotenv(DOTENV_PATH)
 
@@ -108,3 +110,9 @@ async def ask(payload: TitleQuestion) -> TitleAnswer:
     #     HumanMessage(content=payload.question),
     # ])
     # return {"answer": answer.content, "refined": refined.content}
+
+@app.post("/info")
+async def parse(payload: SourcePayload):
+    info = json.loads(payload)
+    print(info['vidio']['seasons'])
+
