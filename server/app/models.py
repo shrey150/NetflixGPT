@@ -1,5 +1,6 @@
 from typing import Union
 from pydantic import BaseModel
+from fastapi import Body
 
 class TitleInfo(BaseModel):
     title: str
@@ -20,4 +21,4 @@ class TitleAnswer(BaseModel):
 
 class SourcePayload(BaseModel):
     source: str
-    data: dict
+    data: dict = Body(...)
