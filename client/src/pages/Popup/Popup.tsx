@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { doc, setDoc } from 'firebase/firestore';
-import { useFirestore, useFirestoreDocData } from 'reactfire';
+// import { doc, setDoc } from 'firebase/firestore';
+// import { useFirestore, useFirestoreDocData } from 'reactfire';
 import {ChatBox} from '../../components/ChatBox';
 
 import {useAutoAnimate} from '@formkit/auto-animate/react';
@@ -38,8 +38,8 @@ const Overflow = (): [React.RefObject<HTMLDivElement>, boolean] => {
 
 const Popup = () => {
   const watchState = useWatchState();
-  const userRef = doc(useFirestore(), 'users/shrey');
-  const { status, data } = useFirestoreDocData(userRef);
+  // const userRef = doc(useFirestore(), 'users/shrey');
+  // const { status, data } = useFirestoreDocData(userRef);
   const [divRef, isOver] = Overflow()
   const [firstClick, setFirstClick] = useState(false)
   const [parent, enableAnimations] = useAutoAnimate()

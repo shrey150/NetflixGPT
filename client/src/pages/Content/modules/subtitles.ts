@@ -9,7 +9,7 @@ export default async function listenForSubtitles() {
 
     function callback(mutationList: MutationRecord[], observer: MutationObserver) {
         mutationList.forEach((mutation) => {
-            if (mutation.type == "childList") {
+            if (mutation.type === "childList") {
                 useWatchState.getState().addSubtitles(targetNode?.textContent ?? '');
             }
         })
