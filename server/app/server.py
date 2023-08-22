@@ -109,9 +109,18 @@ async def ask(payload: TitleQuestion) -> TitleAnswer:
             if content == text:
                 metadata = e[2]
                 ep_num = utils.abs_ep_num(db_dict, payload.title, metadata['season_num'], metadata['ep_num'])
+                print(metadata)
+                print("pogpogpogpogpogpogpogpogpo", ep_num)
                 episode_number.append(ep_num)
     
     print("episode_number ", episode_number)
+    counter = 0
+    for ep in episode_number:
+        ep_num = utils.abs_ep_num(db_dict, payload.title, payload.season_num, payload.ep_num)
+        if ep > ep_num:
+            counter += 1
+    if counter > 5:
+        return {"answer": "I'm sorry, this information cannot be revealed"}
     return {"answer": answer}
     print('Answer:', answer)
 

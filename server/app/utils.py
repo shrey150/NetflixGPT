@@ -5730,7 +5730,7 @@ def hash_dict(d: dict):
     return hashlib.sha256(json.dumps(d, sort_keys=True).encode()).hexdigest()
 
 def abs_ep_num(db_data, title, season_num, ep_num):
-    print(db_data, title, season_num, ep_num)
+    #print(db_data, title, season_num, ep_num)
     prev_ep_count = 0
 
     for n in range(1, season_num):
