@@ -162,12 +162,24 @@ export const useWatchState = create(
     setTitleInfo: ({title, ep_title, season_num, ep_num, summary}) => set({
       title, ep_title, season_num, ep_num, summary
     }),
-
+    
     fetchTitleInfo: async (titleId) => {
       console.log('NetflixGPT> Fetching title info')
       const res = await fetch(`https://www.netflix.com/nq/website/memberapi/vaf4f97f3/metadata?movieid=${titleId}`);
       const payload: NetflixPayload = await res.json();
       console.log('NetflixGPT> Raw payload:', payload);
+      
+      // POST the payload to our server
+      fetch('http://localhost:8000/info', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          source: "netflix",
+          data: payload,
+        })
+      });
 
       const ep = findEpisodeById(payload, payload.video.currentEpisode);
 

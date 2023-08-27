@@ -16,13 +16,17 @@ from langchain.schema import (
     SystemMessage
 )
 import pywikibot
+import re
 
-from app.models import TitleQuestion, TitleAnswer
+from app.models import TitleQuestion, TitleAnswer, SourcePayload, TitleInfo
 from app.scraper import Scraper
 from app.db import Database
+from app import utils
 
 from dotenv import load_dotenv
 from constants import *
+
+import json
 
 load_dotenv(DOTENV_PATH)
 
@@ -98,6 +102,30 @@ async def ask(payload: TitleQuestion) -> TitleAnswer:
     )
 
     answer = llm_chain.predict(question=payload.question)
+    similar_texts = db.search(answer, {'title': payload.title })
+    db_all = db.get_all()
+    db_dict = db.dict_get_all()
+    #Get the episode number from similar_texts
+    episode_number = []
+    for text in similar_texts:
+        for e in db_all:
+            content = e[1]
+            
+            if content == text:
+                metadata = e[2]
+                ep_num = utils.abs_ep_num(db_dict, payload.title, metadata['season_num'], metadata['ep_num'])
+                print(metadata)
+                print("pogpogpogpogpogpogpogpogpo", ep_num)
+                episode_number.append(ep_num)
+    
+    print("episode_number ", episode_number)
+    counter = 0
+    for ep in episode_number:
+        ep_num = utils.abs_ep_num(db_dict, payload.title, payload.season_num, payload.ep_num)
+        if ep > ep_num:
+            counter += 1
+    if counter > 5:
+        return {"answer": "I'm sorry, this information cannot be revealed"}
     return {"answer": answer}
     print('Answer:', answer)
 
@@ -145,3 +173,20 @@ def public(request: Request):
 async def logout(request: Request):
     request.session.pop('user', None)
     return RedirectResponse(url='/')
+
+
+@app.post("/info")
+async def parse(payload: SourcePayload):
+    #Return would simply be a list of titleinfo objects
+    print(payload, payload.source, payload.data)
+    data = payload.data
+    result = []
+    season_num = 1
+    for season in data["video"]["seasons"]:
+        episode_num = 1
+        for episode in season["episodes"]:
+            result.append(TitleInfo(title = data["video"]["title"], season_num = season_num, ep_num= episode_num, ep_title = episode["title"]))
+            episode_num += 1
+        season_num += 1
+    return result
+

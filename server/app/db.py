@@ -1,3 +1,4 @@
+
 import pickle
 from langchain.embeddings import HuggingFaceEmbeddings 
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -31,6 +32,12 @@ class Database():
     def get_all(self):
         data = self.vecstore.get()
         return list(zip(data['ids'], data['documents'], data['metadatas']))
+
+    def dict_get_all(self):
+        data = self.get_all()
+        d = {}
+        d["data"] = data
+        return d
 
 
     def has(self, info: dict):
