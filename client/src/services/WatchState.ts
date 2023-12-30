@@ -165,7 +165,7 @@ export const useWatchState = create(
     
     fetchTitleInfo: async (titleId) => {
       console.log('NetflixGPT> Fetching title info')
-      const res = await fetch(`https://www.netflix.com/nq/website/memberapi/vaf4f97f3/metadata?movieid=${titleId}`);
+      const res = await fetch(`https://www.netflix.com/nq/website/memberapi/va7b420b8/metadata?movieid=${titleId}`);
       const payload: NetflixPayload = await res.json();
       console.log('NetflixGPT> Raw payload:', payload);
       
