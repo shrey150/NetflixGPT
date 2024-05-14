@@ -24,6 +24,8 @@ sqlalchemy = "^2.0.19"
 authlib = "^1.2.1"
 httpx = "^0.24.1"
 itsdangerous = "^2.1.2"
+sqlmodel = "^0.0.16"
+psycopg = {extras = ["binary"], version = "^3.1.19"}
 
 
 [build-system]

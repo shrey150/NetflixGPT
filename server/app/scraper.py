@@ -216,4 +216,11 @@ class Scraper():
 
 
     def __del__(self):
-        self._save_sources_to_disk()
+        try:
+            self._save_sources_to_disk()
+        except NameError as e:
+            if e.name == 'open':
+                pass
+            else:
+                print(f"Error: {e}")
+        

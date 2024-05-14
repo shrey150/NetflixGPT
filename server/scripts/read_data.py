@@ -1,6 +1,6 @@
 import pickle
 from pprint import pprint
-import chromadb
+# import chromadb
 from os import path
 
 BASE_DIR = path.dirname(__file__)

@@ -9,7 +9,6 @@ from starlette.middleware.sessions import SessionMiddleware
 
 load_dotenv(DOTENV_PATH)
 
-
 def main():
     # TODO add envvars in prod
     uvicorn.run(

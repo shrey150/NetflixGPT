@@ -5,9 +5,12 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
 from app.models import TitleInfo
 from app.utils import hash_dict
+from sqlmodel import Field, Session, SQLModel, create_engine, select
 
 from dotenv import load_dotenv
 from constants import *
+
+import os
 
 load_dotenv(DOTENV_PATH)
 DEBUG = True
@@ -16,6 +19,8 @@ class Database():
     def __init__(self):
         self.embedding = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
         self.splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=20)
+        
+        # TODO update this to Pinecone
         self.vecstore = Chroma(
             embedding_function=self.embedding,
             persist_directory=DB_PATH
@@ -27,6 +32,19 @@ class Database():
                 self.cache = pickle.load(f)
         except FileNotFoundError:
             self.cache = {}
+
+        # only needed for psycopg 3 - replace postgresql
+        # with postgresql+psycopg in settings.DATABASE_URL
+
+        self.connection_string = str(os.getenv("DB_CONNECTION_URI")).replace(
+            "postgresql", "postgresql+psycopg"
+        )
+
+        # recycle connections after 5 minutes
+        # to correspond with the compute scale down
+        self.engine = create_engine(
+            self.connection_string, connect_args={"sslmode": "require"}, pool_recycle=300
+        )
 
 
     def get_all(self):
@@ -67,5 +85,11 @@ class Database():
 
 
     def __del__(self):
-        self._save_cache()
-        self.vecstore.persist()
+        try:
+            self._save_cache()
+            self.vecstore.persist()
+        except NameError as e:
+            if e.name == 'open':
+                pass
+            else:
+                print(f"Error: {e}")

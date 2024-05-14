@@ -1,10 +1,14 @@
 import uvicorn
-from fastapi import FastAPI, Request, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status
+# from fastapi.security import OAuth2AuthorizationCodeBearer
+# from fastapi.middleware.cors import CORSMiddleware
+# from fastapi.middleware.cors import SessionMiddleware
+# from authlib.integrations.starlette_client import OAuth
 from starlette.config import Config
-from starlette.responses import HTMLResponse, RedirectResponse
-from authlib.integrations.starlette_client import OAuth, OAuthError
-from fastapi.middleware.cors import CORSMiddleware
-from starlette.middleware.sessions import SessionMiddleware
+from starlette.responses import RedirectResponse
+from dotenv import load_dotenv
+import os
+
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import load_prompt
 from pydantic import BaseModel
@@ -57,13 +61,13 @@ class ScrapePayload(BaseModel):
 async def fetch_plot(payload: ScrapePayload):
     scraper._fetch_plot(pywikibot.Site(payload.sub, payload.site), f'\"{payload.search_term}\"')
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"],
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 @app.post("/ask")
 async def ask(payload: TitleQuestion) -> TitleAnswer:
@@ -129,50 +133,50 @@ async def ask(payload: TitleQuestion) -> TitleAnswer:
     return {"answer": answer}
     print('Answer:', answer)
 
-GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID') or None
+GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID') or None
 GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET') or None
 data = {'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID}
 config = Config(environ=data)
-oauth = OAuth(config)
-app.add_middleware(SessionMiddleware, secret_key=GOOGLE_CLIENT_SECRET)
+# oauth = OAuth(config)
+# app.add_middleware(SessionMiddleware, secret_key=GOOGLE_CLIENT_SECRET)
 
-oauth.register(
-    name='google',
-    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
-    client_kwargs={
-        'scope': 'openid email profile'
-    }
-)
+# oauth.register(
+#     name='google',
+#     server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+#     client_kwargs={
+#         'scope': 'openid email profile'
+#     }
+# )
 
-@app.get('/login')
-async def login(request: Request):
-    redirect_uri = request.url_for('auth')
-    print(redirect_uri)
-    return await oauth.google.authorize_redirect(request, redirect_uri)
+# @app.get('/login')
+# async def login(request: Request):
+#     redirect_uri = request.url_for('auth')
+#     print(redirect_uri)
+#     return await oauth.google.authorize_redirect(request, redirect_uri)
 
-@app.get('/token')
-async def auth(request: Request):
-    try:
-        token = await oauth.google.authorize_access_token(request)
-    except OAuthError as error:
-        raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED,
-                            detail ='Could not validate credentials',
-                            headers={'WWW_Authenticate': 'Bearer'},)
-    user = await oauth.google.parse_id_token(request, token)
+# @app.get('/token')
+# async def auth(request: Request):
+#     try:
+#         token = await oauth.google.authorize_access_token(request)
+#     except OAuthError as error:
+#         raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED,
+#                             detail ='Could not validate credentials',
+#                             headers={'WWW_Authenticate': 'Bearer'},)
+#     user = await oauth.google.parse_id_token(request, token)
     
 
-@app.get('/')
-def public(request: Request):
-    user = request.session.get('user')
-    if user:
-        name = user.get('name')
-        return HTMLResponse(f'<p>Hello {name}!</p><a href=/logout>Logout</a>')
-    return HTMLResponse('<a>href=/login>Login</a>')
+# @app.get('/')
+# def public(request: Request):
+#     user = request.session.get('user')
+#     if user:
+#         name = user.get('name')
+#         return HTMLResponse(f'<p>Hello {name}!</p><a href=/logout>Logout</a>')
+#     return HTMLResponse('<a>href=/login>Login</a>')
 
-@app.route('/logout')
-async def logout(request: Request):
-    request.session.pop('user', None)
-    return RedirectResponse(url='/')
+# @app.route('/logout')
+# async def logout(request: Request):
+#     request.session.pop('user', None)
+#     return RedirectResponse(url='/')
 
 
 @app.post("/info")
@@ -185,7 +189,11 @@ async def parse(payload: SourcePayload):
     for season in data["video"]["seasons"]:
         episode_num = 1
         for episode in season["episodes"]:
-            result.append(TitleInfo(title = data["video"]["title"], season_num = season_num, ep_num= episode_num, ep_title = episode["title"]))
+            result.append(TitleInfo(
+                title=data["video"]["title"],
+                season_num=season_num,
+                ep_num=episode_num,
+                ep_title=episode["title"]))
             episode_num += 1
         season_num += 1
     return result
