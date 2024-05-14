@@ -34,12 +34,13 @@ import json
 
 load_dotenv(DOTENV_PATH)
 
+# TODO use lifespan events to create these top-level objects
 app = FastAPI()
 llm = ChatOpenAI(model="gpt-3.5-turbo")
 scraper = Scraper()
 db = Database()
 #prompt = load_prompt("data/prompt.json")
-prompttemplate = open(PROMPT_REG_TXT_PATH,"r").read()
+prompttemplate = open(PROMPT_REG_TXT_PATH, "r", encoding="utf-8").read()
 prompt = PromptTemplate(
     input_variables= ["title","ep_title","season_num","ep_num","summary","chat_history","question"],
     template = prompttemplate

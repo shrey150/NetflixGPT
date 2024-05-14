@@ -33,9 +33,7 @@ class Database():
         except FileNotFoundError:
             self.cache = {}
 
-        # only needed for psycopg 3 - replace postgresql
-        # with postgresql+psycopg in settings.DATABASE_URL
-
+        # update connection protocol for psycopg3
         self.connection_string = str(os.getenv("DB_CONNECTION_URI")).replace(
             "postgresql", "postgresql+psycopg"
         )
@@ -46,6 +44,10 @@ class Database():
             self.connection_string, connect_args={"sslmode": "require"}, pool_recycle=300
         )
 
+        self.create_db_and_tables()
+
+    def create_db_and_tables(self):
+        SQLModel.metadata.create_all(self.engine)
 
     def get_all(self):
         data = self.vecstore.get()
@@ -64,7 +66,6 @@ class Database():
 
     def add(self, text: str, info: dict):
         texts = self.splitter.split_text(str(text))
-        print("These are texts", texts)
         self.vecstore.add_texts(
             texts=texts,
             metadatas=[info]*len(texts),
