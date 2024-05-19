@@ -1,8 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
-from ..constants import DB_CONNECTION_URI
+from ..config import settings
 
-DB_DRIVER_URI = str(DB_CONNECTION_URI).replace(
+DB_DRIVER_URI = str(settings.DB_CONNECTION_URI).replace(
     "postgresql", "postgresql+psycopg"
 )
 

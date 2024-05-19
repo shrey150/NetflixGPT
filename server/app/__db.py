@@ -1,20 +1,17 @@
 
 import pickle
 from langchain.embeddings import HuggingFaceEmbeddings 
-from app.models import TitleInfo
-from app.utils import hash_dict
+from .utils import hash_dict
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
 from dotenv import load_dotenv
-from constants import *
+from ..config import settings
 
-import os
 from langchain_community.vectorstores import Chroma
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-load_dotenv(DOTENV_PATH)
 DEBUG = True
 
 class Database():

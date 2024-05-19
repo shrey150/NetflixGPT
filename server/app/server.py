@@ -1,82 +1,49 @@
 from contextlib import asynccontextmanager
-import uvicorn
 from fastapi import FastAPI, Depends, HTTPException, status
-# from fastapi.security import OAuth2AuthorizationCodeBearer
-# from fastapi.middleware.cors import CORSMiddleware
-# from fastapi.middleware.cors import SessionMiddleware
-# from authlib.integrations.starlette_client import OAuth
 from starlette.config import Config
 from starlette.responses import RedirectResponse
-from dotenv import load_dotenv
 import os
-from pydantic import BaseModel
 from langchain.memory import ConversationBufferMemory
 from langchain_core.prompts import PromptTemplate
-import pywikibot
 import re
+import tldextract
 
-from app.models import TitleQuestion, TitleAnswer, SourcePayload, Title
-from app.scraper import Scraper
-from app.__db import Database
-from app import utils
-
-from dotenv import load_dotenv
-from constants import *
+from .models import TitleBase, QuestionRequest, MetadataRequest
+from .scraper import Scraper
+from .__db import Database
+from . import utils
+from ..config import settings
 
 import json
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_core.prompts import load_prompt
 from langchain_openai import ChatOpenAI
 
-load_dotenv(DOTENV_PATH)
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await db.create_db_and_tables()
     yield
 
+####################
 # TODO use lifespan events to create these top-level objects
 llm = ChatOpenAI(model="gpt-4o")
 scraper = Scraper()
 db = Database()
-app = FastAPI(lifespan=lifespan)
-#prompt = load_prompt("data/prompt.json")
-prompttemplate = open(PROMPT_REG_TXT_PATH, "r", encoding="utf-8").read()
+prompttemplate = open(settings.PROMPT_REG_TXT_PATH, "r", encoding="utf-8").read()
 prompt = PromptTemplate(
     input_variables= ["title","ep_title","season_num","ep_num","summary","chat_history","question"],
     template = prompttemplate
 )
+####################
+
+app = FastAPI(lifespan=lifespan)
+#prompt = load_prompt("data/prompt.json")
+
 memory = ConversationBufferMemory(memory_key="chat_history")
-#qna = load_prompt(PROMPT_QNA_JSON_PATH)
-@app.get("/get_all")
-async def get_all():
-    data = db.get_all()
-    return {"data": data}
 
-# debugging
-class ScrapePayload(BaseModel):
-    sub: str
-    site: str
-    search_term: str
-
-@app.get("/scrape/fetch_plot")
-async def fetch_plot(payload: ScrapePayload):
-    scraper._fetch_plot(pywikibot.Site(payload.sub, payload.site), f'\"{payload.search_term}\"')
-
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
-
-@app.post("/ask")
-async def ask(payload: TitleQuestion) -> TitleAnswer:
-    # generate dict representing TitleInfo
-    info = payload.dict()
-    info.pop("question")
-    info.pop("summary")
+@app.post("/titles/{title_id}/episodes/{episode_id}/questions")
+async def ask_question(title_id: str, episode_id: str, question_req: QuestionRequest) -> TitleAnswer:
+    question_req = question_req
 
     summary = payload.summary
     if not payload.summary:
@@ -133,70 +100,31 @@ async def ask(payload: TitleQuestion) -> TitleAnswer:
     if counter > 5:
         return {"answer": "I'm sorry, this information cannot be revealed"}
     return {"answer": answer}
-    print('Answer:', answer)
 
-GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID') or None
-GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET') or None
-data = {'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID}
-config = Config(environ=data)
-# oauth = OAuth(config)
-# app.add_middleware(SessionMiddleware, secret_key=GOOGLE_CLIENT_SECRET)
+# GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID') or None
+# GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET') or None
+# data = {'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID}
+# config = Config(environ=data)
 
-# oauth.register(
-#     name='google',
-#     server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
-#     client_kwargs={
-#         'scope': 'openid email profile'
-#     }
-# )
+@app.post("/metadata")
+async def parse_metadata(payload: MetadataRequest):
 
-# @app.get('/login')
-# async def login(request: Request):
-#     redirect_uri = request.url_for('auth')
-#     print(redirect_uri)
-#     return await oauth.google.authorize_redirect(request, redirect_uri)
+    site_info = tldextract.parse(payload.url)
 
-# @app.get('/token')
-# async def auth(request: Request):
-#     try:
-#         token = await oauth.google.authorize_access_token(request)
-#     except OAuthError as error:
-#         raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED,
-#                             detail ='Could not validate credentials',
-#                             headers={'WWW_Authenticate': 'Bearer'},)
-#     user = await oauth.google.parse_id_token(request, token)
-    
-
-# @app.get('/')
-# def public(request: Request):
-#     user = request.session.get('user')
-#     if user:
-#         name = user.get('name')
-#         return HTMLResponse(f'<p>Hello {name}!</p><a href=/logout>Logout</a>')
-#     return HTMLResponse('<a>href=/login>Login</a>')
-
-# @app.route('/logout')
-# async def logout(request: Request):
-#     request.session.pop('user', None)
-#     return RedirectResponse(url='/')
-
-
-@app.post("/info")
-async def parse(payload: SourcePayload):
-    #Return would simply be a list of titleinfo objects
-    print(payload, payload.source, payload.data)
-    data = payload.data
-    result = []
-    season_num = 1
-    for season in data["video"]["seasons"]:
-        episode_num = 1
-        for episode in season["episodes"]:
-            result.append(TitleInfo(
-                title=data["video"]["title"],
-                season_num=season_num,
-                ep_num=episode_num,
-                ep_title=episode["title"]))
-            episode_num += 1
-        season_num += 1
-    return result
+    match site_info.domain:
+        case "netflix":
+            data = payload.data
+            result = []
+            season_num = 1
+            for season in data["video"]["seasons"]:
+                episode_num = 1
+                for episode in season["episodes"]:
+                    result.append(TitleBase(
+                        title=data["video"]["title"],
+                        season_num=season_num,
+                        ep_num=episode_num,
+                        ep_title=episode["title"]))
+                    episode_num += 1
+                season_num += 1
+            return result
 

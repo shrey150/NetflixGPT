@@ -2,17 +2,13 @@ import pickle
 import pywikibot
 from pywikibot import pagegenerators, config
 import mwparserfromhell
-from langchain import SerpAPIWrapper
-import re
-from langchain.memory import ConversationBufferMemory
-from langchain import PromptTemplate, LLMChain
-from langchain.chains.openai_functions import create_openai_fn_chain
-
-from constants import *
-from app.models import Title, PageInfo
-from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_core.prompts import ChatPromptTemplate, HumanMessagePromptTemplate, load_prompt
+from langchain_community.utilities import SerpAPIWrapper
+from langchain_core.messages import SystemMessage
+from langchain_core.prompts import load_prompt
 from langchain_openai import ChatOpenAI
+
+from .models import Title, PageInfo, TitleBase
+
 
 def verify_page_is_source(title_info: Title, page_info: PageInfo) -> bool:
     """
@@ -46,7 +42,7 @@ class Scraper():
         # TODO: save all config familes to disk & load on startup
         return sub
     
-    def fetch(self, info: TitleInfo) -> str:
+    def fetch(self, info: TitleBase) -> str:
         search_terms = [
             f"\"{info.ep_title}\"",
             f"\"{info.ep_title} ({info.title})\"",
@@ -127,7 +123,7 @@ class Scraper():
 
     # generic scraper that takes in specific site/search term format
     # returns the plot text if it finds it, otherwise returns None
-    def _fetch_plot(self, site, search_term: str, info: TitleInfo, heading_names=[]):
+    def _fetch_plot(self, site, search_term: str, info: TitleBase, heading_names=[]):
         search_results = pagegenerators.SearchPageGenerator(search_term, site=site, total=1)
 
         page = next(search_results)

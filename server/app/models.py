@@ -22,6 +22,15 @@ class Title(TitleBase, table=True):
     __tablename__ = "titles"
     id: Optional[int] = Field(default=None, primary_key=True)
 
+class QuestionRequest(BaseModel):
+    question: str
+
+class TitleQuestion(TitleBase):
+    question: str
+
+class TitleAnswer(BaseModel):
+    answer: str
+
 class SummaryBase(SQLModel):
     '''Represents a plot summary from a given source for an episode.'''
     raw_text: str # The raw HTML scraped for generating summary text.
@@ -97,13 +106,6 @@ class PageInfo(BaseModel):
     title: str
     summary: str
 
-class TitleQuestion(TitleBase):
-    question: str
-
-class TitleAnswer(BaseModel):
-    answer: str
-
-class SourcePayload(BaseModel):
-    source: str
-    data: dict = Body(...)
+class MetadataRequest(BaseModel):
+    url: str
     data: dict = Body(...)
