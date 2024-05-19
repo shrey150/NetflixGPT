@@ -1,7 +1,6 @@
 from langchain.agents import load_tools
 from langchain.agents import initialize_agent
 from langchain.agents import AgentType
-from langchain.chat_models import ChatOpenAI
 from langchain import PromptTemplate, LLMChain
 
 # https://python.langchain.com/en/latest/modules/agents/tools/examples/apify.html
@@ -9,10 +8,12 @@ from langchain import PromptTemplate, LLMChain
 #!pip install apify-client
 from langchain.document_loaders.base import Document
 from langchain.indexes import VectorstoreIndexCreator
-from langchain.utilities import ApifyWrapper
 
 # env support
 from dotenv import load_dotenv
+from langchain_community.utilities import ApifyWrapper
+from langchain_openai import ChatOpenAI
+
 load_dotenv()
 
 model = ChatOpenAI(model_name = 'gpt-3.5-turbo')

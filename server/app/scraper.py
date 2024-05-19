@@ -4,22 +4,17 @@ from pywikibot import pagegenerators, config
 import mwparserfromhell
 from langchain import SerpAPIWrapper
 import re
-
-from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain import PromptTemplate, LLMChain
-
-from langchain.chat_models import ChatOpenAI
-
-from langchain.prompts import ChatPromptTemplate, load_prompt
 from langchain.chains.openai_functions import create_openai_fn_chain
-from langchain.schema import SystemMessage, HumanMessage
-from langchain.prompts import HumanMessagePromptTemplate
 
 from constants import *
-from app.models import TitleInfo, PageInfo
+from app.models import Title, PageInfo
+from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.prompts import ChatPromptTemplate, HumanMessagePromptTemplate, load_prompt
+from langchain_openai import ChatOpenAI
 
-def verify_page_is_source(title_info: TitleInfo, page_info: PageInfo) -> bool:
+def verify_page_is_source(title_info: Title, page_info: PageInfo) -> bool:
     """
     Verifies that the page provided is a source for the given episode.
     Returns true if the page is a valid source, false otherwise.
@@ -145,7 +140,7 @@ class Scraper():
         print(wikicode.get_sections(matches=pattern, include_lead=True, include_headings=True))
         
 
-        llm = ChatOpenAI(model="gpt-3.5-turbo")
+        llm = ChatOpenAI(model="gpt-4o")
 
         verify_page = load_prompt("data/verify_source.json")
 

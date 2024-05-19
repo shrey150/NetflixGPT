@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 import uvicorn
 from fastapi import FastAPI, Depends, HTTPException, status
 # from fastapi.security import OAuth2AuthorizationCodeBearer
@@ -8,37 +9,37 @@ from starlette.config import Config
 from starlette.responses import RedirectResponse
 from dotenv import load_dotenv
 import os
-
-from langchain.chat_models import ChatOpenAI
-from langchain.prompts import load_prompt
 from pydantic import BaseModel
-from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
-from langchain import PromptTemplate, LLMChain
-from langchain.schema import (
-    HumanMessage,
-    SystemMessage
-)
+from langchain_core.prompts import PromptTemplate
 import pywikibot
 import re
 
-from app.models import TitleQuestion, TitleAnswer, SourcePayload, TitleInfo
+from app.models import TitleQuestion, TitleAnswer, SourcePayload, Title
 from app.scraper import Scraper
-from app.db import Database
+from app.__db import Database
 from app import utils
 
 from dotenv import load_dotenv
 from constants import *
 
 import json
+from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.prompts import load_prompt
+from langchain_openai import ChatOpenAI
 
 load_dotenv(DOTENV_PATH)
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await db.create_db_and_tables()
+    yield
+
 # TODO use lifespan events to create these top-level objects
-app = FastAPI()
-llm = ChatOpenAI(model="gpt-3.5-turbo")
+llm = ChatOpenAI(model="gpt-4o")
 scraper = Scraper()
 db = Database()
+app = FastAPI(lifespan=lifespan)
 #prompt = load_prompt("data/prompt.json")
 prompttemplate = open(PROMPT_REG_TXT_PATH, "r", encoding="utf-8").read()
 prompt = PromptTemplate(

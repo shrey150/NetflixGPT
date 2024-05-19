@@ -1,16 +1,18 @@
 
 import pickle
 from langchain.embeddings import HuggingFaceEmbeddings 
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import Chroma
 from app.models import TitleInfo
 from app.utils import hash_dict
 from sqlmodel import Field, Session, SQLModel, create_engine, select
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker
 
 from dotenv import load_dotenv
 from constants import *
 
 import os
+from langchain_community.vectorstores import Chroma
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 load_dotenv(DOTENV_PATH)
 DEBUG = True
@@ -34,20 +36,34 @@ class Database():
             self.cache = {}
 
         # update connection protocol for psycopg3
-        self.connection_string = str(os.getenv("DB_CONNECTION_URI")).replace(
+        self.connection_string = str(DB_CONNECTION_URI).replace(
             "postgresql", "postgresql+psycopg"
         )
 
         # recycle connections after 5 minutes
         # to correspond with the compute scale down
-        self.engine = create_engine(
-            self.connection_string, connect_args={"sslmode": "require"}, pool_recycle=300
+        self.engine = create_async_engine(
+            self.connection_string,
+            connect_args={"sslmode": "require"},
+            pool_recycle=300
         )
 
-        self.create_db_and_tables()
+        self.async_session = sessionmaker(
+            self.engine,
+            class_= AsyncSession,
+            expire_on_commit=False,
+        )
 
-    def create_db_and_tables(self):
-        SQLModel.metadata.create_all(self.engine)
+    async def create_db_and_tables(self):
+        async with self.engine.begin() as conn:
+            await conn.run_sync(SQLModel.metadata.create_all)
+
+    async def async_get_db(self) -> AsyncSession:
+        local_session = self.async_session
+
+        async with local_session() as db:
+            yield db
+            await db.commit()
 
     def get_all(self):
         data = self.vecstore.get()
