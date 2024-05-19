@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Depends, HTTPException, status
+from pydantic import ValidationError
 from starlette.config import Config
 from starlette.responses import RedirectResponse
 import os
@@ -7,10 +8,13 @@ from langchain.memory import ConversationBufferMemory
 from langchain_core.prompts import PromptTemplate
 import re
 import tldextract
+from logging import Logger
+
+from .models.episode import Episode
 
 from .models.netflix import NetflixPayload
 
-from .models.title import TitleBase
+from .models.title import Title, TitleBase
 from .models.metadata import MetadataRequest
 
 from .scraper import Scraper
@@ -111,24 +115,55 @@ memory = ConversationBufferMemory(memory_key="chat_history")
 # data = {'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID}
 # config = Config(environ=data)
 
+def get_title_by_name(name: str) -> Title:
+    print("[TODO] get_title_by_name not implemented, sending dummy data")
+    dummy_title = Title(
+        id=69,
+        title="Dummy Title",
+        ep_title="Dummy Episode Title",
+        season_num=1,
+        ep_num=1,
+        summary="This is a dummy summary for the dummy title."
+    )
+    return dummy_title
+
+def get_episode_by_name(name: str) -> Episode:
+    # TODO implement
+    print("[TODO] get_episode_by_name not implemented, sending dummy data")
+    sample_episode = Episode(
+        id=420,
+        title_id=101,
+        synopsis="A thrilling episode where the protagonist faces new challenges.",
+        season_num=1,
+        ep_num=1
+    )
+    return sample_episode
+
+def netflix_find_current_episode(data: NetflixPayload) -> Episode:
+    for season in data.video.seasons:
+        for episode in season.episodes:
+            if episode.episodeId == data.video.currentEpisode:
+                return get_episode_by_name(episode.title)
+
 @app.post("/metadata")
 async def parse_metadata(payload: MetadataRequest):
     site_info = tldextract.extract(payload.url)
 
     match site_info.domain:
         case "netflix":
-            data = NetflixPayload(**payload.data)
-            result = []
-            season_num = 1
-            for season in data.video.seasons:
-                episode_num = 1
-                for episode in season.episodes:
-                    result.append(TitleBase(
-                        title=data.video.title,
-                        season_num=season_num,
-                        ep_num=episode_num,
-                        ep_title=episode.title))
-                    episode_num += 1
-                season_num += 1
-            return result
+            try:
+                data = NetflixPayload(**payload.data)
+            except ValidationError:
+                return HTTPException(status_code=400, detail="Malformed Netflix metadata")
+        
+            title = get_title_by_name(data.video.title)
+            episode = netflix_find_current_episode(data)
+
+            return {
+                "episode_id": episode.id,
+                "title_id": title.id,
+            }
+        
+        case _:
+            return HTTPException(status_code=400, detail="Unsupported streaming provider")
 
