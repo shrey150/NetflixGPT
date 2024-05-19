@@ -7,7 +7,10 @@ from langchain_core.messages import SystemMessage
 from langchain_core.prompts import load_prompt
 from langchain_openai import ChatOpenAI
 
-from .models import Title, PageInfo, TitleBase
+from .models.title import Title, TitleBase
+from .models.source import PageInfo
+
+from config import settings
 
 
 def verify_page_is_source(title_info: Title, page_info: PageInfo) -> bool:
@@ -188,7 +191,7 @@ class Scraper():
     # looks for a file called sources.pickle, loads it in as a list of strings, and loops over it to populate config.family_files
     def _load_sources_from_disk(self):
         try:
-            with open(SOURCES_PATH, 'rb') as f:
+            with open(settings.SOURCES_PATH, 'rb') as f:
                 self.sources = pickle.load(f)
                 for show in self.sources:
                     (family, sub) = self.sources[show]
@@ -201,7 +204,7 @@ class Scraper():
 
 
     def _save_sources_to_disk(self):
-        with open(SOURCES_PATH, 'wb') as f:
+        with open(settings.SOURCES_PATH, 'wb') as f:
             pickle.dump(self.sources, f)
             print('Saved sources to disk')
 

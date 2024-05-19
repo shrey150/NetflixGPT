@@ -1,0 +1,18 @@
+from typing import Union, Optional, List
+from pydantic import BaseModel, EmailStr
+from sqlmodel import SQLModel, Field, Enum
+from fastapi import Body
+from datetime import datetime
+from sqlalchemy import Column, Integer, String
+from sqlalchemy_utils import ChoiceType
+import enum
+
+class TitleBase(SQLModel):
+    '''Represents a TV show or movie.'''
+    name: str = Field(max_length=255, nullable=False)
+    num_seasons: int = Field(nullable=False)
+
+class Title(TitleBase, table=True):
+    '''Represents the `titles` table.'''
+    __tablename__ = "titles"
+    id: Optional[int] = Field(default=None, primary_key=True)

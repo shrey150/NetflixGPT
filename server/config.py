@@ -13,6 +13,11 @@ class PromptSettings(BaseSettings):
     PROMPT_QNA_TXT_PATH: str = os.path.join(current_file_dir, 'data/qna.txt')
     PROMPT_QNA_JSON_PATH: str = os.path.join(current_file_dir, 'data/qna.json')
 
+# TODO remove all of these. we use Postgres now
+class LegacySettings():
+    DB_PATH: str = os.path.join(current_file_dir, 'db')
+    CACHE_PATH: str = os.path.join(current_file_dir, 'db_cache.pickle')
+    SOURCES_PATH: str = os.path.join(current_file_dir, 'sources.pickle')
 
 class DatabaseSettings():
     DB_CONNECTION_URI = config("DB_CONNECTION_URI")
@@ -20,6 +25,7 @@ class DatabaseSettings():
 class Settings(
     PromptSettings,
     DatabaseSettings,
+    LegacySettings,
 ):
     pass
 

@@ -1,16 +1,15 @@
 
 import pickle
-from langchain.embeddings import HuggingFaceEmbeddings 
-from .utils import hash_dict
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
-from dotenv import load_dotenv
-from ..config import settings
-
 from langchain_community.vectorstores import Chroma
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+from .utils import hash_dict
+from config import settings
 
 DEBUG = True
 
@@ -22,18 +21,18 @@ class Database():
         # TODO update this to Pinecone
         self.vecstore = Chroma(
             embedding_function=self.embedding,
-            persist_directory=DB_PATH
+            persist_directory=settings.DB_PATH
         )
 
         # load cache from CACHE_PATH if file exists; else, initialize empty cache
         try:
-            with open(CACHE_PATH, 'rb') as f:
+            with open(settings.CACHE_PATH, 'rb') as f:
                 self.cache = pickle.load(f)
         except FileNotFoundError:
             self.cache = {}
 
         # update connection protocol for psycopg3
-        self.connection_string = str(DB_CONNECTION_URI).replace(
+        self.connection_string = str(settings.DB_CONNECTION_URI).replace(
             "postgresql", "postgresql+psycopg"
         )
 
@@ -84,7 +83,7 @@ class Database():
             metadatas=[info]*len(texts),
         )
         self.cache[hash_dict(info)] = True
-        self._save_cache()
+        # self._save_cache()
         self.vecstore.persist()
 
 
@@ -93,7 +92,7 @@ class Database():
         return list(set(map(lambda x: x.page_content, docs)))
     
 
-    def _save_cache(self, path=CACHE_PATH):
+    def _save_cache(self, path=settings.CACHE_PATH):
         with open(path, 'wb') as f:
             pickle.dump(self.cache, f)
 
