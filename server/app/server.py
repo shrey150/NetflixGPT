@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+from typing import Optional
 from fastapi import FastAPI, Depends, HTTPException, status
 from pydantic import ValidationError
 from starlette.config import Config
@@ -144,6 +145,8 @@ def netflix_find_current_episode(data: NetflixPayload) -> Episode:
         for episode in season.episodes:
             if episode.episodeId == data.video.currentEpisode:
                 return get_episode_by_name(episode.title)
+
+    raise HTTPException(status_code=400, detail="Episode metadata not found in Netflix payload")
 
 @app.post("/metadata")
 async def parse_metadata(payload: MetadataRequest):
