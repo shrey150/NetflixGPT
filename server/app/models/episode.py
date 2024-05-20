@@ -9,6 +9,7 @@ import enum
 
 class EpisodeBase(SQLModel):
     '''Represents the metadata for an episode.'''
+    name: str
     synopsis: str # The high-level, one-line summary for an episode usually provided for TV networks. This is NOT the full summary.
     season_num: int = Field(nullable=False)
     ep_num: int = Field(nullable=False)
@@ -18,4 +19,6 @@ class Episode(EpisodeBase, table=True):
     __tablename__ = "episodes"
     id: Optional[int] = Field(default=None, primary_key=True)
     title_id: Optional[int] = Field(default=None, foreign_key="titles.id")
-    
+
+class EpisodeCreate(EpisodeBase):
+    title_id: int

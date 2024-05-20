@@ -8,4 +8,5 @@
     "python.analysis.extraPaths": [
         "${workspaceFolder}"
     ],
+    "pylint.args": ["--disable=C0114,C0115,C0116"]
 }

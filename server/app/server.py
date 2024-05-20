@@ -4,6 +4,7 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from pydantic import ValidationError
 from starlette.config import Config
 from starlette.responses import RedirectResponse
+from sqlalchemy.ext.asyncio import AsyncSession
 import os
 from langchain.memory import ConversationBufferMemory
 from langchain_core.prompts import PromptTemplate
@@ -11,17 +12,21 @@ import re
 import tldextract
 from logging import Logger
 
-from .models.episode import Episode
+from .database import create_db_and_tables, async_get_db
 
+from .models.episode import Episode, EpisodeCreate
 from .models.netflix import NetflixPayload
-
-from .models.title import Title, TitleBase
+from .models.netflix import Episode as NetflixEpisode
+from .models.title import Title, TitleBase, TitleCreate
+from .models.conversation import Conversation
+from .models.message import Message
+from .models.user import User
 from .models.metadata import MetadataRequest
 
 from .scraper import Scraper
-from .__db import Database
 from . import utils
 from config import settings
+from .crud import crud_episode, crud_title
 
 import json
 from langchain_core.messages import HumanMessage, SystemMessage
@@ -30,14 +35,14 @@ from langchain_openai import ChatOpenAI
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await db.create_db_and_tables()
+    await create_db_and_tables()
     yield
 
 ####################
 # TODO use lifespan events to create these top-level objects
 llm = ChatOpenAI(model="gpt-4o")
 # scraper = Scraper()
-db = Database()
+# db = Database()
 prompttemplate = open(settings.PROMPT_REG_TXT_PATH, "r", encoding="utf-8").read()
 prompt = PromptTemplate(
     input_variables= ["title","ep_title","season_num","ep_num","summary","chat_history","question"],
@@ -128,28 +133,26 @@ def get_title_by_name(name: str) -> Title:
     )
     return dummy_title
 
-def get_episode_by_name(name: str) -> Episode:
+def get_episode_by_name(name: str, db: AsyncSession) -> NetflixEpisode:
     # TODO implement
     print("[TODO] get_episode_by_name not implemented, sending dummy data")
-    sample_episode = Episode(
-        id=420,
-        title_id=101,
-        synopsis="A thrilling episode where the protagonist faces new challenges.",
-        season_num=1,
-        ep_num=1
-    )
-    return sample_episode
 
-def netflix_find_current_episode(data: NetflixPayload) -> Episode:
+    episode = crud_episode.exists(db, name=name)
+    return episode
+
+def find_netflix_episode(data: NetflixPayload) -> NetflixEpisode:
     for season in data.video.seasons:
         for episode in season.episodes:
             if episode.episodeId == data.video.currentEpisode:
-                return get_episode_by_name(episode.title)
+                return episode
 
     raise HTTPException(status_code=400, detail="Episode metadata not found in Netflix payload")
 
 @app.post("/metadata")
-async def parse_metadata(payload: MetadataRequest):
+async def parse_metadata(
+    payload: MetadataRequest,
+    db: AsyncSession = Depends(async_get_db)
+):
     site_info = tldextract.extract(payload.url)
 
     match site_info.domain:
@@ -158,15 +161,36 @@ async def parse_metadata(payload: MetadataRequest):
                 data = NetflixPayload(**payload.data)
             except ValidationError:
                 return HTTPException(status_code=400, detail="Malformed Netflix metadata")
-        
-            title = get_title_by_name(data.video.title)
-            episode = netflix_find_current_episode(data)
+
+            title_name = data.video.title
+            num_seasons = len(data.video.seasons)
+
+            if not await crud_title.exists(db, name=title_name):
+                await crud_title.create(db, object=TitleCreate(
+                    name=title_name,
+                    num_seasons=num_seasons,
+                ))
+
+            title = await crud_title.get(db, name=title_name)
+
+            netflix_episode = find_netflix_episode(data)
+            title_name = netflix_episode.title
+
+            if not await crud_episode.exists(db, name=title_name):
+                await crud_episode.create(db, object=EpisodeCreate(
+                    name=netflix_episode.title,
+                    synopsis=netflix_episode.synopsis,
+                    season_num=-1,
+                    ep_num=-1,
+                    title_id=title["id"])
+                )
+
+            episode = await crud_episode.get(db, name=title_name)
 
             return {
-                "episode_id": episode.id,
-                "title_id": title.id,
+                "episode_id": episode["id"],
+                "title_id": title["id"],
             }
-        
+      
         case _:
             return HTTPException(status_code=400, detail="Unsupported streaming provider")
-

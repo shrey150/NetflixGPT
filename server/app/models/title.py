@@ -16,3 +16,6 @@ class Title(TitleBase, table=True):
     '''Represents the `titles` table.'''
     __tablename__ = "titles"
     id: Optional[int] = Field(default=None, primary_key=True)
+
+class TitleCreate(TitleBase):
+    pass
