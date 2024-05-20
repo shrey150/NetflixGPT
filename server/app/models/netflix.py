@@ -65,7 +65,7 @@ class Seasons(BaseModel):
     episodes: List[Episode]
 
 class UserRating(BaseModel):
-    matchScore: int
+    matchScore: Optional[int]
     tooNewForMatchScore: bool
     type: str
     userRating: int
