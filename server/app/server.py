@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 from typing import Optional
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import BackgroundTasks, FastAPI, Depends, HTTPException, status
 from pydantic import ValidationError
 from starlette.config import Config
 from starlette.responses import RedirectResponse
@@ -140,17 +140,34 @@ def get_episode_by_name(name: str, db: AsyncSession) -> NetflixEpisode:
     episode = crud_episode.exists(db, name=name)
     return episode
 
-def find_netflix_episode(data: NetflixPayload) -> NetflixEpisode:
-    for season in data.video.seasons:
-        for episode in season.episodes:
+def find_netflix_episode(data: NetflixPayload) -> (NetflixEpisode, int, int):
+    for season_num, season in enumerate(data.video.seasons):
+        for ep_num, episode in enumerate(season.episodes):
             if episode.episodeId == data.video.currentEpisode:
-                return episode
+                # convert from zero-indexing to 1-indexing
+                return (episode, season_num+1, ep_num+1)
 
     raise HTTPException(status_code=400, detail="Episode metadata not found in Netflix payload")
+
+async def ensure_all_episodes_in_db(data: NetflixPayload, db: AsyncSession, title_id: int):
+    for season_num, season in enumerate(data.video.seasons):
+        for ep_num, episode in enumerate(season.episodes):
+            episode_name = episode.title
+            if not await crud_episode.exists(db, name=episode_name):
+                await crud_episode.create(db, object=EpisodeCreate(
+                    name=episode_name,
+                    synopsis=episode.synopsis,
+                    title_id=title_id,
+
+                    # account for zero-indexing -> 1-indexing
+                    season_num=season_num+1,
+                    ep_num=ep_num+1,
+                ))
 
 @app.post("/metadata")
 async def parse_metadata(
     payload: MetadataRequest,
+    background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(async_get_db)
 ):
     site_info = tldextract.extract(payload.url)
@@ -159,8 +176,9 @@ async def parse_metadata(
         case "netflix":
             try:
                 data = NetflixPayload(**payload.data)
-            except ValidationError:
-                return HTTPException(status_code=400, detail="Malformed Netflix metadata")
+            except ValidationError as e:
+                print(e)
+                raise HTTPException(status_code=400, detail="Malformed Netflix metadata") from e
 
             title_name = data.video.title
             num_seasons = len(data.video.seasons)
@@ -173,24 +191,33 @@ async def parse_metadata(
 
             title = await crud_title.get(db, name=title_name)
 
-            netflix_episode = find_netflix_episode(data)
+            netflix_episode, season_num, ep_num = find_netflix_episode(data)
             title_name = netflix_episode.title
 
             if not await crud_episode.exists(db, name=title_name):
                 await crud_episode.create(db, object=EpisodeCreate(
                     name=netflix_episode.title,
                     synopsis=netflix_episode.synopsis,
-                    season_num=-1,
-                    ep_num=-1,
+                    season_num=season_num,
+                    ep_num=ep_num,
                     title_id=title["id"])
                 )
 
             episode = await crud_episode.get(db, name=title_name)
 
-            return {
+            background_tasks.add_task(ensure_all_episodes_in_db, data, db, title["id"])
+
+            res = {
                 "episode_id": episode["id"],
+                "episode_name": episode["name"],
+                "title_name": title["name"],
                 "title_id": title["id"],
+                **title,
+                **episode,
             }
+            res.pop("id")
+            res.pop("name")
+            return res
       
         case _:
-            return HTTPException(status_code=400, detail="Unsupported streaming provider")
+            raise HTTPException(status_code=400, detail="Unsupported streaming provider")

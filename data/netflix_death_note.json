@@ -1,0 +1,2015 @@
+{
+    "version": "2.1",
+    "trackIds": {
+        "nextEpisode": 200257858,
+        "episodeSelector": 200257859
+    },
+    "video": {
+        "title": "DEATH NOTE",
+        "synopsis": "When a Japanese high schooler comes into possession of a mystical notebook, he finds he has the power to kill anybody whose name he enters in it.",
+        "rating": "TV-14",
+        "artwork": [
+            {
+                "w": 1280,
+                "h": 720,
+                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/Qs00mKCpRvrkl3HZAN5KwEL1kpE/AAAABYB5uh4nmup9a10_rapHwQPjuVD6zyYUgoD33rKmSRrQOfLi01sqVwxZ9hAJKYPblSmox3jqmRwGz_vxNBbO_sYjA-Vn5EmwZt5O.jpg?r=bc9"
+            },
+            {
+                "w": 1280,
+                "h": 720,
+                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/Qs00mKCpRvrkl3HZAN5KwEL1kpE/AAAABYB5uh4nmup9a10_rapHwQPjuVD6zyYUgoD33rKmSRrQOfLi01sqVwxZ9hAJKYPblSmox3jqmRwGz_vxNBbO_sYjA-Vn5EmwZt5O.jpg?r=bc9"
+            }
+        ],
+        "boxart": [
+            {
+                "w": 426,
+                "h": 607,
+                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/WNk1mr9x_Cd_2itp6pUM7-lXMJg/AAAABcfinxRFEUSi0rMyfyljetNb4CeO13LsdOnF5cwbp_KJmsx-liacMoi63tEcOXP5_2NjSx08Wl-Bj-e32jGSX7fNMtzVJMn1NGQx.jpg?r=f60"
+            },
+            {
+                "w": 284,
+                "h": 405,
+                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/WNk1mr9x_Cd_2itp6pUM7-lXMJg/AAAABbqymj3QtqADIdQIwQ3jDMS6Ihqp7PEY36LA3gsIJFIas5M8hCa2dCfdWOU3sKY0dfFIy82CHI5mt_YeLEA-r3Om4jVeis48ziD1.jpg?r=f60"
+            }
+        ],
+        "storyart": [
+            {
+                "w": 1280,
+                "h": 720,
+                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABboqDwV98d-QpA6biauPIcgNeH_c439AXzsln9B1k2Ol9F36YokyOE42ORtSKEx-CiqNsiC-6Dhm4-mFCK1q9OZRJFa9rG_CUvHe.jpg?r=685"
+            },
+            {
+                "w": 1920,
+                "h": 1080,
+                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABTAJKVgSOCzdyCOxlnsMGHr2zNiJRjYiwsMngQ8P-p-rAoo_xFRiAz4rXVT2KX_nibIsO05W_kdBd9D0gP84IPduRA0yT6Kiqh16.jpg?r=685"
+            }
+        ],
+        "type": "show",
+        "unifiedEntityId": "Video:70204970",
+        "id": 70204970,
+        "userRating": {
+            "matchScore": 97,
+            "tooNewForMatchScore": true,
+            "type": "thumb",
+            "userRating": 2
+        },
+        "skipMarkers": {
+            "credit": {
+                "start": null,
+                "end": null
+            },
+            "recap": {
+                "start": null,
+                "end": null
+            },
+            "content": []
+        },
+        "currentEpisode": 70171903,
+        "hiddenEpisodeNumbers": false,
+        "requiresAdultVerification": false,
+        "requiresPin": false,
+        "requiresPreReleasePin": false,
+        "seasons": [
+            {
+                "year": 2006,
+                "shortName": "",
+                "longName": "",
+                "hiddenEpisodeNumbers": false,
+                "title": "Death Note",
+                "id": 70081003,
+                "seq": 1,
+                "episodes": [
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Brilliant but bored high school student Light Yagami suddenly finds himself holding the power of life and death in his hands.",
+                        "episodeId": 70171896,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1299,
+                        "runtime": 1367,
+                        "displayRuntime": 1367,
+                        "watchedToEndOffset": 1215,
+                        "autoplayable": true,
+                        "title": "Rebirth",
+                        "id": 70171896,
+                        "bookmark": {
+                            "watchedDate": 1716224469682,
+                            "offset": 983
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 79497
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABbLUPSH2Gps8V8Upb1HqREaYU2P0byfyXa8H0QzpyLeKcI2m0NUqVLxY_EjdyyXIuTqm58fPzBe5fqSws2RwkN_vsto8h6BbnMfguM2z8d1B4qvl6qhxYIzh.jpg?r=eeb"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABVbQ2KXA55ezspzXHAEH4p5CkZR9HGYPvATFLwTwNGIFRcKoKBRU-nAAqYhy0ndLyUf8e5x82tssh5mYd0VdvXcIwTbOMGkV0MajjLfpvgOaITxL4dRHpDtirQ.jpg?r=eeb"
+                            }
+                        ],
+                        "seq": 1,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "While the world's criminals continue to drop dead, L meets by computer with representatives from various nations.",
+                        "episodeId": 70171897,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1289,
+                        "runtime": 1368,
+                        "displayRuntime": 1368,
+                        "watchedToEndOffset": 1172,
+                        "autoplayable": true,
+                        "title": "Confrontation",
+                        "id": 70171897,
+                        "bookmark": {
+                            "watchedDate": 1591655688447,
+                            "offset": 1299
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 123456
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABRG2yiIMSXE-aGGx4FCkt1I6jwACkFrzBTe5Cun_XBR-2ZCEtwOzRqhG8UtQSA6R5D4UwR-fSdQ22aAojx2_vT38dMECkWyUNR3rDzL5Z6iHy6DjKUBu_m8u.jpg?r=7e8"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABQanGGywofS8dQA646F0Pjak5se_38k2tdL08GGagPxU8Rk5-8TqRxJTyAOCcgenSyD4cyKBgoBlvTVJiomMXhXHKiMm4E_1YVFec7ZQKoeLTet9_sGE9wzRIg.jpg?r=7e8"
+                            }
+                        ],
+                        "seq": 2,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Ryuk, the Shinigami, or god of death, who dropped the Death Note into the human world, warns Light that someone is on his trail.",
+                        "episodeId": 70171898,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1292,
+                        "runtime": 1370,
+                        "displayRuntime": 1370,
+                        "watchedToEndOffset": 1172,
+                        "autoplayable": true,
+                        "title": "Dealings",
+                        "id": 70171898,
+                        "bookmark": {
+                            "watchedDate": 1591676849171,
+                            "offset": 1294
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 126251
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABWUTiZvhtrcu2f976lKKIu3L4AZNH-RxjC2LesODIyky05D9qZJjTqUgXM6N17PhWXYmQts1tgkujCtiUOUlikxs_BrQqiTXbD5HcDm-fWae5CPuawu6uQER.jpg?r=b9f"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABVNnygfs3E1P_H6QEvGW19AAhEAP0jyu2yRPbxEUp0-UEH8sE_LnpNKTi5csrLftNmdjQ7vJNei2de62CBljElRjR5zpPbIG229mJqMqVFrpklbjSQiae8NibQ.jpg?r=b9f"
+                            }
+                        ],
+                        "seq": 3,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Light--now known to the world as Kira--tests the Death Note to understand the scope of its powers by killing off six convicts in various ways...",
+                        "episodeId": 70171899,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1293,
+                        "runtime": 1371,
+                        "displayRuntime": 1371,
+                        "watchedToEndOffset": 1184,
+                        "autoplayable": true,
+                        "title": "Pursuit",
+                        "id": 70171899,
+                        "bookmark": {
+                            "watchedDate": 1591725222613,
+                            "offset": 1296
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 147355
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABck9nKS8ZB4EO1DTZXT1S8i5EyF2ZiZbC209FdsvkW9MTAsHnlOK9A63U-_UcHZkjFOML0horQaiOPgkYaqlcaJpD5Mhuk2E9pjuMVsCAwG9zyKG0ss6Uyxr.jpg?r=54b"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABQ5vfcK64Y8Y4AxeWWEgu7MATgCd9b4KlT-2ATmSat5-HdLUvrCz8i6uXzDe-9oXEyg7Fr1jc5wRD9xtRKbv4zMVVZTZc0xSOex7mprIjtj5nUNChjJVN5TrRg.jpg?r=54b"
+                            }
+                        ],
+                        "seq": 4,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Soichiro Yagami demands to meet with L in person when he finds out that L has secretly brought FBI agents into Japan.",
+                        "episodeId": 70171900,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1293,
+                        "runtime": 1371,
+                        "displayRuntime": 1371,
+                        "watchedToEndOffset": 1216,
+                        "autoplayable": true,
+                        "title": "Tactics",
+                        "id": 70171900,
+                        "bookmark": {
+                            "watchedDate": 1591733187803,
+                            "offset": 1133
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 79454
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABdwDDERqGX0-_-h5zVTzAwj2bBqyQeSL3KgnSL_fvYdatBOXwO1x1EDiXk2DwRakgWzzgaxB4MbYPmQOpS5Z0-spzKPenWQvdmUlXgwsU-sUNrV4BZUPXR-K.jpg?r=8c2"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABZEmYk9-2ADFNto9Ol3Hldn5zPLGuXZEpa27GBbPobmC6NHXcVDOpQ78rPW53VfD_-4xqy3xwh6fxB_TU8vl_ZsWuTxn5-FBt4Jv5grCdaCaScx0Bm3gH18AOw.jpg?r=8c2"
+                            }
+                        ],
+                        "seq": 5,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Light meets a woman at the Police Department with an urgent message for the Kira task force.",
+                        "episodeId": 70171901,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1300,
+                        "runtime": 1380,
+                        "displayRuntime": 1380,
+                        "watchedToEndOffset": 1220,
+                        "autoplayable": true,
+                        "title": "Unraveling",
+                        "id": 70171901,
+                        "bookmark": {
+                            "watchedDate": 1591734498988,
+                            "offset": 1307
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 79454
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABfeVTdDQGlT3El-hre-EwtN7t8iSOPaI5mMgWSVgcx1GCA4FgV20nerUZF0_hjd87uKHXpv9PbGQ11L5M6un0IxstzPR7Zighs9GENXBAceGzwo44N7LyfZg.jpg?r=dac"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABXVUn9THZp-QXqe-HIlsWS_Vt9YurN8gV4r0xEihdkosZthIT_Z-ogu63mqwd_y9KoLzQr5WScCaL6K0Kl0NyY87Z8_oCgSOaB9mIjKln0WSFLnQydmlZldWDQ.jpg?r=dac"
+                            }
+                        ],
+                        "seq": 6,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Light uses the Death Note to try to get rid of the woman who could get him captured, and is shocked when it doesn't work.",
+                        "episodeId": 70171902,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1293,
+                        "runtime": 1372,
+                        "displayRuntime": 1372,
+                        "watchedToEndOffset": 1215,
+                        "autoplayable": true,
+                        "title": "Overcast",
+                        "id": 70171902,
+                        "bookmark": {
+                            "watchedDate": 1591737806472,
+                            "offset": 1293
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 79579
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABX0uPCjDl1ZaPaceofgtdaMPoEOpqPXO1z5TbIXsIaX_O9mADvic0vgmEgoQElcno2zkMim4zz-S4e3jj_CaVTHHUBfTOUGbY2aiVIG6pNYjYcNGx0cdvBre.jpg?r=aaf"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABUji4RwJjt7G1G6Hm5boSJlQ1cS5yNROVV-M7D3jI3y6SEoDaaY7fYlzpAlrZPKAcoerv7wYubL_7YKmQ1fMYnBFSpl81cZUpzV-K7EFwpzQiiEk_VN_pClgig.jpg?r=aaf"
+                            }
+                        ],
+                        "seq": 7,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "L insists on setting up bugs and cameras in the homes of Chief Yagami and Deputy Director Kitamura...",
+                        "episodeId": 70171903,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1293,
+                        "runtime": 1372,
+                        "displayRuntime": 1372,
+                        "watchedToEndOffset": 1214,
+                        "autoplayable": true,
+                        "title": "Glare",
+                        "id": 70171903,
+                        "bookmark": {
+                            "watchedDate": 1591740053455,
+                            "offset": 1296
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 79579
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABUgiWxaX3g33pF02h-9VfT2CsxdWiWExPY_w1uKTvQh3JuGiR99XShYbgFYI7fgHJf0nOOjJSMgnPxgTcqrZnaMfBaMqo7ktvTLn5KDBy-W-q2OPEuUk0Ewd.jpg?r=d6e"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABZstotfR_rDzW0L7xr9Q2PL6eeqBWLG5Ny_cUL3zuXMfXgRqyxxxF7X6Qgkv_mYVEKrqv579ua3rn-I5DuTw91RZU4syEnd81rINy9ylpD0dIpdX1FpJFqDgvA.jpg?r=d6e"
+                            }
+                        ],
+                        "seq": 8,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "The murders continue, and L grows suspicious of Light's too-perfect behavior and decides to investigate him on his own.",
+                        "episodeId": 70171904,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1293,
+                        "runtime": 1371,
+                        "displayRuntime": 1371,
+                        "watchedToEndOffset": 1178,
+                        "autoplayable": true,
+                        "title": "Encounter",
+                        "id": 70171904,
+                        "bookmark": {
+                            "watchedDate": 1591741333335,
+                            "offset": 1296
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 120328
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABaqdCKl3b_yK42iz7XNEfEb63MnJIBCEHhGATmlaOcgR1E_8eIvuzRuYcdsVecA_fuX2k8Wb3YSkljs95c3G7SOaAAB_pyt23OwxKbn-6AsUb8x4yse4QBbz.jpg?r=645"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABfPaR5Qi91wiuABLeHAnzQ3GkqB-CTESeQkm3HaJphDdkvrXXj95_5SYdHHv4589HwBR1Co1apvfsR8m83SgfyAGG3bKsIokqwpsx27qbJOkgZaCHABqcX279g.jpg?r=645"
+                            }
+                        ],
+                        "seq": 9,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "L's suspicion of Light deepens, compelling him to invite Light into the investigation.",
+                        "episodeId": 70171905,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1293,
+                        "runtime": 1372,
+                        "displayRuntime": 1372,
+                        "watchedToEndOffset": 1215,
+                        "autoplayable": true,
+                        "title": "Doubt",
+                        "id": 70171905,
+                        "bookmark": {
+                            "watchedDate": 1591742696074,
+                            "offset": 1296
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 79454
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABYgcauEMvUOkJuHHSR5aAQYuGvEd-ne_xR0WFklF4vqXyst9PydTMxy-LaCfGNEA59P2lsIXEyKuqXWOg2WlFgtznzi5YnkA_9jNTM8SekBkbOMipdxI6DCJ.jpg?r=f1d"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABbKAx1wkozCi1gHPcRNKapwAkvBDgf_t5ym8W67KVeBs52vrPg4a-oIBkorew7f2Ck1rl-bho9cIXsSzCzGQs0_zihi7iznPTh2r0XthNB0IDd5M_hJO_rjtNQ.jpg?r=f1d"
+                            }
+                        ],
+                        "seq": 10,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "As predicted on the tapes sent to Sakura TV, news anchors and commentators who expressed doubt about Kira die one by one.",
+                        "episodeId": 70171906,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1293,
+                        "runtime": 1372,
+                        "displayRuntime": 1372,
+                        "watchedToEndOffset": 1215,
+                        "autoplayable": true,
+                        "title": "Assault",
+                        "id": 70171906,
+                        "bookmark": {
+                            "watchedDate": 1591747800408,
+                            "offset": 1295
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 79621
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABU8wmLhoNVhtCd51welhZihSPUljFzQheEgXF6p70w7Q_N_Mg3R9x8qe37wOT4XdoPk9hYP1V00rz8vR_wmQkRdXtX8YS1wvb_iNLQpjgf4okopkCQUvLEs4.jpg?r=79e"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABeWfZ3xAZZhmUGNOE2nrdfI14MI9FoA_6kAmdgs0FmQNH06m0bURTcobsQXekTV7eE1ynqFTwhV2cWm5NVsxoVlL2bI9FHC-uxGt0pm67Z9mdnOW5BiakfIh4A.jpg?r=79e"
+                            }
+                        ],
+                        "seq": 11,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "With a second Kira now on the loose, L asks Light to join the task force and pose as the real Kira in order to catch the copycat.",
+                        "episodeId": 70171907,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1293,
+                        "runtime": 1372,
+                        "displayRuntime": 1372,
+                        "watchedToEndOffset": 1214,
+                        "autoplayable": true,
+                        "title": "Love",
+                        "id": 70171907,
+                        "bookmark": {
+                            "watchedDate": 1591749162407,
+                            "offset": 1294
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 79621
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABQEDzhq6Wf9Ho0z4cdaNiKg7lkQ7RD454ljeuxi1sc4ltG4taUnibeS6FWziya_25PKfljZpwc4GlXQnxkQWoWbg-Wul6-SwNh90oO9NddEqvFT0l1p-6lXH.jpg?r=2ff"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABb24TzLVtRr9FiumePsWY_f_FWUo9JUb9vycWbWx82Idpw4FIYrbyCrMIOUUi37loJyu1XWuBSOhtOdUj3vD6pMylAWjpz8tgt0jw6Jkt2Wiy5nCvr484r3xfA.jpg?r=2ff"
+                            }
+                        ],
+                        "seq": 12,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Light goes to Aoyama to discover the identity of the second Kira before L becomes more suspicious.",
+                        "episodeId": 70171908,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1293,
+                        "runtime": 1372,
+                        "displayRuntime": 1372,
+                        "watchedToEndOffset": 1214,
+                        "autoplayable": true,
+                        "title": "Confession",
+                        "id": 70171908,
+                        "bookmark": {
+                            "watchedDate": 1591765209698,
+                            "offset": 1296
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 79621
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABW7A3T0ZVt4SqQ7fDpyNavyxJnC4rL1xWDDGuil8UeNZO9b2j77E981pQMv-gR1wSinmM7hKbgRwaoqJiBHvCQU7CV241xkgoN6wsaqdBOUwwAkhOOAy0xoJ.jpg?r=54c"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABQZt__P-h2kB9FqFOAlC6SB3mxAyPBQ-UFUhzr7NDIC-mNBnC17ENT2eTqER4MkQk1dH57hnKBdcH0PBEugE4ckkdJV26NEb-hD9ds4x6L5vA9Q-4fKAFqz2Ng.jpg?r=54c"
+                            }
+                        ],
+                        "seq": 13,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Light and Misa show each other their Death Notes, and Light asks Misa to have her shinigami Rem get rid of L.",
+                        "episodeId": 70171909,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1292,
+                        "runtime": 1372,
+                        "displayRuntime": 1372,
+                        "watchedToEndOffset": 1207,
+                        "autoplayable": true,
+                        "title": "Friend",
+                        "id": 70171909,
+                        "bookmark": {
+                            "watchedDate": 1591766449510,
+                            "offset": 1295
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 79662
+                            },
+                            "recap": {
+                                "start": 89631,
+                                "end": 104187
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABQVfl6TfInsLh9Y566ZxLFYg0W06GUkTUu3WhwyZ46ZrgPkGuQeI2zRyIQngbhTAmwULi3n-U-kJnGUL3myqtcgjiyxgx3Ri9s6pAD77CG6uR2S9VZ3ImSjm.jpg?r=a7d"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABRR9e3EwTznNoRqZI4_aKY_ASJUBXIUUUF_OtolXdSLfdVSjUGr0skI5yen2llajqsDWdl33u0h2NAbtYj6oSstwa5iuAB5ki2MTCY2nWw6v8nMzpliKUAtjgw.jpg?r=a7d"
+                            }
+                        ],
+                        "seq": 14,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Evidence turns up that points to Misa Amane as the second Kira.",
+                        "episodeId": 70171910,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1289,
+                        "runtime": 1369,
+                        "displayRuntime": 1369,
+                        "watchedToEndOffset": 1175,
+                        "autoplayable": true,
+                        "title": "Wager",
+                        "id": 70171910,
+                        "bookmark": {
+                            "watchedDate": 1591767661369,
+                            "offset": 1290
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 118034
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABU8YPvHA3E7KowDiVZyeP8_PtDl-h6tQznMq_7JNleKAGlmu-czK3-KQ6ZJrKDSVb0dAguOwMKbVi2pCHlPMWmmG8pTYfx-2ODWj9_rdhWgH12bsHl0unGHa.jpg?r=f09"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABav-5CLJKRITT035C5wsD-b6Zstz8iezgSBht2l6EaOHuluP9aqMvx4ciuAKVDjMX42rzWx6b11x_VAEHIfZdQMr4zlJKnKcydxOjA54SFEjq4wePFPK72YrHw.jpg?r=f09"
+                            }
+                        ],
+                        "seq": 15,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Misa is in confinement, though her memories of the Death Note have been completely wiped away.",
+                        "episodeId": 70171911,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1292,
+                        "runtime": 1372,
+                        "displayRuntime": 1372,
+                        "watchedToEndOffset": 1212,
+                        "autoplayable": true,
+                        "title": "Decision",
+                        "id": 70171911,
+                        "bookmark": {
+                            "watchedDate": 1591768886393,
+                            "offset": 1293
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 79412
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABc-8TOUjPfyRTNwhf1OXGt0boMavEn-fRP30RE4MI92RlbHGdV4-YFHEFf3Mp-ckPTTC9hqihG9IKRNC-2vQ97Rm6JmOSVsKdlpQqbr7VFzVRM5eFE04Ug1q.jpg?r=220"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABS3teuLorNCvtZwQaPt03aBX50k9Dci5JGJ82mL3TBg2Ovsid4b8yUa7fUxDvJ3QCXg5ZWnIuCgnejrdUGQcUG2Ji7XJTepTZnLKVWXQJyIY8c2_AugmH0z51w.jpg?r=220"
+                            }
+                        ],
+                        "seq": 16,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "After fifty days of confinement the killings continue, and Misa and Light are released.",
+                        "episodeId": 70171912,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1292,
+                        "runtime": 1372,
+                        "displayRuntime": 1372,
+                        "watchedToEndOffset": 1211,
+                        "autoplayable": true,
+                        "title": "Execution",
+                        "id": 70171912,
+                        "bookmark": {
+                            "watchedDate": 1591770140878,
+                            "offset": 1289
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 79537
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABeoC7eSWczoVoRIfMO8zAqeNkN2JNv9Wcaq46Miw4bD_I_cUwN34mbjPB2GCSGmPjkxQpWoRWj-tLqDSpHofhgEMKeOjIsS3fwDpKQUAH_LlJKE5mJ_FpokJ.jpg?r=03f"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABSgCIzsVc-Y64IUM-jInWEczX2bjRWqWT1Dlek9NntFkq2aNlwH7A8olVO6f58wsz0FttfjUe4WxN6kgEHQ4vAmSTTnMMZdLvIR67GmNSPLjzGeR2ewhTqz5ag.jpg?r=03f"
+                            }
+                        ],
+                        "seq": 17,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Though L is still suspicious, Light and Misa, their memories of being Kira wiped clean, return to headquarters...",
+                        "episodeId": 70171913,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1291,
+                        "runtime": 1372,
+                        "displayRuntime": 1372,
+                        "watchedToEndOffset": 1214,
+                        "autoplayable": true,
+                        "title": "Ally",
+                        "id": 70171913,
+                        "bookmark": {
+                            "watchedDate": 1591822622965,
+                            "offset": 1291
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 79496
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABTPnigE2zhIAsHHvhGbteQVeq4srAY2gdRr6dKdjxoQGpWdB9DjFmK922ipX_y5x5l6VvqTcqYANwejcpU8LQKNfd_71Lwu1i5PTSuJrv-YQSG0IwFkobVz8.jpg?r=ee0"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABRDr9TlazCXXIaWESjGFdd0CC4le0dlT6Wrv1OtWJNCaE8yrpst9jai9HnFFEdYwIeX_442tsNZvn7qBdolL6P97nutwsdRyJWe6nTEKhRYjNOK21_3VMV_Ztg.jpg?r=ee0"
+                            }
+                        ],
+                        "seq": 18,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Matsuda, the task force member assigned to watch Misa, is eager to distinguish himself...",
+                        "episodeId": 70171914,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1289,
+                        "runtime": 1368,
+                        "displayRuntime": 1368,
+                        "watchedToEndOffset": 1186,
+                        "autoplayable": true,
+                        "title": "Matsuda",
+                        "id": 70171914,
+                        "bookmark": {
+                            "watchedDate": 1592022676817,
+                            "offset": 1292
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 107107
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABV8tPwIgGpgQMvORRYwVCV8MXs8mbeRGXLg1Gqpq_e195QyBXFjttWrNW0QUPRt9_HTXFNfvAthwXT1LkrPq97Zg2nB1ION8nSe5dNCGNxcP-p5fshbfZBJr.jpg?r=5cc"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABfRAH7k22XRLb93tYzs8XYg28WZ4W2gzzmQjFi-j_la-wSRDiOtcV8bVybKi-3HxHd-ySa-jROXU03SiT7sV29n1usz4ZbUEd-ylU_8ded7jNplm7pzu92muiQ.jpg?r=5cc"
+                            }
+                        ],
+                        "seq": 19,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "L's team discovers that the Yotsuba Group meet in secret to discuss the elimination of individuals who are troublesome to their company...",
+                        "episodeId": 70171915,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1301,
+                        "runtime": 1369,
+                        "displayRuntime": 1369,
+                        "watchedToEndOffset": 1213,
+                        "autoplayable": true,
+                        "title": "Makeshift",
+                        "id": 70171915,
+                        "bookmark": {
+                            "watchedDate": 1592112079707,
+                            "offset": 1296
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 87879
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABZsVI6Fxquw6Nw6KywXDtzi1-kw1pOp7TbdLg3qr0jJaB4HQCUY8QL9DMtH5odYABpCdt9pSsOGzXDRIZPJHZrhDy5wbXeudT80P4J3SGLhJADyfyzzCA6wb.jpg?r=66e"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABbkXsOYP7gb90tpracB3zCVrTQ2q8CncWV32HLELmPwCC_QCk41100fmTfzLMJO9iMiHoup6E3i2YC8V21z2lJrpZD8Q1V_G0bLiraMNEDz7fHl0YAMWUyFwcw.jpg?r=66e"
+                            }
+                        ],
+                        "seq": 20,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "The Yotsuba Group hires Eraldo Coil to uncover L's identity.",
+                        "episodeId": 70171916,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1292,
+                        "runtime": 1369,
+                        "displayRuntime": 1369,
+                        "watchedToEndOffset": 1208,
+                        "autoplayable": true,
+                        "title": "Performance",
+                        "id": 70171916,
+                        "bookmark": {
+                            "watchedDate": 1592196823328,
+                            "offset": 1294
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 87837
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABeVmpUsRir32ALHczp-yUA9fCmfFUI8w0o6-F-mZArSMXthZTawkiWKtOCm49hWwWI_vR-B-OkZA-xpH72uHE3dpL-bam7NV_pFZBSZkCVI-J6gThqbjmc-D.jpg?r=0e3"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABRkF-gGZo4VI9fdWJmbxyMmGn8hXwolxq9bUu2eVsSuvcxMWSvSOKekNJmwrx7yDixATTuv1SWM3J9LB_yqCDkG2oVe0fX9qGGNT44dTFZkyq95ouUHnzv20KA.jpg?r=0e3"
+                            }
+                        ],
+                        "seq": 21,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Misa succeeds in narrowing down the Kira suspects in the Yotsuba Group to one: Higuchi.",
+                        "episodeId": 70171917,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1289,
+                        "runtime": 1366,
+                        "displayRuntime": 1366,
+                        "watchedToEndOffset": 1200,
+                        "autoplayable": true,
+                        "title": "Guidance",
+                        "id": 70171917,
+                        "bookmark": {
+                            "watchedDate": 1592198058171,
+                            "offset": 1292
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 91383
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABSEJPgnTug43CIh7vm54shUxh_GIPhKKBEy5HPQd6oC9QovUd9STfwN3ajp39qIBBIQPLOERuRirfvaHjLOnZcxUfD9vRiERLVJFKnLyfASJ7hCEIOzBNWbM.jpg?r=a9d"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABZ9_MSJRIQ5zXQT0x8zD0Ep82gD7MztiMck0s7dER6RyjoZmZ_QLW7HCa-8X2xle9GxjUMbFdELjV_4RyMpmjq9Igd92M5tJSjf-Mj0YHgXgkwwepAt0uGtdHg.jpg?r=a9d"
+                            }
+                        ],
+                        "seq": 22,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Higuchi of the Yotsuba Group attempts to kill Matsuda of the task force, and is surprised when he doesn't die after 40 seconds.",
+                        "episodeId": 70171918,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1289,
+                        "runtime": 1366,
+                        "displayRuntime": 1366,
+                        "watchedToEndOffset": 1165,
+                        "autoplayable": true,
+                        "title": "Frenzy",
+                        "id": 70171918,
+                        "bookmark": {
+                            "watchedDate": 1592199228220,
+                            "offset": 1292
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 136594
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABe5NgUp9pNmp82xyzLLAdLT6uI44u-ymiVlYYW30Ge177NgHi3SeVjZuYOQrk5eZeQhS1coJIS3SbRSvkx8zqcJnx0ufiHZu1YSG4q_8uxT_T7tbnsHw3rBd.jpg?r=17e"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABUvesCFwoS2nYZLBnWoYSJ2j0AiuH_iHFOA2trNzVuSkJUsy6UGbCjRe50w8Ytpnjj1AN5RUED9W7F0BqyJFmiaXnJ3wEy8mufatzgMSwbycKoMdXWDLNbScww.jpg?r=17e"
+                            }
+                        ],
+                        "seq": 23,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Higuchi is captured and tells the investigators about the Death Note.",
+                        "episodeId": 70171919,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1292,
+                        "runtime": 1369,
+                        "displayRuntime": 1369,
+                        "watchedToEndOffset": 1212,
+                        "autoplayable": true,
+                        "title": "Revival",
+                        "id": 70171919,
+                        "bookmark": {
+                            "watchedDate": 1592200549420,
+                            "offset": 1294
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 79954
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABXG_tbGJ-0LyKmOHHx1F1Ddy5xwBgKh2nGyRKSRC8U9PgF--SX8y3L0fCur3BF0XSPLkaB4ApOr_lFzIuhILp9lcRrxfZGT64d7JMRTxzU9l5Zh6YcOlct_W.jpg?r=653"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABZKtnoiLnlBnDr8l8zpQC83f1iL42t7pcAiKWKaHgCyK_Oa4_FEOdf6Z091ajACdrA4mf3eK4N2uvvj3nxmsatO6fRP8dty4A5oXxdNTO_WIl0A1OzzPp-D-pg.jpg?r=653"
+                            }
+                        ],
+                        "seq": 24,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Light, his memory recovered, orders Misa to begin killing after Higuchi dies.",
+                        "episodeId": 70171920,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1292,
+                        "runtime": 1369,
+                        "displayRuntime": 1369,
+                        "watchedToEndOffset": 1210,
+                        "autoplayable": true,
+                        "title": "Silence",
+                        "id": 70171920,
+                        "bookmark": {
+                            "watchedDate": 1592201833486,
+                            "offset": 1291
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 79955
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABWTeBbyiiGrD4QRNRytNQrLTOSyUJqRWxMeQOttI0f8-033airKYmjnDzHAJqIunWxXMssgsVDuRTY4oMCUpaeOTKCDiG_PBHjnZLI5l0J92zvr2ZyWELLCo.jpg?r=9e4"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABVuy0WSlY6ZvqflocEn8Ts7cDwIpdek11eSIxCCjSUY4FEChJ3ddD9al3kDkwOVPXIxHJXMmXcTwURP-RDJ3wdUwzBHJ1Yl68UzS9umSQ7oaGtDLuqwF-Tyfyg.jpg?r=9e4"
+                            }
+                        ],
+                        "seq": 25,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Light has removed everyone in his way and is closer to achieving his perfect world.",
+                        "episodeId": 70171921,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1289,
+                        "runtime": 1366,
+                        "displayRuntime": 1366,
+                        "watchedToEndOffset": 1177,
+                        "autoplayable": true,
+                        "title": "Renewal",
+                        "id": 70171921,
+                        "bookmark": {
+                            "watchedDate": 1592278774078,
+                            "offset": 1292
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 118743
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABSCAEP4j2x6E2bIJ8AQRrLzzdfUEQw0zNuvZU60lB0FNNkFoqsnPKQveos0hr1zbnZUw1JJEcgMsuW0V2gynkJT98IUf8LaCyY3KEBF8nwhZTKjg-CvK4OV9.jpg?r=daa"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABUVK0cIyaegkwYbkczWeNDd16QbPFkKzSs-eJ9PV_tvRThf3LhHGVEOT0yauhqj9PYFSO9qXa-cPeUL0eHpljSPG4TbT5jTJ-11qReBh-vvqJT2MO67RznZ9Rw.jpg?r=daa"
+                            }
+                        ],
+                        "seq": 26,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "A new investigator steps forward--Near, a central figure in the SPK, an organization that is trying to catch Kira without relying on L.",
+                        "episodeId": 70171922,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1289,
+                        "runtime": 1366,
+                        "displayRuntime": 1366,
+                        "watchedToEndOffset": 1211,
+                        "autoplayable": true,
+                        "title": "Abduction",
+                        "id": 70171922,
+                        "bookmark": {
+                            "watchedDate": 1592372498057,
+                            "offset": 1292
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 79914
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABe4O473Vhpj1xvmlEJe0_BcKvFU8lVYMNLKMAxnftf5_SWdHt0moo7v1L4h-hAyJcHU3aFJEXYVX6YIs8tXLpokjwhu5XD6vP4FVwhVcoTiyETqWsY77D-y6.jpg?r=a22"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABYYk79LW9slYj5AoYX-bu5OGkv-pR0G5fMKCkzD9yNUVQzYI1RirTc4R374CLJVDKakH4WWfKxerq8m29gWR-Wqx7wiuimfywTvlytwMObqajMeOcC7bu1dVwg.jpg?r=a22"
+                            }
+                        ],
+                        "seq": 27,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Light, acting as L, reveals to Near that his sister Sayu has been kidnapped by someone wanting to trade her for the Death Note.",
+                        "episodeId": 70171923,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1289,
+                        "runtime": 1366,
+                        "displayRuntime": 1366,
+                        "watchedToEndOffset": 1165,
+                        "autoplayable": true,
+                        "title": "Impatience",
+                        "id": 70171923,
+                        "bookmark": {
+                            "watchedDate": 1592373695669,
+                            "offset": 1290
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 132757
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABbT6pLk_y1dv2rTraagXOJjR_LWDYxA013iaw_acqZc77W96teCv7mg74hXMBinOWMdFk0TTkO2qlFPvENGYcrNj4cCctlo-H08IyOg1XeEwtXgQAEEz1qfR.jpg?r=9cb"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABVqRFf-nuTZ2CslCfzbONoIe4F_7OQm6X-FBaqZZTZfC5PIaFTT5C6R8mftnPutBBsoOad2F7KV3ZVUsbCSXG7y696thfITczqSGDH7uvAQQ6lgbPJBKn7VsGw.jpg?r=9cb"
+                            }
+                        ],
+                        "seq": 28,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Light tries to discover where Mello and his Mafia associates are hiding and uses Misa's eyes to find the Death Note's current owner.",
+                        "episodeId": 70171924,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1289,
+                        "runtime": 1366,
+                        "displayRuntime": 1366,
+                        "watchedToEndOffset": 1211,
+                        "autoplayable": true,
+                        "title": "Father",
+                        "id": 70171924,
+                        "bookmark": {
+                            "watchedDate": 1592374928640,
+                            "offset": 1291
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 79955
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABbkhUk2I14QTTV53nmszQHAJQYy6FbSuw702zahEGHC3yTp38FYssfa5oIMvOZ2i49TnSQ1n7AQeElYcoeD18zSZ9CV5gXZTJmV-yHwQZa6sJDaHyhTRoiLe.jpg?r=288"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABa8FAE_gtZBvOKqKgk8SVvy1K6Rn8eYBRRJMFYjhdgQSTHqkGwpqURv5CZuQhA3KVk3mNISfqPvfl6O8DxK3sFLNRHRdMb_AwvURRTdS9AiKvogjfRrfZraf1g.jpg?r=288"
+                            }
+                        ],
+                        "seq": 29,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Mello busts into SPK headquarters to retrieve a photograph of himself to make sure he won't be killed by Kira.",
+                        "episodeId": 70171925,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1289,
+                        "runtime": 1366,
+                        "displayRuntime": 1366,
+                        "watchedToEndOffset": 1211,
+                        "autoplayable": true,
+                        "title": "Justice",
+                        "id": 70171925,
+                        "bookmark": {
+                            "watchedDate": 1592800586319,
+                            "offset": 1293
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 79996
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABcYZFAw3xGzzxScAs1EDqJ8KdLdZtC6awMQsBGLRf02tp5iTX4j2fO_6GvbgcT6egjoF1BNyhCQYKn2y36D9uljyI3HLrCOIpzAFxZF8ff9M5huXR7f9u_eo.jpg?r=a13"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABXT1u5upJch-h2WdmrSHriFdwECBKzGXKu-F9AKlccDfDnZLbHIGEtJsDzMbjkNyt0EohglRkp_H7k0USibN2f3FEE-PSdzlBY7Za_k8c0OLucaGHWQtWBMvBA.jpg?r=a13"
+                            }
+                        ],
+                        "seq": 30,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Near contacts the Japanese task force and determines that Kira is among their members.",
+                        "episodeId": 70171926,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1289,
+                        "runtime": 1366,
+                        "displayRuntime": 1366,
+                        "watchedToEndOffset": 1168,
+                        "autoplayable": true,
+                        "title": "Transfer",
+                        "id": 70171926,
+                        "bookmark": {
+                            "watchedDate": 1592801850188,
+                            "offset": 1293
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 126918
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABdQwrPs-BiK21Gs-i9MXi-XLZDF6uun8ttSLyW-2XTbCzkP7nSqB2AKeSOAvjFz5vbUvVm0tjvjIOsv7wgD2cHHL3BSgfJMWJQ6kNnwxfKrz7tB4ibaGv8ce.jpg?r=09a"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABWCzuwDNNdNXom2HrRq9S_D4HEXRhW7meh3-NEZ9_iH2wAxnhLBqH8d9CdkxqtgS-1nIpSzABIw-OSpgDqQrxHXHdgl1udxNUxHLXX5eaVAIglIN2eJTDgG66g.jpg?r=09a"
+                            }
+                        ],
+                        "seq": 31,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Star newscaster Kiyomi Takada becomes Kira's spokesperson to the world...",
+                        "episodeId": 70171927,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1289,
+                        "runtime": 1366,
+                        "displayRuntime": 1366,
+                        "watchedToEndOffset": 1208,
+                        "autoplayable": true,
+                        "title": "Selection",
+                        "id": 70171927,
+                        "bookmark": {
+                            "watchedDate": 1593063239332,
+                            "offset": 1292
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 79954
+                            },
+                            "recap": {
+                                "start": 83875,
+                                "end": 93301
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABVWCPTpxn82d3C9ESabqx5KbXU4Mnrttwvc9ivm6I-qrWntw0Z-9aqv664aJlvpFYnLODBikz3eFkicaN64_Ko6R95HQ5bhaGExOx55csukV1eE7hiyX_NEd.jpg?r=5e4"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABU7lEDhhrhDwb_gGonQaCJBMVKHXNB8z0LlqV9usOibt_6yJmw8KQGnpM3Jxg25jV-y10I6HHkZnQiCjIbv36ORLMlvvqKchzcCyjJ4Zp5UMaPktksaitgLRPw.jpg?r=5e4"
+                            }
+                        ],
+                        "seq": 32,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Light pretends to investigate Kiyomi...",
+                        "episodeId": 70171928,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1293,
+                        "runtime": 1369,
+                        "displayRuntime": 1369,
+                        "watchedToEndOffset": 1176,
+                        "autoplayable": true,
+                        "title": "Scorn",
+                        "id": 70171928,
+                        "bookmark": {
+                            "watchedDate": 1593064493596,
+                            "offset": 1296
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 121871
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABXN7tA__sdimwka4CY2CgqGVOrPUe6hTe0SpRfFEGVH8prId4a0nKUnj8QQyBxhfwctmqXj2iDftNDalYUo4nKa-XB5HLTsc7l6IyNdzma-ZP9vQUent74yg.jpg?r=995"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABQ9dNZ9_QVncseRwcODaOc-URhp1hlMvxumkvntzmtcEHviJfN7rfaA9RVgdUUYzzyw5OBpSJiHFvRZcvEWMnAoo80g0WvfL_uKY9KtxE8oWIebCdDmnkHGL8Q.jpg?r=995"
+                            }
+                        ],
+                        "seq": 33,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Aizawa figures out what's going on and tells Near, who already knows about the notes.",
+                        "episodeId": 70171929,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1289,
+                        "runtime": 1366,
+                        "displayRuntime": 1366,
+                        "watchedToEndOffset": 1171,
+                        "autoplayable": true,
+                        "title": "Vigilance",
+                        "id": 70171929,
+                        "bookmark": {
+                            "watchedDate": 1593066110829,
+                            "offset": 1292
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 142684
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABRF2bgWt-fM4GW8EvmuVYcna_MaJ_CdptH2IhBb7638Fu1g13t2QHjZCXNUZnm9RKr8m5J1mle_S2gd-6Nwwh5yaNWMgx5Rq4IgIZeZhtEGJecqO5Rjj5AyX.jpg?r=ec9"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABQdddLB7WIsT8JIrApyieWBQVf3oi9q4waZInimDKE8GVKZu9DKN7-fSONISl0BIlR4P1WgQ-TyDSbcF3GuHjiM1uvdNZyn6UaJA5xs0avEzje24LpAA1cJ6EQ.jpg?r=ec9"
+                            }
+                        ],
+                        "seq": 34,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Light gives Kiyomi the order to finish off Near.",
+                        "episodeId": 70171930,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1292,
+                        "runtime": 1369,
+                        "displayRuntime": 1369,
+                        "watchedToEndOffset": 1212,
+                        "autoplayable": true,
+                        "title": "Malice",
+                        "id": 70171930,
+                        "bookmark": {
+                            "watchedDate": 1593067648093,
+                            "offset": 1295
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 79954
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABZ4D85A2mKdRXRIXLOzTmEF7ykWBFOavLZdoNYy30_kPOloi6OL4l7NHio0e9stopvEObbqyXmPjbQJ7BDcI4nVME8giQ5KwufRoqFUBi5N6HA-7-9YphOdH.jpg?r=cdb"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABYeymW-0HER-tbpZjqhfNOKHXXUAMhPw5_65HH2oa9KFuqcmY-6N9AJnp-o2zTYsw7arVcOImqJhIbSbrcWHYMF35SUampQT7_TmgsGpqv-hKM3P518h1UDRbQ.jpg?r=cdb"
+                            }
+                        ],
+                        "seq": 35,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Near, along with the SPK, meets Light and the task force at a warehouse for the final showdown.",
+                        "episodeId": 70171931,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1292,
+                        "runtime": 1369,
+                        "displayRuntime": 1369,
+                        "watchedToEndOffset": 1170,
+                        "autoplayable": true,
+                        "title": "1.28",
+                        "id": 70171931,
+                        "bookmark": {
+                            "watchedDate": 1593068816012,
+                            "offset": 1294
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 127961
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABcrP_Weq4y7XjEr31roIC16-sQwAiFo4tcMj65B9zf0gAUJk_n26NAV6SiqFXxj7ec89JM-lSZPqfs0qdiRyAV6nTU9UMKeujSpW0oVlCt6Bl1eUkpSPrLpw.jpg?r=93c"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABRnMQzqxvgCD_Aai98nquzcvDbPZ1p0nF7dVsY2K4YqrYurcJf-bAgkCGZItx-eRznXvE5kbBxcQN7k7cop14cc2WH0gRMlIbewZcubLln3OGkrvg85oAxwCGg.jpg?r=93c"
+                            }
+                        ],
+                        "seq": 36,
+                        "hiddenEpisodeNumbers": false
+                    },
+                    {
+                        "start": 1665817200000,
+                        "end": 1728975600000,
+                        "synopsis": "Though Mikami has written all the investigators' names in the Death Note, a minute passes and everyone is still alive.",
+                        "episodeId": 70171932,
+                        "taglineMessages": {
+                            "tagline": "",
+                            "classification": "REGULAR"
+                        },
+                        "requiresAdultVerification": false,
+                        "requiresPin": false,
+                        "requiresPreReleasePin": false,
+                        "creditsOffset": 1355,
+                        "runtime": 1357,
+                        "displayRuntime": 1357,
+                        "watchedToEndOffset": 1205,
+                        "autoplayable": true,
+                        "title": "New World",
+                        "id": 70171932,
+                        "bookmark": {
+                            "watchedDate": 1593070064281,
+                            "offset": 1356
+                        },
+                        "skipMarkers": {
+                            "credit": {
+                                "start": 0,
+                                "end": 114364
+                            },
+                            "recap": {
+                                "start": 0,
+                                "end": 0
+                            },
+                            "content": []
+                        },
+                        "hd": true,
+                        "thumbs": [
+                            {
+                                "w": 350,
+                                "h": 197,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABbpwr2hLvr6cuy0-ln7WitKXP0wW70eKA_ansMUIpYdVhyXKCQP_noR_P7AMcLZfLk9mJKf5D5Gbm9fqvPhN25mqrm-LabtV9Hp3uZgV2t7yJ7DdGomd0X_P.jpg?r=1cd"
+                            }
+                        ],
+                        "stills": [
+                            {
+                                "w": 1920,
+                                "h": 1080,
+                                "url": "https://occ-0-472-465.1.nflxso.net/dnm/api/v6/9pS1daC2n6UGc3dUogvWIPMR_OU/AAAABQRmUsYwtoqtAbhic6vxUEc2JjgIVb7NAswXZgzVVBIfY5fzWRIIeTb11Lx8ATM5AzMjiLMmsHHNJ4ZHQZhmJxdB2BbJkX6c3nwpSuZ7WIDRzGCcGRXXtVKHkw.jpg?r=1cd"
+                            }
+                        ],
+                        "seq": 37,
+                        "hiddenEpisodeNumbers": false
+                    }
+                ]
+            }
+        ],
+        "merchedVideoId": null,
+        "cinematch": {
+            "type": "predicted",
+            "value": "3.0"
+        }
+    }
+}
