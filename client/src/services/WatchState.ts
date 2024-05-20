@@ -170,13 +170,14 @@ export const useWatchState = create(
       console.log('NetflixGPT> Raw payload:', payload);
       
       // POST the payload to our server
-      fetch('http://localhost:8000/info', {
+      // TODO replace with axios -- less clunky
+      fetch('http://localhost:8000/metadata', {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          source: "netflix",
+          url: window.location.href,
           data: payload,
         })
       });

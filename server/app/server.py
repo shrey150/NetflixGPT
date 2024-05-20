@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 from typing import Optional
 from fastapi import BackgroundTasks, FastAPI, Depends, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import ValidationError
 from starlette.config import Config
 from starlette.responses import RedirectResponse
@@ -52,6 +53,21 @@ prompt = PromptTemplate(
 
 app = FastAPI(lifespan=lifespan)
 #prompt = load_prompt("data/prompt.json")
+
+origins = [
+    "http://localhost",
+    "http://localhost:8000",
+    "http://localhost:3000",
+    "https://www.netflix.com",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 memory = ConversationBufferMemory(memory_key="chat_history")
 
@@ -158,11 +174,12 @@ async def ensure_all_episodes_in_db(data: NetflixPayload, db: AsyncSession, titl
                     name=episode_name,
                     synopsis=episode.synopsis,
                     title_id=title_id,
-
                     # account for zero-indexing -> 1-indexing
                     season_num=season_num+1,
                     ep_num=ep_num+1,
                 ))
+
+                # TODO call scraping background task here
 
 @app.post("/metadata")
 async def parse_metadata(
@@ -204,9 +221,9 @@ async def parse_metadata(
                 )
 
             episode = await crud_episode.get(db, name=title_name)
-
             background_tasks.add_task(ensure_all_episodes_in_db, data, db, title["id"])
 
+            # include title & episode objects in final response
             res = {
                 "episode_id": episode["id"],
                 "episode_name": episode["name"],
@@ -215,8 +232,11 @@ async def parse_metadata(
                 **title,
                 **episode,
             }
+
+            # account for key collisions
             res.pop("id")
             res.pop("name")
+
             return res
       
         case _:

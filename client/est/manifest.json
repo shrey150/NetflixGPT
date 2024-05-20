@@ -1,1 +1,51 @@
-{"description":"A chatbot companion for Q&A during Netflix episodes","version":"0.0.1","manifest_version":3,"name":"NetflixGPT","host_permissions":["https://www.netflix.com/watch/*"],"options_page":"options.html","background":{"service_worker":"background.bundle.js"},"action":{"default_popup":"popup.html","default_icon":"icon-34.png"},"icons":{"128":"icon-128.png"},"content_scripts":[{"matches":["https://www.netflix.com/watch/*"],"js":["contentScript.bundle.js"],"css":["content.styles.css"]}],"web_accessible_resources":[{"resources":["content.styles.css","icon-128.png","icon-34.png","icon_search.png"],"matches":[]}],"permissions":["webRequest","activeTab","tabs","storage","scripting"]}
+{
+    "description": "A chatbot companion for Q&A during Netflix episodes",
+    "version": "0.0.1",
+    "manifest_version": 3,
+    "name": "NetflixGPT",
+    "host_permissions": [
+        "https://www.netflix.com/watch/*"
+    ],
+    "options_page": "options.html",
+    "background": {
+        "service_worker": "background.bundle.js"
+    },
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": "icon-34.png"
+    },
+    "icons": {
+        "128": "icon-128.png"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://www.netflix.com/watch/*"
+            ],
+            "js": [
+                "contentScript.bundle.js"
+            ],
+            "css": [
+                "content.styles.css"
+            ]
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "content.styles.css",
+                "icon-128.png",
+                "icon-34.png",
+                "icon_search.png"
+            ],
+            "matches": []
+        }
+    ],
+    "permissions": [
+        "webRequest",
+        "activeTab",
+        "tabs",
+        "storage",
+        "scripting"
+    ]
+}
