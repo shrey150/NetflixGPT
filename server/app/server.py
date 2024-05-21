@@ -137,25 +137,6 @@ memory = ConversationBufferMemory(memory_key="chat_history")
 # data = {'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID}
 # config = Config(environ=data)
 
-def get_title_by_name(name: str) -> Title:
-    print("[TODO] get_title_by_name not implemented, sending dummy data")
-    dummy_title = Title(
-        id=69,
-        title="Dummy Title",
-        ep_title="Dummy Episode Title",
-        season_num=1,
-        ep_num=1,
-        summary="This is a dummy summary for the dummy title."
-    )
-    return dummy_title
-
-def get_episode_by_name(name: str, db: AsyncSession) -> NetflixEpisode:
-    # TODO implement
-    print("[TODO] get_episode_by_name not implemented, sending dummy data")
-
-    episode = crud_episode.exists(db, name=name)
-    return episode
-
 def find_netflix_episode(data: NetflixPayload) -> (NetflixEpisode, int, int):
     for season_num, season in enumerate(data.video.seasons):
         for ep_num, episode in enumerate(season.episodes):
