@@ -93,6 +93,10 @@ class Video(BaseModel):
     requiresPreReleasePin: bool
     seasons: List[Seasons]
 
+    def __init__(self, **data):
+        super().__init__(**data)
+        self.seasons.sort(key=lambda season: season.year)
+
 class NetflixPayload(BaseModel):
     version: str
     trackIds: TrackIds
