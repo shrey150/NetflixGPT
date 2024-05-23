@@ -180,11 +180,13 @@ async def parse_metadata(
 
             title_name = data.video.title
             num_seasons = len(data.video.seasons)
+            synopsis = data.video.synopsis
 
             if not await crud_title.exists(db, name=title_name):
                 await crud_title.create(db, object=TitleCreate(
                     name=title_name,
                     num_seasons=num_seasons,
+                    synopsis=synopsis,
                 ))
 
             title = await crud_title.get(db, name=title_name)
