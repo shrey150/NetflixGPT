@@ -8,8 +8,9 @@ from sqlalchemy_utils import ChoiceType
 
 class SummaryBase(SQLModel):
     '''Represents a plot summary from a given source for an episode.'''
-    raw_text: str # The raw HTML scraped for generating summary text.
-    text: str
+    raw_text: str   # The raw HTML scraped for generating summary text
+    # url: str        # The specific page where the data came from
+    text: str       # The summarized text (using LLMs or extraction)
     source_id: Optional[int] = Field(default=None, foreign_key="sources.id")
     last_indexed: datetime = Field(default_factory=datetime.utcnow, nullable=False)
 

@@ -23,6 +23,7 @@ from .models.conversation import Conversation
 from .models.message import Message
 from .models.user import User
 from .models.metadata import MetadataRequest
+from app.tasks import find_fandom_sub
 
 from .scraper import Scraper
 from . import utils
@@ -183,6 +184,7 @@ async def parse_metadata(
             synopsis = data.video.synopsis
 
             if not await crud_title.exists(db, name=title_name):
+                print(f"Discovered title {title_name}")
                 await crud_title.create(db, object=TitleCreate(
                     name=title_name,
                     num_seasons=num_seasons,
@@ -192,19 +194,23 @@ async def parse_metadata(
             title = await crud_title.get(db, name=title_name)
 
             netflix_episode, season_num, ep_num = find_netflix_episode(data)
-            title_name = netflix_episode.title
+            episode_name = netflix_episode.title
 
-            if not await crud_episode.exists(db, name=title_name):
+            if not await crud_episode.exists(db, name=episode_name):
+                print(f"Discovered episode {episode_name}")
                 await crud_episode.create(db, object=EpisodeCreate(
-                    name=netflix_episode.title,
+                    name=episode_name,
                     synopsis=netflix_episode.synopsis,
                     season_num=season_num,
                     ep_num=ep_num,
                     title_id=title["id"])
                 )
 
-            episode = await crud_episode.get(db, name=title_name)
+            episode = await crud_episode.get(db, name=episode_name)
             background_tasks.add_task(ensure_all_episodes_in_db, data, db, title["id"])
+
+            # TODO for testing
+            # find_fandom_sub(TitleBase(**title))
 
             # include title & episode objects in final response
             res = {

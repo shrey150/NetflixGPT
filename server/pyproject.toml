@@ -35,6 +35,8 @@ langchain-openai = "^0.1.7"
 pydantic-settings = "^2.2.1"
 tldextract = "^5.1.2"
 fastcrud = "^0.12.1"
+celery = "^5.4.0"
+redis = "^5.0.4"
 
 
 [build-system]

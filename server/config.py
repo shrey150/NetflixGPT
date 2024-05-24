@@ -20,12 +20,19 @@ class LegacySettings():
     SOURCES_PATH: str = os.path.join(current_file_dir, 'sources.pickle')
 
 class DatabaseSettings():
-    DB_CONNECTION_URI = config("DB_CONNECTION_URI")
+    DB_CONNECTION_URI: str = config("DB_CONNECTION_URI")
+
+class RedisQueueSettings():
+    REDIS_QUEUE_HOST: str = config("REDIS_QUEUE_HOST", default="localhost")
+    REDIS_QUEUE_PORT: int = config("REDIS_QUEUE_PORT", default=6379)
+    REDIS_QUEUE_DB: int = config("REDIS_QUEUE_DB", default=0)
+    REDIS_QUEUE_URI: str = f"redis://{REDIS_QUEUE_HOST}:{REDIS_QUEUE_PORT}/{REDIS_QUEUE_DB}"
 
 class Settings(
     PromptSettings,
     DatabaseSettings,
     LegacySettings,
+    RedisQueueSettings,
 ):
     pass
 
