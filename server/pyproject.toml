@@ -37,6 +37,7 @@ tldextract = "^5.1.2"
 fastcrud = "^0.12.1"
 celery = "^5.4.0"
 redis = "^5.0.4"
+html5lib = "^1.1"
 
 
 [build-system]
