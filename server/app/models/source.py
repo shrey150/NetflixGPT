@@ -26,3 +26,6 @@ class Source(SourceBase, table=True):
     '''Represents the `sources` table.'''
     __tablename__ = "sources"
     id: Optional[int] = Field(default=None, primary_key=True)
+
+class SourceCreate(SourceBase):
+    pass

@@ -1,91 +1,101 @@
 from bs4 import BeautifulSoup
 from celery import Celery
 import requests
+import pywikibot
+from pywikibot import pagegenerators, config
+from bs4 import BeautifulSoup
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from .models.episode import EpisodeBase
+from .models.summary import SummaryBase
 from .models.title import TitleBase
+from .models.source import SourceCreate, SourceType
+from .models.title_source import TitleSourceCreate
+
+from .crud import crud_title_source
+from .crud import crud_source
+
 from config import settings
 
-app = Celery('tasks', broker=settings.REDIS_QUEUE_URI)
+# app = Celery('tasks', broker=settings.REDIS_QUEUE_URI)
 
-@app.task
-def find_fandom_sub(title: TitleBase) -> str:
-    base_url = "https://community.fandom.com/wiki/Special:SearchCommunity"
-    params = { 'query': title.name }
-    response = requests.get(base_url, params=params)
+async def find_fandom_sub(title: TitleBase, db: AsyncSession) -> str:
+    print('Finding fandom sub')
+    fandom_sub_url = None
 
-    if response.status_code != 200:
-        print(f"Failed to retrieve data: {response.status_code}")
-        return []
+    if not await crud_title_source.exists(db, title_id=title.id):
+        print('Creating relationship b/t title and source')
+        base_url = "https://community.fandom.com/wiki/Special:SearchCommunity"
+        params = { 'query': title.name }
 
-    soup = BeautifulSoup(response.text, 'html.parser')
+        response = requests.get(base_url, params=params, timeout=5)
+        response.raise_for_status()
 
-    # this selects all possible search results
-    els = soup.select('.unified-search__result__title')
+        # fetch all search result elements
+        soup = BeautifulSoup(response.text, 'html.parser')
+        els = soup.select('.unified-search__result__title')
 
-    '''
-    (1) iterate through all search results (if more than one)
-    (2) request the text for the home page (the link for the search result) using results
-    (3) use BS to parse the home page and get all the text
-    (4) perform NER to get all the proper noun keywords like characters, locations, etc (using spaCy)
-    (5) if the number of characters in the NER is greater than a certain threshold, return the link
+        # TODO: don't trust this assumption long-term -- verify each sub using NER
+        fandom_sub_url = els[0]['href']
 
-    side note, you also need to get all the text from all the synposes for every episode
-    from the show & the show's synopsis and perform NER. these are your ground truth tokens
+        if len(els) > 0:
+            print(f"[WARN] multiple Fandom subs found for {title.name}")
+            print(f"Assuming first one is best choice: {fandom_sub_url}")
 
-    now compare how many of the tokens from the fandom sub match, if high enough threshold, you can return it
+        print(f'Best choice: {fandom_sub_url}')
 
-    keep in mind for some shows there might not be a fandom. if threshold isn't reached, then return None
-    '''
+        source = await crud_source.create(db, object=SourceCreate(
+            url=fandom_sub_url,
+            type=SourceType.FANDOM,
+        ))
 
-    if len(els) > 0:
-        print(f"[WARN] multiple Fandom subs found for {title.name}")
-        print(f"Assuming first one is best choice: {els[0]['href']}")
+        await crud_title_source.create(db, object=TitleSourceCreate(
+            title_id=title.id,
+            source_id=source.id,
+        ))
 
-    # TODO: don't trust this assumption long-term
-    link = els[0]['href']
+    else:
+        title_source = await crud_title_source.get(db, title_id=title.id)
+        source = await crud_source.get(db, source_id=title_source['source_id'])
+        fandom_sub_url = source['url']
 
-    return link
+    print(f'Fandom URL: {fandom_sub_url}')
+    return fandom_sub_url
+
+async def scrape_episode_fandom(episode: EpisodeBase, sub: str) -> SummaryBase:
+
+    # Set up the custom site configuration
+    config.family_files[sub] = f'https://{sub}.fandom.com/api.php'
+    site = pywikibot.Site(sub, sub)
+
+    search_results = pagegenerators.SearchPageGenerator(episode.name, site=site, total=1)
+
+    # Get the first page from the search results
+    page = next(search_results)
+    print('Scraping page: ', page.title())
+
+    # infer URL name from page title
+    # TODO: ideally get URL from page data, this works for now
+    url = f'https://{sub}.fandom.com/wiki/{page.title().replace(" ", "_")}'
+
+    response = requests.get(url, timeout=5)
+    response.raise_for_status()
+
+    return response.text
+
 
 # @app.task
-# def scrape_episode(episode_id):
-#         search_terms = [
-#             f"\"{info.ep_title}\"",
-#             f"\"{info.ep_title} ({info.title})\"",
-#         ]
+def summarize_episode(raw_text: str):
+    soup = BeautifulSoup(raw_text, 'html5lib')
 
-#         custom_sub = self.get_fandom_sub(info.title)
+    # Using CSS selectors to get all p tags that are children of mw-parser-output
+    # TODO can optimize by only selecting p tags that are directly adjacent to h2s containing "Story|Synopsis|Plot|Summary|Story"
+    paragraphs = soup.select('.mw-parser-output > p')
+    text_content = ' '.join(p.get_text() for p in paragraphs)
+    return text_content
 
-#         sites = [
-#             pywikibot.Site(custom_sub, custom_sub),
-#             pywikibot.Site("en", "wikipedia"),
-#             pywikibot.Site("en", "netflix"),
-#         ]
-
-#         # try to fetch plot from fandom, wikipedia, and netflix
-#         # return whichever summary is longest
-
-#         sources = []
-
-#         # find most relevant plot section on each source
-#         for site in sites:
-#             print('Searching site: ', site)
-#             for term in search_terms:
-#                 fetched_plot = self._fetch_plot(site, term, info)
-#                 if fetched_plot is not None:
-#                     return fetched_plot
-#     return episode_data
-
-@app.task
-def summarize_episode(episode_data):
-    # Summarize the episode
-    summarized_data = {'episode_id': episode_data['episode_id'], 'summary': '...'}
-    return summarized_data
-
-@app.task
+# @app.task
 def index_episode(summarized_data):
     # Index the episode
     indexed_data = {'episode_id': summarized_data['episode_id'], 'index': '...'}
     return indexed_data
-
-if __name__ == '__main__':
-    find_fandom_sub(None)
