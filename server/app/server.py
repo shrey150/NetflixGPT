@@ -35,6 +35,8 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_core.prompts import load_prompt
 from langchain_openai import ChatOpenAI
 
+import spacy
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await create_db_and_tables()
@@ -146,6 +148,27 @@ def find_netflix_episode(data: NetflixPayload) -> (NetflixEpisode, int, int):
                 return (episode, season_num+1, ep_num+1)
 
     raise HTTPException(status_code=400, detail="Episode metadata not found in Netflix payload")
+
+def generate_keywords(titleID: int):
+    # get title
+    title = await crud_title.get(db, id=titleID)
+
+    #get all synopses from episodes and title if exists
+    episodes = await crud_episode.get_multi(db, title_id=titleID)
+    all_synopses = title.synopsis if title.synopsis else ""
+    for episode in episodes['data']:
+        all_synopses += " " + episode.synopsis
+
+    # concatenate all the synopses and pass it to the NER model
+    nlp = spacy.load("en_core_web_sm")
+    doc = nlp(all_synopses)
+
+    # combine entities
+    keywords = ", ".join(set([ent.text for ent in doc.ents]))
+
+    # save the string of entities to keywords column in the title table
+    await crud_title.update(db, id=titleID, object=TitleBase(
+        keywords=keywords))
 
 async def ensure_all_episodes_in_db(data: NetflixPayload, db: AsyncSession, title_id: int):
     for season_num, season in enumerate(data.video.seasons):

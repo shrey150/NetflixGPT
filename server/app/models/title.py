@@ -12,6 +12,7 @@ class TitleBase(SQLModel):
     name: str = Field(max_length=255, nullable=False)
     num_seasons: int = Field(nullable=False)
     synopsis: str # The high-level, one-line summary for an episode usually provided for TV networks. This is NOT the full summary.
+    keywords: str
 
 class Title(TitleBase, table=True):
     '''Represents the `titles` table.'''
