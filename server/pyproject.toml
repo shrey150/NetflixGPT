@@ -14,8 +14,7 @@ wikipedia = "^1.4.0"
 langchain = "^0.2.0"
 pywikibot = "^8.3.0"
 mwparserfromhell = "^0.6.4"
-chromadb = "^0.4.5"
-fastapi = "^0.111.0"
+fastapi = "^0.100.0"
 uvicorn = "^0.23.2"
 tiktoken = "^0.7.0"
 sentence-transformers = "^2.2.2"
@@ -38,7 +37,9 @@ fastcrud = "^0.12.1"
 celery = "^5.4.0"
 redis = "^5.0.4"
 html5lib = "^1.1"
-
+spacy = "^3.5.0"
+typer = "0.4.1"
+setuptools = "^67.6.1"
 
 [build-system]
 requires = ["poetry-core"]
