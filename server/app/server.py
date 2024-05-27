@@ -44,7 +44,7 @@ async def lifespan(app: FastAPI):
 
 ####################
 # TODO use lifespan events to create these top-level objects
-llm = ChatOpenAI(model="gpt-4o")
+llm = ChatOpenAI(model="gpt-4o", api_key=settings.OPENAI_API_KEY)
 # scraper = Scraper()
 # db = Database()
 prompttemplate = open(settings.PROMPT_REG_TXT_PATH, "r", encoding="utf-8").read()
@@ -149,15 +149,15 @@ def find_netflix_episode(data: NetflixPayload) -> (NetflixEpisode, int, int):
 
     raise HTTPException(status_code=400, detail="Episode metadata not found in Netflix payload")
 
-def generate_keywords(titleID: int):
+async def generate_keywords(titleID: int, db: AsyncSession = Depends(async_get_db)):
     # get title
     title = await crud_title.get(db, id=titleID)
 
     #get all synopses from episodes and title if exists
     episodes = await crud_episode.get_multi(db, title_id=titleID)
-    all_synopses = title.synopsis if title.synopsis else ""
+    all_synopses = title["synopsis"] if title["synopsis"] else ""
     for episode in episodes['data']:
-        all_synopses += " " + episode.synopsis
+        all_synopses += " " + episode["synopsis"]
 
     # concatenate all the synopses and pass it to the NER model
     nlp = spacy.load("en_core_web_sm")
@@ -168,7 +168,13 @@ def generate_keywords(titleID: int):
 
     # save the string of entities to keywords column in the title table
     await crud_title.update(db, id=titleID, object=TitleBase(
-        keywords=keywords))
+        name=title["name"],
+        num_seasons=title["num_seasons"],
+        synopsis=title["synopsis"],
+        keywords=keywords
+    ))
+
+    return keywords # for testing
 
 async def ensure_all_episodes_in_db(data: NetflixPayload, db: AsyncSession, title_id: int):
     for season_num, season in enumerate(data.video.seasons):

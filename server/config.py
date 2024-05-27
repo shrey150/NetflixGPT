@@ -28,11 +28,15 @@ class RedisQueueSettings():
     REDIS_QUEUE_DB: int = config("REDIS_QUEUE_DB", default=0)
     REDIS_QUEUE_URI: str = f"redis://{REDIS_QUEUE_HOST}:{REDIS_QUEUE_PORT}/{REDIS_QUEUE_DB}"
 
+class OpenAISettings():
+    OPENAI_API_KEY: str = config("OPENAI_API_KEY")
+
 class Settings(
     PromptSettings,
     DatabaseSettings,
     LegacySettings,
     RedisQueueSettings,
+    OpenAISettings,
 ):
     pass
 

@@ -29,3 +29,6 @@ async def async_get_db() -> AsyncSession:
             raise
         finally:
             await db.close()
+
+def get_engine():
+    return engine
