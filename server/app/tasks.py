@@ -111,7 +111,9 @@ def scrape_episode_fandom(payload: dict, episode: dict) -> SummaryCreate:
     response.raise_for_status()
 
     return FandomScraperPayload(
-        **payload.model_dump(),
+        sub=payload.sub,
+        source_id=payload.source_id,
+        title_id=payload.title_id,
         raw_text=response.text,
         url=url,
         ep_id=episode.id,
@@ -128,12 +130,16 @@ def summarize_episode_fandom(payload: dict) -> Summary:
     text = ' '.join(p.get_text() for p in paragraphs)
 
     summary_create = SummaryCreate(
-        **payload.model_dump(),
+        sub=payload.sub,
+        source_id=payload.source_id,
+        title_id=payload.title_id,
+        raw_text=payload.raw_text,
+        url=payload.url,
+        ep_id=payload.ep_id,
         text=text,
     )
 
-    summary = async_to_sync(write_summary_to_db)(summary_create)
-    return summary
+    async_to_sync(write_summary_to_db)(summary_create)
 
 async def write_summary_to_db(summary: SummaryCreate) -> Summary:
     async for db in async_get_db():
