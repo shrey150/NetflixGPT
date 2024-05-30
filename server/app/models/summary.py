@@ -9,14 +9,17 @@ from sqlalchemy_utils import ChoiceType
 class SummaryBase(SQLModel):
     '''Represents a plot summary from a given source for an episode.'''
     raw_text: str   # The raw HTML scraped for generating summary text
-    # url: str        # The specific page where the data came from
+    url: str        # The specific page where the data came from
     text: str       # The summarized text (using LLMs or extraction)
+    title_id: Optional[int] = Field(default=None, foreign_key="titles.id")
     source_id: Optional[int] = Field(default=None, foreign_key="sources.id")
+    ep_id: Optional[int] = Field(default=None, foreign_key="episodes.id")
     last_indexed: datetime = Field(default_factory=datetime.utcnow, nullable=False)
 
 class Summary(SummaryBase, table=True):
     '''Represents the `summaries` table.'''
     __tablename__ = "summaries"
     id: Optional[int] = Field(default=None, primary_key=True)
-    title_id: Optional[int] = Field(default=None, foreign_key="titles.id")
-    ep_id: Optional[int] = Field(default=None, foreign_key="episodes.id")
+
+class SummaryCreate(SummaryBase):
+    pass

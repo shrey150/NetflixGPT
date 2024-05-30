@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 from typing import Optional
+from celery import chain, group
 from fastapi import BackgroundTasks, FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import ValidationError
@@ -23,23 +24,23 @@ from .models.conversation import Conversation
 from .models.message import Message
 from .models.user import User
 from .models.metadata import MetadataRequest
-from app.tasks import find_fandom_sub
+from .tasks import find_fandom_sub, summarize_episode_fandom, scrape_episode_fandom
 
 from .scraper import Scraper
 from . import utils
 from config import settings
 from .crud import crud_episode, crud_title
 
+import spacy
 import json
+
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_core.prompts import load_prompt
 from langchain_openai import ChatOpenAI
 
-import spacy
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await create_db_and_tables()
+    # await create_db_and_tables()
     yield
 
 ####################
@@ -177,20 +178,40 @@ async def generate_keywords(titleID: int, db: AsyncSession = Depends(async_get_d
     return keywords # for testing
 
 async def ensure_all_episodes_in_db(data: NetflixPayload, db: AsyncSession, title_id: int):
+    parallel_scraper_tasks = []
+    
+    print(f'Ensuring all episodes exist for title id {title_id}')
+    title = await crud_title.get(db, id=title_id)
+
     for season_num, season in enumerate(data.video.seasons):
-        for ep_num, episode in enumerate(season.episodes):
-            episode_name = episode.title
-            if not await crud_episode.exists(db, name=episode_name):
-                await crud_episode.create(db, object=EpisodeCreate(
+        for ep_num, netflix_episode in enumerate(season.episodes):
+            episode_name = netflix_episode.title
+            if not await crud_episode.exists(db, name=episode_name, title_id=title_id):
+                print(f'Discovered episode {episode_name}')
+                episode = await crud_episode.create(db, object=EpisodeCreate(
                     name=episode_name,
-                    synopsis=episode.synopsis,
+                    synopsis=netflix_episode.synopsis,
                     title_id=title_id,
                     # account for zero-indexing -> 1-indexing
                     season_num=season_num+1,
                     ep_num=ep_num+1,
                 ))
 
-                # TODO call scraping background task here
+        episode = await crud_episode.get(db, name=episode_name, title_id=title_id)
+        parallel_scraper_tasks.append(process_episode(title, episode))
+
+    # execute all tasks in parallel    
+    chain(
+        find_fandom_sub.s(title),
+        group(parallel_scraper_tasks),
+    ).delay()
+
+
+def process_episode(title, episode):
+    return chain(
+        scrape_episode_fandom.s(episode),
+        summarize_episode_fandom.s()
+    )
 
 @app.post("/metadata")
 async def parse_metadata(
@@ -214,18 +235,20 @@ async def parse_metadata(
 
             if not await crud_title.exists(db, name=title_name):
                 print(f"Discovered title {title_name}")
-                await crud_title.create(db, object=TitleCreate(
+                title = await crud_title.create(db, object=TitleCreate(
                     name=title_name,
                     num_seasons=num_seasons,
                     synopsis=synopsis,
                 ))
+
+                # find_fandom_sub.s(title.model_dump())
 
             title = await crud_title.get(db, name=title_name)
 
             netflix_episode, season_num, ep_num = find_netflix_episode(data)
             episode_name = netflix_episode.title
 
-            if not await crud_episode.exists(db, name=episode_name):
+            if not await crud_episode.exists(db, name=episode_name, title_id=title['id']):
                 print(f"Discovered episode {episode_name}")
                 await crud_episode.create(db, object=EpisodeCreate(
                     name=episode_name,
@@ -235,11 +258,8 @@ async def parse_metadata(
                     title_id=title["id"])
                 )
 
-            episode = await crud_episode.get(db, name=episode_name)
+            episode = await crud_episode.get(db, title_id=title['id'])
             background_tasks.add_task(ensure_all_episodes_in_db, data, db, title["id"])
-
-            # TODO for testing
-            # find_fandom_sub(TitleBase(**title))
 
             # include title & episode objects in final response
             res = {

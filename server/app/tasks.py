@@ -1,72 +1,101 @@
+import asyncio
 from bs4 import BeautifulSoup
 from celery import Celery
+from fastapi import BackgroundTasks, Depends
 import requests
 import pywikibot
 from pywikibot import pagegenerators, config
 from bs4 import BeautifulSoup
 from sqlalchemy.ext.asyncio import AsyncSession
+from asgiref.sync import async_to_sync
+import tldextract
 
-from .models.episode import EpisodeBase
-from .models.summary import SummaryBase
-from .models.title import TitleBase
-from .models.source import SourceCreate, SourceType
+from .models.scraper import FandomScraperPayload, FandomSubPayload
+
+from .database import async_get_db
+
+from .models.episode import Episode, EpisodeBase
+from .models.summary import SummaryBase, SummaryCreate, Summary
+from .models.title import TitleBase, Title
+from .models.source import SourceCreate, SourceType, Source
 from .models.title_source import TitleSourceCreate
 
-from .crud import crud_title_source
-from .crud import crud_source
+from .crud import crud_title_source, crud_source, crud_summary
 
 from config import settings
 
-# app = Celery('tasks', broker=settings.REDIS_QUEUE_URI)
+app = Celery('tasks', broker=settings.REDIS_QUEUE_URI)
 
-async def find_fandom_sub(title: TitleBase, db: AsyncSession) -> str:
-    print('Finding fandom sub')
-    fandom_sub_url = None
+@app.task
+def find_fandom_sub(
+    title: dict,
+) -> FandomSubPayload:
+    result = async_to_sync(find_fandom_sub_async)(title)
+    return result
 
-    if not await crud_title_source.exists(db, title_id=title.id):
-        print('Creating relationship b/t title and source')
-        base_url = "https://community.fandom.com/wiki/Special:SearchCommunity"
-        params = { 'query': title.name }
+async def find_fandom_sub_async(
+    title: dict,
+) -> FandomSubPayload:
+    title: Title = Title(**title)
+    
+    async for db in async_get_db():
+        print('Finding fandom sub')
+        fandom_sub_url = None
 
-        response = requests.get(base_url, params=params, timeout=5)
-        response.raise_for_status()
+        if not await crud_title_source.exists(db, title_id=title.id):
+            print('Creating relationship b/t title and source')
+            base_url = "https://community.fandom.com/wiki/Special:SearchCommunity"
+            params = { 'query': title.name }
 
-        # fetch all search result elements
-        soup = BeautifulSoup(response.text, 'html.parser')
-        els = soup.select('.unified-search__result__title')
+            response = requests.get(base_url, params=params, timeout=5)
+            response.raise_for_status()
 
-        # TODO: don't trust this assumption long-term -- verify each sub using NER
-        fandom_sub_url = els[0]['href']
+            # fetch all search result elements
+            soup = BeautifulSoup(response.text, 'html.parser')
+            els = soup.select('.unified-search__result__title')
 
-        if len(els) > 0:
-            print(f"[WARN] multiple Fandom subs found for {title.name}")
-            print(f"Assuming first one is best choice: {fandom_sub_url}")
+            # TODO: don't trust this assumption long-term -- verify each sub using NER
+            fandom_sub_url = els[0]['href']
 
-        print(f'Best choice: {fandom_sub_url}')
+            if len(els) > 0:
+                print(f"[WARN] multiple Fandom subs found for {title.name}")
+                print(f"Assuming first one is best choice: {fandom_sub_url}")
 
-        source = await crud_source.create(db, object=SourceCreate(
-            url=fandom_sub_url,
-            type=SourceType.FANDOM,
-        ))
+            print(f'Best choice: {fandom_sub_url}')
 
-        await crud_title_source.create(db, object=TitleSourceCreate(
-            title_id=title.id,
+            source = await crud_source.create(db, object=SourceCreate(
+                url=fandom_sub_url,
+                type=SourceType.FANDOM,
+            ))
+
+            await crud_title_source.create(db, object=TitleSourceCreate(
+                title_id=title.id,
+                source_id=source.id,
+            ))
+
+        else:
+            raise Exception('this should never happen')
+            title_source = await crud_title_source.get(db, title_id=title.id)
+            source = Source(**await crud_source.get(db, source_id=title_source['source_id']))
+            fandom_sub_url = source.url
+
+        print(f'Fandom URL: {fandom_sub_url}')
+        site_info = tldextract.extract(fandom_sub_url)
+
+        return FandomSubPayload(
+            sub=site_info.subdomain,
             source_id=source.id,
-        ))
+            title_id=title.id,
+        ).model_dump()
 
-    else:
-        title_source = await crud_title_source.get(db, title_id=title.id)
-        source = await crud_source.get(db, source_id=title_source['source_id'])
-        fandom_sub_url = source['url']
-
-    print(f'Fandom URL: {fandom_sub_url}')
-    return fandom_sub_url
-
-async def scrape_episode_fandom(episode: EpisodeBase, sub: str) -> SummaryBase:
+@app.task
+def scrape_episode_fandom(payload: dict, episode: dict) -> SummaryCreate:
+    episode: Episode = Episode(**episode)
+    payload: FandomSubPayload = FandomSubPayload(**payload)
 
     # Set up the custom site configuration
-    config.family_files[sub] = f'https://{sub}.fandom.com/api.php'
-    site = pywikibot.Site(sub, sub)
+    config.family_files[payload.sub] = f'https://{payload.sub}.fandom.com/api.php'
+    site = pywikibot.Site(payload.sub, payload.sub)
 
     search_results = pagegenerators.SearchPageGenerator(episode.name, site=site, total=1)
 
@@ -76,23 +105,39 @@ async def scrape_episode_fandom(episode: EpisodeBase, sub: str) -> SummaryBase:
 
     # infer URL name from page title
     # TODO: ideally get URL from page data, this works for now
-    url = f'https://{sub}.fandom.com/wiki/{page.title().replace(" ", "_")}'
+    url = f'https://{payload.sub}.fandom.com/wiki/{page.title().replace(" ", "_")}'
 
     response = requests.get(url, timeout=5)
     response.raise_for_status()
 
-    return response.text
+    return FandomScraperPayload(
+        **payload.model_dump(),
+        raw_text=response.text,
+        url=url,
+        ep_id=episode.id,
+    ).model_dump()
 
-
-# @app.task
-def summarize_episode(raw_text: str):
-    soup = BeautifulSoup(raw_text, 'html5lib')
+@app.task
+def summarize_episode_fandom(payload: dict) -> Summary:
+    payload: FandomScraperPayload = FandomScraperPayload(**payload)
+    soup = BeautifulSoup(payload.raw_text, 'html5lib')
 
     # Using CSS selectors to get all p tags that are children of mw-parser-output
     # TODO can optimize by only selecting p tags that are directly adjacent to h2s containing "Story|Synopsis|Plot|Summary|Story"
     paragraphs = soup.select('.mw-parser-output > p')
-    text_content = ' '.join(p.get_text() for p in paragraphs)
-    return text_content
+    text = ' '.join(p.get_text() for p in paragraphs)
+
+    summary_create = SummaryCreate(
+        **payload.model_dump(),
+        text=text,
+    )
+
+    summary = async_to_sync(write_summary_to_db)(summary_create)
+    return summary
+
+async def write_summary_to_db(summary: SummaryCreate) -> Summary:
+    async for db in async_get_db():
+        return await crud_summary.create(db, object=summary)
 
 # @app.task
 def index_episode(summarized_data):
