@@ -39,6 +39,7 @@ from .scraper import Scraper
 from . import utils
 from config import settings
 from .crud import crud_episode, crud_title
+from .auth import verify_google_token, create_access_token, get_current_user, TokenData, Token
 
 import spacy
 import json
@@ -172,6 +173,7 @@ async def parse_metadata(
     payload: MetadataRequest,
     background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(async_get_db),
+    current_user: TokenData = Depends(get_current_user)
 ):
     site_info = tldextract.extract(payload.url)
 
@@ -183,6 +185,16 @@ async def parse_metadata(
             return await resolve_crunchyroll(payload, background_tasks, db)
 
         case _:
-            raise HTTPException(
-                status_code=400, detail="Unsupported streaming provider"
-            )
+            raise HTTPException(status_code=400, detail="Unsupported streaming provider")
+
+
+@app.post("/signin", response_model=Token)
+async def signin(form_data: OAuth2PasswordRequestForm = Depends()):
+    token_info = await verify_google_token(form_data.password)
+    username = token_info['email']
+
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": username}, expires_delta=access_token_expires
+    )
+    return {"access_token": access_token, "token_type": "bearer"}

@@ -44,6 +44,7 @@ asgiref = "^3.8.1"
 pinecone = "^4.0.0"
 langchain-pinecone = "^0.1.1"
 langchain-huggingface = "^0.0.3"
+python-jose = "^3.3.0"
 
 [build-system]
 requires = ["poetry-core"]
