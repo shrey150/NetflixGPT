@@ -18,6 +18,7 @@ server/sources.pickle
 .env.test.local
 .env.production.local
 .history
+.idea/
 
 # secrets
 secrets.*.js
