@@ -40,7 +40,7 @@ from langchain_openai import ChatOpenAI
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # await create_db_and_tables()
+    await create_db_and_tables()
     yield
 
 ####################
@@ -197,15 +197,14 @@ async def ensure_all_episodes_in_db(data: NetflixPayload, db: AsyncSession, titl
                     ep_num=ep_num+1,
                 ))
 
-        episode = await crud_episode.get(db, name=episode_name, title_id=title_id)
-        parallel_scraper_tasks.append(process_episode(title, episode))
+            episode = await crud_episode.get(db, name=episode_name, title_id=title_id)
+            parallel_scraper_tasks.append(process_episode(title, episode))
 
     # execute all tasks in parallel    
     chain(
         find_fandom_sub.s(title),
         group(parallel_scraper_tasks),
     ).delay()
-
 
 def process_episode(title, episode):
     return chain(
