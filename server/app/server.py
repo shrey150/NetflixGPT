@@ -3,6 +3,7 @@ from typing import Optional
 from celery import chain, group
 from fastapi import BackgroundTasks, FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import ValidationError
 from starlette.config import Config
 from starlette.responses import RedirectResponse

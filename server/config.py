@@ -34,6 +34,9 @@ class RedisQueueSettings():
 class OpenAISettings():
     OPENAI_API_KEY: str = config("OPENAI_API_KEY")
 
+class AuthSettings():
+    JWT_SECRET_KEY: str = config("JWT_SECRET_KEY")
+
 class Settings(
     PromptSettings,
     DatabaseSettings,
@@ -41,6 +44,7 @@ class Settings(
     RedisQueueSettings,
     OpenAISettings,
     PineconeSettings,
+    AuthSettings,
 ):
     pass
 
