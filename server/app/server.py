@@ -14,6 +14,9 @@ import re
 import tldextract
 from logging import Logger
 
+from .providers.netflix import resolve_netflix
+from .providers.crunchyroll import resolve_crunchyroll
+
 from .database import create_db_and_tables, async_get_db
 
 from .models.episode import Episode, EpisodeCreate
@@ -147,29 +150,6 @@ memory = ConversationBufferMemory(memory_key="chat_history")
 # data = {'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID}
 # config = Config(environ=data)
 
-def find_netflix_episode(data: NetflixPayload) -> (NetflixEpisode, int, int):
-    for season_num, season in enumerate(data.video.seasons):
-        for ep_num, episode in enumerate(season.episodes):
-            if episode.episodeId == data.video.currentEpisode:
-                # convert from zero-indexing to 1-indexing
-                return (episode, season_num+1, ep_num+1)
-
-    raise HTTPException(status_code=400, detail="Episode metadata not found in Netflix payload")
-
-# May not even be necessary if these arent "absolute episodes"
-def find_crunchyroll_episode(data: CrunchyPayload) -> (CrunchyrollEpisode, int, int):
-    for season_num, season in enumerate(data.seasons):
-        print("season_num", season_num)
-        for ep_num, episode in enumerate(season.data):
-            print("ep_num", ep_num)
-            print(episode.id, data.current_episode, data.lang)
-            for v in episode.versions:
-                if v.audio_locale == data.lang and v.guid == data.current_episode:
-                    print("found episode")
-                    return (episode, season_num+1, ep_num+1)
-
-    raise HTTPException(status_code=400, detail="Episode metadata not found in Crunchyroll payload")
-
 async def generate_keywords(titleID: int, db: AsyncSession = Depends(async_get_db)):
     # get title
     title = await crud_title.get(db, id=titleID)
@@ -197,71 +177,6 @@ async def generate_keywords(titleID: int, db: AsyncSession = Depends(async_get_d
 
     return keywords # for testing
 
-async def ensure_all_episodes_in_db(data: NetflixPayload, db: AsyncSession, title_id: int):
-    parallel_scraper_tasks = []
-    
-    print(f'Ensuring all episodes exist for title id {title_id}')
-    title = await crud_title.get(db, id=title_id)
-
-    for season_num, season in enumerate(data.video.seasons):
-        for ep_num, netflix_episode in enumerate(season.episodes):
-            episode_name = netflix_episode.title
-            if not await crud_episode.exists(db, name=episode_name, title_id=title_id):
-                print(f'Discovered episode {episode_name}')
-                episode = await crud_episode.create(db, object=EpisodeCreate(
-                    name=episode_name,
-                    synopsis=netflix_episode.synopsis,
-                    title_id=title_id,
-                    # account for zero-indexing -> 1-indexing
-                    season_num=season_num+1,
-                    ep_num=ep_num+1,
-                ))
-
-            episode = await crud_episode.get(db, name=episode_name, title_id=title_id)
-            parallel_scraper_tasks.append(process_episode(title, episode))
-
-    # execute all tasks in parallel    
-    chain(
-        find_fandom_sub.s(title),
-        group(parallel_scraper_tasks),
-    ).delay()
-
-def process_episode(title, episode):
-    return chain(
-        scrape_episode_fandom.s(episode),
-        summarize_episode_fandom.s()
-    )
-
-async def ensure_all_episodes_in_db_crunchy(data: CrunchyPayload, db: AsyncSession, title_id: int):
-    parallel_scraper_tasks = []
-    title = await crud_title.get(db, id=title_id)
-    #print("started")
-    for season_num, season in enumerate(data.seasons):
-        #print("season_num", season_num, "season", season.data)
-        for ep_num, episode in enumerate(season.data):
-            #print("episode", episode, "ep_num", ep_num)
-            episode_name = episode.title
-            if not await crud_episode.exists(db, name=episode_name, title_id=title_id):
-                await crud_episode.create(db, object=EpisodeCreate(
-                    name=episode_name,
-                    synopsis=episode.description,
-                    title_id=title_id,
-                    # account for zero-indexing -> 1-indexing
-                    season_num=season_num+1,
-                    ep_num=ep_num+1,
-                ))
-
-                # TODO call scraping background task here
-            episode = await crud_episode.get(db, name=episode_name, title_id=title_id)
-            parallel_scraper_tasks.append(process_episode(title, episode))
-    
-    # execute all tasks in parallel
-    chain(
-        find_fandom_sub.s(title),
-        group(parallel_scraper_tasks),
-    ).delay()
-    
-
 @app.post("/metadata")
 async def parse_metadata(
     payload: MetadataRequest,
@@ -272,112 +187,10 @@ async def parse_metadata(
 
     match site_info.domain:
         case "netflix":
-            try:
-                data = NetflixPayload(**payload.data)
-            except ValidationError as e:
-                print(e)
-                raise HTTPException(status_code=400, detail="Malformed Netflix metadata") from e
-
-            title_name = data.video.title
-            num_seasons = len(data.video.seasons)
-            synopsis = data.video.synopsis
-
-            if not await crud_title.exists(db, name=title_name):
-                print(f"Discovered title {title_name}")
-                title = await crud_title.create(db, object=TitleCreate(
-                    name=title_name,
-                    num_seasons=num_seasons,
-                    synopsis=synopsis,
-                ))
-
-                # find_fandom_sub.s(title.model_dump())
-
-            title = await crud_title.get(db, name=title_name)
-
-            netflix_episode, season_num, ep_num = find_netflix_episode(data)
-            episode_name = netflix_episode.title
-
-            if not await crud_episode.exists(db, name=episode_name, title_id=title['id']):
-                print(f"Discovered episode {episode_name}")
-                await crud_episode.create(db, object=EpisodeCreate(
-                    name=episode_name,
-                    synopsis=netflix_episode.synopsis,
-                    season_num=season_num,
-                    ep_num=ep_num,
-                    title_id=title["id"])
-                )
-
-            episode = await crud_episode.get(db, title_id=title['id'])
-            background_tasks.add_task(ensure_all_episodes_in_db, data, db, title["id"])
-
-            # include title & episode objects in final response
-            res = {
-                "episode_id": episode["id"],
-                "episode_name": episode["name"],
-                "title_name": title["name"],
-                "title_id": title["id"],
-                **title,
-                **episode,
-            }
-
-            # account for key collisions
-            res.pop("id")
-            res.pop("name")
-
-            return res
+            return await resolve_netflix(payload, background_tasks, db)
+        
         case "crunchyroll":
-            print("CrunchyRoll", payload.data["seasons"][0]["data"][0])
-            try:
-                data = CrunchyPayload(**payload.data)
-            except ValidationError as e:
-                print(e)
-                raise HTTPException(status_code=400, detail="Malformed Netflix metadata") from e
-            title_name = data.title
-            num_seasons = len(data.seasons)
-            synopsis = data.synopsis
-            print("title_name", title_name, "num_seasons", num_seasons, "synopsis", synopsis)
-            if not await crud_title.exists(db, name=title_name):
-                print(f"Discovered title {title_name}")
-                await crud_title.create(db, object=TitleCreate(
-                    name=title_name,
-                    num_seasons=num_seasons,
-                    synopsis=synopsis,
-                ))
-            #print("Next steps")
-            title = await crud_title.get(db, name=title_name)
-            #print("title", title)
-            crunchyroll_episode, season_num, ep_num = find_crunchyroll_episode(data)
-            #print("crunchyroll_episode", crunchyroll_episode, "season_num", season_num, "ep_num", ep_num)
-            episode_name = crunchyroll_episode.title
-            #print("episode_name", episode_name)
-
-            if not await crud_episode.exists(db, name=episode_name):
-                print(f"Discovered episode {episode_name}")
-                await crud_episode.create(db, object=EpisodeCreate(
-                    name=episode_name,
-                    synopsis=crunchyroll_episode.description,
-                    season_num=season_num,
-                    ep_num=ep_num,
-                    title_id=title["id"])
-                ) 
-            
-            episode = await crud_episode.get(db, name=episode_name)
-            background_tasks.add_task(ensure_all_episodes_in_db_crunchy, data, db, title["id"])
-            
-            # include title & episode objects in final response
-            res = {
-                "episode_id": episode["id"],
-                "episode_name": episode["name"],
-                "title_name": title["name"],
-                "title_id": title["id"],
-                **title,
-                **episode,
-            }
-
-            # account for key collisions
-            res.pop("id")
-            res.pop("name")
-            return res
+            return await resolve_crunchyroll(payload, background_tasks, db)
 
         case _:
             raise HTTPException(status_code=400, detail="Unsupported streaming provider")

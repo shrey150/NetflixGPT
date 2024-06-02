@@ -1,6 +1,6 @@
 import asyncio
 from bs4 import BeautifulSoup
-from celery import Celery
+from celery import Celery, chain
 from fastapi import BackgroundTasks, Depends
 import requests
 import pywikibot
@@ -139,7 +139,7 @@ def summarize_episode_fandom(payload: dict) -> Summary:
         text=text,
     )
 
-    async_to_sync(write_summary_to_db)(summary_create)
+    return async_to_sync(write_summary_to_db)(summary_create)
 
 async def write_summary_to_db(summary: SummaryCreate) -> Summary:
     async for db in async_get_db():
@@ -150,3 +150,10 @@ def index_episode(summarized_data):
     # Index the episode
     indexed_data = {'episode_id': summarized_data['episode_id'], 'index': '...'}
     return indexed_data
+
+# entry point for our processing pipeline
+def process_episode(title, episode):
+    return chain(
+        scrape_episode_fandom.s(episode),
+        summarize_episode_fandom.s()
+    )
