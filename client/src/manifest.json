@@ -3,7 +3,8 @@
   "name": "NetflixGPT",
   "description": "A chatbot companion for Q&A during Netflix episodes",
   "host_permissions": [
-    "https://www.netflix.com/watch/*" 
+    "https://www.netflix.com/watch/*",
+    "https://www.crunchyroll.com/watch/*"
   ],
   "options_page": "options.html",
   "background": { "service_worker": "background.bundle.js" },
@@ -16,10 +17,15 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://www.netflix.com/watch/*"],
-      "js": ["contentScript.bundle.js"],
-      "css": ["content.styles.css"]
-    }
+        "matches": ["https://www.netflix.com/watch/*"],
+        "js": ["contentScript.bundle.js"],
+        "css": ["content.styles.css"]
+    },
+    {
+        "matches": ["https://www.crunchyroll.com/watch/*"],
+        "js": ["contentScript.bundle.js"],
+        "css": ["content.styles.css"]
+      }
   ],
   "web_accessible_resources": [
     {

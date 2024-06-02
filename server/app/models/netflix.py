@@ -1,6 +1,6 @@
 from typing import List, Optional
 from pydantic import BaseModel
-
+from datetime import datetime
 class Artwork(BaseModel):
     w: int
     h: int
@@ -101,3 +101,4 @@ class NetflixPayload(BaseModel):
     version: str
     trackIds: TrackIds
     video: Video
+

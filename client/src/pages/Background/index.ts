@@ -5,7 +5,8 @@ chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONT
 
 // inject content script on Netflix watch pages
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, _) => {
-    if (changeInfo.url?.includes('netflix.com/watch')) {
+    console.log('NetflixGPT> Tab updated:', changeInfo);
+    if (changeInfo.url?.includes('netflix.com/watch') || changeInfo.url?.includes('crunchyroll.com/watch')) {
         console.log('NetflixGPT> Injecting content script!')
         chrome.scripting.executeScript({
             target: { tabId },

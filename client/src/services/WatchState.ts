@@ -18,6 +18,7 @@ export interface WatchProps {
 export interface TitleActions {
   setTitleInfo: (titleInfo: TitleInfo) => void;
   fetchTitleInfo: (titleId: string) => Promise<void>;
+  fetchTitleInfocr: (episodeID: string) => Promise<void>;
   addSubtitles: (subtitle: string) => void;
   ask: (question: string) => Promise<void>;
   setLoading: (status: boolean) => void;
@@ -164,8 +165,8 @@ export const useWatchState = create(
     }),
     
     fetchTitleInfo: async (titleId) => {
-      console.log('NetflixGPT> Fetching title info')
-      const res = await fetch(`https://www.netflix.com/nq/website/memberapi/va7b420b8/metadata?movieid=${titleId}`);
+      console.log('NetflixGPT> Fetching title info Test')
+      const res = await fetch(`https://www.netflix.com/nq/website/memberapi/v9779f77b/metadata?movieid=${titleId}`); // TODO: Maybe replace va7b420b8 with variable
       const payload: NetflixPayload = await res.json();
       console.log('NetflixGPT> Raw payload:', payload);
       
@@ -196,6 +197,130 @@ export const useWatchState = create(
         ep_num: ep.seq,
         summary: ep.synopsis,
       })
+    },
+
+    fetchTitleInfocr: async (episodeID) => {
+      console.log('NetflixGPT> Fetching title info for Crunchyroll');
+
+      // (0) Before anything - we need to POST to grab an anonymous token from crunchyroll
+      //What it should look like:
+      // POST /auth/v1/token
+      // # Request Headers
+      // Authorization: Basic bm9haWhkZXZtXzZpeWcwYThsMHE6
+      // ETP-Anonymous-ID: ${ETP_ID}
+      // Content-Type: application/x-www-form-urlencoded
+      // # Request Body
+      // "grant_type=client_id"
+
+      const endpoint = "https://www.crunchyroll.com/auth/v1/token";
+      const authorizationHeader = "Basic YWNmYWZtNTE3aGtpZWt4Yl93bWU6MDluclZfejBUNWxVdjRyRHp5ZlJYZk0wVmlIRHQyQV8=";
+      const contentTypeHeader = "application/x-www-form-urlencoded";
+      const etpAnonymousIdHeader = crypto.randomUUID();
+
+      const body = new URLSearchParams({
+          "grant_type": "client_id",
+          "scope": "offline_access"
+      });
+
+      const authresponse = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+              "Authorization": authorizationHeader,
+              "Content-Type": contentTypeHeader,
+              "ETP-Anonymous-ID": etpAnonymousIdHeader
+          },
+          body: body.toString()
+      });
+
+      const authresponsepayload = await authresponse.json();
+      console.log("NetflixGPT> Authorized response payload", authresponsepayload);
+
+      // (1) we need to fetch the ratings tab - which can be done using - https://www.crunchyroll.com/content/v2/cms/objects/<episodeID>?ratings=true&locale=en-US 
+      //     (1b) we need to grab the seriesID from the fetch response
+      const ratingsRes = await fetch(`https://www.crunchyroll.com/content/v2/cms/objects/${episodeID}?ratings=true&locale=en-US`, {
+        headers: {
+          "Authorization": `Bearer ${encodeURIComponent(authresponsepayload.access_token)}` // Ensure token is properly encoded
+        }
+      });
+      const ratingsPayload = await ratingsRes.json();
+      console.log('NetflixGPT> Ratings payload:', ratingsPayload);
+      const seriesId = ratingsPayload.data[0].episode_metadata.series_id;
+      if (!seriesId) {
+        console.error('NetflixGPT> Unable to find series ID');
+        return;
+      }
+
+      // 1c - fetch the overall synopysis from https://www.crunchyroll.com/content/v2/cms/series/$seriesID?preferred_audio_language=en-US&locale=en-US
+      const seriesRes = await fetch(`https://www.crunchyroll.com/content/v2/cms/series/${seriesId}?preferred_audio_language=en-US&locale=en-US`, {
+        headers: {
+          "Authorization": `Bearer ${encodeURIComponent(authresponsepayload.access_token)}` // Ensure token is properly encoded
+        }
+      });
+      const seriesPayload = await seriesRes.json();
+      console.log('NetflixGPT> Series payload:', seriesPayload);
+    
+
+      // (2) After we grab the series ID from the fetch response - we need to
+      //     (2b) fetch seasons from this tab https://www.crunchyroll.com/content/v2/cms/series/<seriesID>/seasons?force_locale=&locale=en-US
+      const seasonsRes = await fetch(`https://www.crunchyroll.com/content/v2/cms/series/${seriesId}/seasons?force_locale=&locale=en-US`, {
+        headers: {
+          "Authorization": `Bearer ${encodeURIComponent(authresponsepayload.access_token)}` // Ensure token is properly encoded
+        }
+      });
+      const seasonsPayload = await seasonsRes.json();
+
+      const allSeasonsData = [];
+      for (const season of seasonsPayload.data) {
+        // (3) Individually run through each season to produce payload
+        //     (3b) fetch episodes from this tab https://www.crunchyroll.com/content/v2/cms/seasons/<seasonID>/episodes?locale=en-US
+        const episodesRes= await fetch(`https://www.crunchyroll.com/content/v2/cms/seasons/${season.id}/episodes?locale=en-US`, {
+          headers: {
+            "Authorization": `Bearer ${encodeURIComponent(authresponsepayload.access_token)}` // Ensure token is properly encoded
+          }
+        });
+        const episodesPayload = await episodesRes.json();
+        allSeasonsData.push(episodesPayload);
+      }
+
+      // (4) POST the payload to our server
+
+      // Absolutely necesssary to payload:
+      // 
+      const payload = {
+        title: seriesPayload.data[0].title,
+        current_episode: episodeID,
+        lang: ratingsPayload.data[0].episode_metadata.audio_locale,
+        synopsis: seriesPayload.data[0].description,
+        seasons: allSeasonsData
+      };
+      console.log('NetflixGPT> Crunchyroll payload:', payload);
+      //is this stringifiable?
+      try {
+        JSON.stringify(payload);
+      }
+      catch (e) {
+        console.error('NetflixGPT> Unable to stringify payload:', e);
+        return;
+      }
+      fetch('http://localhost:8000/metadata', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          url: window.location.href,
+          data: payload,
+        })
+      });
+
+      set({
+        title: ratingsPayload.data[0].title,
+        ep_title: ratingsPayload.data[0].slug_title,
+        season_num: ratingsPayload.data[0].season_number,
+        ep_num: ratingsPayload.data[0].episode_number,
+        summary: ratingsPayload.data[0].description,
+      })
+
     },
 
     addSubtitles: (subtitle) => set((state) => ({

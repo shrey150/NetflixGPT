@@ -116,6 +116,9 @@ var options = {
     extensions: fileExtensions
       .map((extension) => '.' + extension)
       .concat(['.js', '.jsx', '.ts', '.tsx', '.css']),
+    fallback: {
+      "url": require.resolve("url/")
+    }
   },
   plugins: [
     isDevelopment && new ReactRefreshWebpackPlugin(),
