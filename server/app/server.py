@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+from datetime import timedelta
 from typing import Optional
 from celery import chain, group
 from fastapi import BackgroundTasks, FastAPI, Depends, HTTPException, status
@@ -194,7 +195,7 @@ async def signin(form_data: OAuth2PasswordRequestForm = Depends()):
     token_info = await verify_google_token(form_data.password)
     username = token_info['email']
 
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={"sub": username}, expires_delta=access_token_expires
     )

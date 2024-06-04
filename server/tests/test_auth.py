@@ -2,9 +2,10 @@ import os
 from datetime import timedelta
 from jose import jwt
 import pytest
-from app.auth import create_access_token, SECRET_KEY, ALGORITHM
+from ..app.auth import create_access_token, SECRET_KEY, ALGORITHM
 
 # HOW TO RUN: poetry run pytest tests/test_auth.py
+# (do this from server/)
 
 def test_create_access_token():
     data = {"sub": "testuser@example.com"}
