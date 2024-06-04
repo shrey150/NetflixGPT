@@ -36,6 +36,7 @@ class OpenAISettings():
 
 class AuthSettings():
     JWT_SECRET_KEY: str = config("JWT_SECRET_KEY")
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = config("ACCESS_TOKEN_EXPIRE_MINUTES", default=60)
 
 class Settings(
     PromptSettings,
