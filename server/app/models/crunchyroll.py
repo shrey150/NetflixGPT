@@ -54,7 +54,7 @@ class EpisodeData(BaseModel):
     production_episode_id: str
     extended_maturity_rating: ExtendedMaturityRating
     content_descriptors: List[str]
-    streams_link: str
+    streams_link: Optional[str] = None
     episode: str
     season_slug_title: str
     series_title: str
