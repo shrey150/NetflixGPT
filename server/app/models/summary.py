@@ -15,6 +15,8 @@ class SummaryBase(SQLModel):
     source_id: Optional[int] = Field(default=None, foreign_key="sources.id")
     ep_id: Optional[int] = Field(default=None, foreign_key="episodes.id")
     last_indexed: datetime = Field(default_factory=datetime.utcnow, nullable=False)
+    reliability_score: float   # NER reliability score, 0-1
+    is_primary: bool
 
 class Summary(SummaryBase, table=True):
     '''Represents the `summaries` table.'''

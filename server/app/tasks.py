@@ -22,7 +22,9 @@ from .models.title import TitleBase, Title
 from .models.source import SourceCreate, SourceType, Source
 from .models.title_source import TitleSourceCreate
 
-from .crud import crud_title_source, crud_source, crud_summary
+from .crud import crud_title_source, crud_source, crud_summary, crud_title
+
+from .ner import calculate_reliability_score
 
 from config import settings
 from sentence_transformers import SentenceTransformer
@@ -76,6 +78,7 @@ async def find_fandom_sub_async(
             source = await crud_source.create(db, object=SourceCreate(
                 url=fandom_sub_url,
                 type=SourceType.FANDOM,
+                reliability_score=0.0
             ))
 
             await crud_title_source.create(db, object=TitleSourceCreate(
@@ -141,6 +144,9 @@ def scrape_episode_fandom(payload: dict, episode: dict) -> SummaryCreate:
 
 @app.task
 def summarize_episode_fandom(payload: dict) -> Summary:
+    return async_to_sync(summarize_episode_fandom_async)(payload)
+
+async def summarize_episode_fandom_async(payload: dict) -> Summary:
     payload: FandomScraperPayload = FandomScraperPayload(**payload)
     soup = BeautifulSoup(payload.raw_text, 'html5lib')
 
@@ -148,6 +154,12 @@ def summarize_episode_fandom(payload: dict) -> Summary:
     # TODO can optimize by only selecting p tags that are directly adjacent to h2s containing "Story|Synopsis|Plot|Summary|Story"
     paragraphs = soup.select('.mw-parser-output > p')
     text = ' '.join(p.get_text() for p in paragraphs)
+
+    # calculate NER score for this summary
+    async for db in async_get_db():
+        title = await crud_title.get(db, title_id=payload.title_id)
+        title_keywords = title['keywords']
+        reliability_score = calculate_reliability_score(text, title_keywords)
 
     summary_create = SummaryCreate(
         sub=payload.sub,
@@ -157,6 +169,8 @@ def summarize_episode_fandom(payload: dict) -> Summary:
         url=payload.url,
         ep_id=payload.ep_id,
         text=text,
+        reliability_score=reliability_score,
+        is_primary=False,
     )
 
     async_to_sync(write_summary_to_db)(summary_create)

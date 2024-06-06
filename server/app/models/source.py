@@ -21,6 +21,8 @@ class SourceBase(SQLModel):
     '''Maps from titles to URLs for their sources.'''
     url: str = Field(max_length=255, nullable=False)
     type: SourceType = Field(sa_column=Column(ChoiceType(SourceType, impl=Integer()), nullable=False))  # Fandom, Wikipedia, other
+    reliability_score: float = Field(default=0.0,nullable=False)
+    is_primary: bool = Field(default=False,nullable=False)
 
 class Source(SourceBase, table=True):
     '''Represents the `sources` table.'''

@@ -13,6 +13,8 @@ from ..models.netflix import Episode as NetflixEpisode
 from ..models.metadata import MetadataRequest
 from ..crud import crud_episode, crud_title
 
+from ..ner import generate_keywords
+
 def find_netflix_episode(data: NetflixPayload) -> (NetflixEpisode, int, int):
     for season_num, season in enumerate(data.video.seasons):
         for ep_num, episode in enumerate(season.episodes):
@@ -42,8 +44,11 @@ async def ensure_all_episodes_in_db(data: NetflixPayload, db: AsyncSession, titl
                     ep_num=ep_num+1,
                 ))
 
-                episode = await crud_episode.get(db, name=episode_name, title_id=title_id)
-                parallel_scraper_tasks.append(process_episode(title, episode))
+            episode = await crud_episode.get(db, name=episode_name, title_id=title_id)
+            parallel_scraper_tasks.append(process_episode(title, episode))
+            break
+
+    await generate_keywords(title_id, db)
 
     if len(parallel_scraper_tasks) > 0:
         # execute all tasks in parallel    

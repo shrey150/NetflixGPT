@@ -13,6 +13,8 @@ from ..models.crunchyroll import EpisodeData as CrunchyrollEpisode
 from ..models.metadata import MetadataRequest
 from ..crud import crud_episode, crud_title
 
+from ..ner import generate_keywords
+
 def find_crunchyroll_episode(data: CrunchyPayload) -> (CrunchyrollEpisode, int, int):
     for season_num, season in enumerate(data.seasons):
         print("season_num", season_num)
@@ -52,6 +54,8 @@ async def ensure_all_episodes_in_db_crunchy(data: CrunchyPayload, db: AsyncSessi
         group(parallel_scraper_tasks),
     ).delay()
 
+    await generate_keywords(title_id, db)
+
 async def resolve_crunchyroll(
     payload: MetadataRequest,
     background_tasks: BackgroundTasks,
@@ -86,11 +90,11 @@ async def resolve_crunchyroll(
             season_num=season_num,
             ep_num=ep_num,
             title_id=title["id"])
-        ) 
-    
+        )
+
     episode = await crud_episode.get(db, name=episode_name)
     background_tasks.add_task(ensure_all_episodes_in_db_crunchy, data, db, title["id"])
-    
+
     # include title & episode objects in final response
     res = {
         "episode_id": episode["id"],
