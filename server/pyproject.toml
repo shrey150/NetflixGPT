@@ -41,6 +41,7 @@ spacy = "^3.5.0"
 typer = "0.4.1"
 setuptools = "^67.6.1"
 asgiref = "^3.8.1"
+pinecone = "^4.0.0"
 
 [build-system]
 requires = ["poetry-core"]

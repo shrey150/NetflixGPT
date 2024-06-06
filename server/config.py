@@ -22,6 +22,9 @@ class LegacySettings():
 class DatabaseSettings():
     DB_CONNECTION_URI: str = config("DB_CONNECTION_URI")
 
+class PineconeSettings():
+    PINECONE_API_KEY: str = config("PINECONE_API_KEY")
+
 class RedisQueueSettings():
     REDIS_QUEUE_HOST: str = config("REDIS_QUEUE_HOST", default="localhost")
     REDIS_QUEUE_PORT: int = config("REDIS_QUEUE_PORT", default=6379)
@@ -37,6 +40,7 @@ class Settings(
     LegacySettings,
     RedisQueueSettings,
     OpenAISettings,
+    PineconeSettings,
 ):
     pass
 

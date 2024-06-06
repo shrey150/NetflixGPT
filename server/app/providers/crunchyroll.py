@@ -29,11 +29,8 @@ def find_crunchyroll_episode(data: CrunchyPayload) -> (CrunchyrollEpisode, int, 
 async def ensure_all_episodes_in_db_crunchy(data: CrunchyPayload, db: AsyncSession, title_id: int):
     parallel_scraper_tasks = []
     title = await crud_title.get(db, id=title_id)
-    #print("started")
     for season_num, season in enumerate(data.seasons):
-        #print("season_num", season_num, "season", season.data)
         for ep_num, episode in enumerate(season.data):
-            #print("episode", episode, "ep_num", ep_num)
             episode_name = episode.title
             if not await crud_episode.exists(db, name=episode_name, title_id=title_id):
                 await crud_episode.create(db, object=EpisodeCreate(
@@ -45,9 +42,8 @@ async def ensure_all_episodes_in_db_crunchy(data: CrunchyPayload, db: AsyncSessi
                     ep_num=ep_num+1,
                 ))
 
-                # TODO call scraping background task here
-            episode = await crud_episode.get(db, name=episode_name, title_id=title_id)
-            parallel_scraper_tasks.append(process_episode(title, episode))
+                episode = await crud_episode.get(db, name=episode_name, title_id=title_id)
+                parallel_scraper_tasks.append(process_episode(title, episode))
     
     # execute all tasks in parallel
     chain(

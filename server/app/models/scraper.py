@@ -9,3 +9,6 @@ class FandomScraperPayload(FandomSubPayload):
     raw_text: str
     url: str
     ep_id: int
+
+class FandomSummaryPayload(FandomScraperPayload):
+    text: str
