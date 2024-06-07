@@ -138,6 +138,15 @@ async def ask_question(
     )
 
 
+def find_netflix_episode(data: NetflixPayload) -> (NetflixEpisode, int, int):
+    for season_num, season in enumerate(data.video.seasons):
+        for ep_num, episode in enumerate(season.episodes):
+            if episode.episodeId == data.video.currentEpisode:
+                # convert from zero-indexing to 1-indexing
+                return (episode, season_num+1, ep_num+1)
+
+    raise HTTPException(status_code=400, detail="Episode metadata not found in Netflix payload")
+
 async def generate_keywords(titleID: int, db: AsyncSession = Depends(async_get_db)):
     # get title
     title = await crud_title.get(db, id=titleID)
@@ -170,6 +179,41 @@ async def generate_keywords(titleID: int, db: AsyncSession = Depends(async_get_d
     return keywords  # for testing
 
 
+async def ensure_all_episodes_in_db(data: NetflixPayload, db: AsyncSession, title_id: int):
+    parallel_scraper_tasks = []
+    
+    print(f'Ensuring all episodes exist for title id {title_id}')
+    title = await crud_title.get(db, id=title_id)
+
+    for season_num, season in enumerate(data.video.seasons):
+        for ep_num, netflix_episode in enumerate(season.episodes):
+            episode_name = netflix_episode.title
+            if not await crud_episode.exists(db, name=episode_name, title_id=title_id):
+                print(f'Discovered episode {episode_name}')
+                episode = await crud_episode.create(db, object=EpisodeCreate(
+                    name=episode_name,
+                    synopsis=netflix_episode.synopsis,
+                    title_id=title_id,
+                    # account for zero-indexing -> 1-indexing
+                    season_num=season_num+1,
+                    ep_num=ep_num+1,
+                ))
+
+            episode = await crud_episode.get(db, name=episode_name, title_id=title_id)
+            parallel_scraper_tasks.append(process_episode(title, episode))
+
+    # execute all tasks in parallel    
+    chain(
+        find_fandom_sub.s(title),
+        group(parallel_scraper_tasks),
+    ).delay()
+
+def process_episode(title, episode):
+    return chain(
+        scrape_episode_fandom.s(episode),
+        summarize_episode_fandom.s()
+    )
+
 @app.post("/metadata")
 async def parse_metadata(
     payload: MetadataRequest,
@@ -190,13 +234,13 @@ async def parse_metadata(
             raise HTTPException(status_code=400, detail="Unsupported streaming provider")
 
 
-@app.post("/signin", response_model=Token)
-async def signin(form_data: OAuth2PasswordRequestForm = Depends()):
-    token_info = await verify_google_token(form_data.password)
-    username = token_info['email']
+# @app.post("/signin", response_model=Token)
+# async def signin(form_data: OAuth2PasswordRequestForm = Depends()):
+#     token_info = await verify_google_token(form_data.password)
+#     username = token_info['email']
 
-    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": username}, expires_delta=access_token_expires
-    )
-    return {"access_token": access_token, "token_type": "bearer"}
+#     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+#     access_token = create_access_token(
+#         data={"sub": username}, expires_delta=access_token_expires
+#     )
+#     return {"access_token": access_token, "token_type": "bearer"}

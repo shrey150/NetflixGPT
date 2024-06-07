@@ -14,9 +14,11 @@
   },
   "dependencies": {
     "@formkit/auto-animate": "^1.0.0-beta.6",
+    "auth0-chrome": "^0.1.2",
     "firebase": "^9.22.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-google-button": "^0.8.0",
     "react-scripts": "^5.0.1",
     "reactfire": "^4.2.2",
     "shared-zustand": "^2.0.0",

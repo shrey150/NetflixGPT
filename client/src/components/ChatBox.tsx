@@ -30,7 +30,7 @@ export const ChatBox = ({question, onClick, firstClick, setFirstClick, enableAni
 
     return (
       <div className='w-screen flex flex-col items-center justify-center p-5 rounded-lg'>
-        <div className='flex flex-row p-2 bg-gray-600 rounded-full max-w-full align-middle'>
+        <div className='flex flex-row p-2 bg-gray-400 rounded-full max-w-full align-middle'>
           <input className='font-inter p-5 font-medium subpixel-antialisased border-none bg-transparent outline-none text-white text-xl' 
             id='chat'
             style={{width: 400, height: 36,}}
