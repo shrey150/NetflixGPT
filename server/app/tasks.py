@@ -55,7 +55,7 @@ text_splitter = RecursiveCharacterTextSplitter(
         "\u3002",  # Ideographic full stop
         "",
     ],
-    chunk_size=100,
+    chunk_size=1024,
     chunk_overlap=0
 )
 
@@ -207,8 +207,9 @@ def index_episode(payload: dict):
     payload: FandomSummaryPayload = FandomSummaryPayload(**payload)
 
     docs = text_splitter.create_documents([payload.text])
+    embedding_metadata_pairs = []
 
-    for doc in docs:
+    for i, doc in enumerate(docs):
         try:
             embedding = embeddings.encode(doc.page_content)
             metadata = {
@@ -219,9 +220,18 @@ def index_episode(payload: dict):
                 'text': doc.page_content,
                 'url': payload.url,
             }
-            index.upsert([(f"{payload.ep_id}_{i}", embedding, metadata) for i, _ in enumerate(docs)])
+
+            embedding_id = f"{payload.sub}-{payload.source_id}-{payload.title_id}-{payload.ep_id}-{i}"
+            embedding_metadata_pairs.append((embedding_id, embedding, metadata))
+
         except Exception as e:
-            print(f"Error indexing document: {e}")
+            print(f"Error indexing document at index {i}: {e}")
+
+    if embedding_metadata_pairs:
+        try:
+            index.upsert(embedding_metadata_pairs)
+        except Exception as e:
+            print(f"Error during upsert operation: {e}")
 
     return {"status": "indexed"}
 
