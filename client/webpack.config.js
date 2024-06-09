@@ -117,6 +117,9 @@ var options = {
       .map((extension) => '.' + extension)
       .concat(['.js', '.jsx', '.ts', '.tsx', '.css']),
     fallback: {
+      "path": false,
+      "os": false,
+      "crypto": false,
       "url": require.resolve("url/")
     }
   },

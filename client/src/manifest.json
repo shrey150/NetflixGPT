@@ -43,5 +43,9 @@
     "scripting",
     "identity",
     "notifications"
-  ]
+  ],
+  "oauth2": {
+    "client_id": "482785177008-2qq2eg3bq1hd5m4dgdcua0sp81962q37.apps.googleusercontent.com",
+    "scopes": []
+  }
 }

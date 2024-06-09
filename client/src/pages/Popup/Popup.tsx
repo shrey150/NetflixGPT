@@ -1,7 +1,4 @@
 import React, { useEffect, useState, useRef } from 'react';
-// import { doc, setDoc } from 'firebase/firestore';
-// import { useFirestore, useFirestoreDocData } from 'reactfire';
-import {ChatBox} from '../../components/ChatBox';
 import { Login } from '../../components/Login';
 import {useAutoAnimate} from '@formkit/auto-animate/react';
 import { TitleInfo, useWatchState } from '../../services/WatchState';
@@ -95,23 +92,10 @@ const Popup = () => {
     `
   );
   
-  const handleLogin = () => {
-    console.log('triggering authentication')
-    chrome.runtime.sendMessage({ action: "login" }, (response) => {
-      if (response && response.success) {
-        console.log("Login successful", response.token);
-      } else {
-        console.log("Login failed");
-      }
-    });
-  }
-
   return (
       <div>
         <div id='unauthorized' className='flex flex-col items-center justify-center bg-stone-900 h-screen overflow-hidden'>
-          <button onClick={handleLogin}>
             <Login/>
-          </button>
         </div>
         {/* <div id='authorized'>
           <div className={firstClick ? 'flex flex-col items-center bg-stone-900 h-screen overflow-hidden' : 'flex flex-col items-center bg-stone-900 h-screen overflow-hidden'}>
