@@ -19,6 +19,7 @@ from .providers.crunchyroll import resolve_crunchyroll
 
 from .database import create_db_and_tables, async_get_db
 
+from .models.question import QuestionRequest, QuestionResponse
 from .models.episode import Episode, EpisodeCreate
 from .models.netflix import NetflixPayload
 from .models.netflix import Episode as NetflixEpisode
@@ -45,26 +46,34 @@ import json
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_core.prompts import load_prompt
 from langchain_openai import ChatOpenAI
+from langchain.chains import ConversationChain
+
+from .vecstore import vecstore
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await create_db_and_tables()
     yield
 
-####################
+
 # TODO use lifespan events to create these top-level objects
 llm = ChatOpenAI(model="gpt-4o", api_key=settings.OPENAI_API_KEY)
-# scraper = Scraper()
-# db = Database()
 prompttemplate = open(settings.PROMPT_REG_TXT_PATH, "r", encoding="utf-8").read()
 prompt = PromptTemplate(
-    input_variables= ["title","ep_title","season_num","ep_num","summary","chat_history","question"],
-    template = prompttemplate
+    input_variables=[
+        "title",
+        "ep_title",
+        "season_num",
+        "ep_num",
+        "summary",
+        "chat_history",
+        "question",
+    ],
+    template=prompttemplate,
 )
-####################
 
 app = FastAPI(lifespan=lifespan)
-#prompt = load_prompt("data/prompt.json")
 
 origins = [
     "http://localhost",
@@ -82,82 +91,58 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-memory = ConversationBufferMemory(memory_key="chat_history")
+@app.post("/ask")
+async def ask_question(
+    question_req: QuestionRequest, db: AsyncSession = Depends(async_get_db)
+) -> QuestionResponse:
+    print(f"Question: {question_req.question}")
 
-# @app.post("/titles/{title_id}/episodes/{episode_id}/questions")
-# async def ask_question(title_id: str, episode_id: str, question_req: QuestionRequest) -> TitleAnswer:
-    
-#     question = question_req.question
+    title = await crud_title.get(db, id=question_req.title_id)
+    episode = await crud_episode.get(db, id=question_req.episode_id)
 
-#     summary = payload.summary
-#     if not payload.summary:
-#         if not db.has(info):
-#             print(payload)
-#             summary = scraper.fetch(payload)  
-#             print('summary', summary)
-#             db.add(summary, info)
+    print(f"Title: {title}")
+    print(f"Episode: {episode}")
 
-#         texts = db.search(payload.question, {'title': payload.title})
-#         summary = '\n'.join(texts)
-#         print('Context:', texts)
+    retriever = vecstore.as_retriever(
+        search_type="similarity",
+        filter={
+            "title_id": question_req.title_id,
+            # TODO filter by <= abs_ep_num
+        },
+    )
 
-#     context = prompt.format(
-#         title=payload.title,
-#         ep_title=payload.ep_title,
-#         season_num=payload.season_num,
-#         ep_num=payload.ep_num,
-#         summary=summary,
-#         question = "{question}",
-#         chat_history = "{chat_history}"
-#     )
+    docs = retriever.invoke(question_req.question)
+    docs_content = "\n".join(doc.page_content for doc in docs)
 
-#     llm_chain = LLMChain(
-#         prompt = PromptTemplate(input_variables=["chat_history", "question"], template = context),
-#         llm = llm,
-#         verbose = True,
-#         memory = memory
-#     )
+    print(f"Retrieved {len(docs)} documents")
+    print(f"Docs content: {docs_content}")
 
-#     answer = llm_chain.predict(question=payload.question)
-#     similar_texts = db.search(answer, {'title': payload.title })
-#     db_all = db.get_all()
-#     db_dict = db.dict_get_all()
-#     #Get the episode number from similar_texts
-#     episode_number = []
-#     for text in similar_texts:
-#         for e in db_all:
-#             content = e[1]
-            
-#             if content == text:
-#                 metadata = e[2]
-#                 ep_num = utils.abs_ep_num(db_dict, payload.title, metadata['season_num'], metadata['ep_num'])
-#                 print(metadata)
-#                 print("pogpogpogpogpogpogpogpogpo", ep_num)
-#                 episode_number.append(ep_num)
-    
-#     print("episode_number ", episode_number)
-#     counter = 0
-#     for ep in episode_number:
-#         ep_num = utils.abs_ep_num(db_dict, payload.title, payload.season_num, payload.ep_num)
-#         if ep > ep_num:
-#             counter += 1
-#     if counter > 5:
-#         return {"answer": "I'm sorry, this information cannot be revealed"}
-#     return {"answer": answer}
+    question = question_req.question
+    context = prompt.format(
+        title_name=title["name"],
+        ep_name=episode["name"],
+        season_num=episode["season_num"],
+        ep_num=episode["ep_num"],
+        title_synopsis=title["synopsis"],
+        episode_synopsis=episode["synopsis"],
+        question=question,
+        summary_chunks=docs_content,
+    )
 
-# GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID') or None
-# GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET') or None
-# data = {'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID}
-# config = Config(environ=data)
+    answer = llm.invoke(context)
+    return QuestionResponse(
+        answer=answer.content,
+    )
+
 
 async def generate_keywords(titleID: int, db: AsyncSession = Depends(async_get_db)):
     # get title
     title = await crud_title.get(db, id=titleID)
 
-    #get all synopses from episodes and title if exists
+    # get all synopses from episodes and title if exists
     episodes = await crud_episode.get_multi(db, title_id=titleID)
     all_synopses = title["synopsis"] if title["synopsis"] else ""
-    for episode in episodes['data']:
+    for episode in episodes["data"]:
         all_synopses += " " + episode["synopsis"]
 
     # concatenate all the synopses and pass it to the NER model
@@ -168,29 +153,36 @@ async def generate_keywords(titleID: int, db: AsyncSession = Depends(async_get_d
     keywords = ", ".join(set([ent.text for ent in doc.ents]))
 
     # save the string of entities to keywords column in the title table
-    await crud_title.update(db, id=titleID, object=TitleBase(
-        name=title["name"],
-        num_seasons=title["num_seasons"],
-        synopsis=title["synopsis"],
-        keywords=keywords
-    ))
+    await crud_title.update(
+        db,
+        id=titleID,
+        object=TitleBase(
+            name=title["name"],
+            num_seasons=title["num_seasons"],
+            synopsis=title["synopsis"],
+            keywords=keywords,
+        ),
+    )
 
-    return keywords # for testing
+    return keywords  # for testing
+
 
 @app.post("/metadata")
 async def parse_metadata(
     payload: MetadataRequest,
     background_tasks: BackgroundTasks,
-    db: AsyncSession = Depends(async_get_db)
+    db: AsyncSession = Depends(async_get_db),
 ):
     site_info = tldextract.extract(payload.url)
 
     match site_info.domain:
         case "netflix":
             return await resolve_netflix(payload, background_tasks, db)
-        
+
         case "crunchyroll":
             return await resolve_crunchyroll(payload, background_tasks, db)
 
         case _:
-            raise HTTPException(status_code=400, detail="Unsupported streaming provider")
+            raise HTTPException(
+                status_code=400, detail="Unsupported streaming provider"
+            )

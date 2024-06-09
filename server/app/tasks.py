@@ -27,37 +27,9 @@ from .crud import crud_title_source, crud_source, crud_summary
 from config import settings
 from sentence_transformers import SentenceTransformer
 
+from .vecstore import text_splitter, embeddings, index
+
 app = Celery('tasks', broker=settings.REDIS_QUEUE_URI)
-embeddings = SentenceTransformer('all-mpnet-base-v2')
-
-# Initialize Pinecone
-pinecone = Pinecone(api_key=settings.PINECONE_API_KEY)
-index_name = "netflixgpt"
-if index_name not in pinecone.list_indexes().names():
-    pinecone.create_index(
-        name=index_name,
-        dimension=768,
-        spec=ServerlessSpec(cloud='aws', region='us-east-1'),
-    )
-index = pinecone.Index(index_name)
-
-text_splitter = RecursiveCharacterTextSplitter(
-    separators=[
-        "\n\n",
-        "\n",
-        " ",
-        ".",
-        ",",
-        "\u200b",  # Zero-width space
-        "\uff0c",  # Fullwidth comma
-        "\u3001",  # Ideographic comma
-        "\uff0e",  # Fullwidth full stop
-        "\u3002",  # Ideographic full stop
-        "",
-    ],
-    chunk_size=1024,
-    chunk_overlap=0
-)
 
 @app.task
 def find_fandom_sub(

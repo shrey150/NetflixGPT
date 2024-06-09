@@ -6,7 +6,7 @@ authors = ["Shrey Pandya <shrey150@yahoo.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = ">=3.11,<3.13"
 python-dotenv = "^1.0.0"
 openai = "^1.30.1"
 google-search-results = "^2.4.2"
@@ -42,6 +42,8 @@ typer = "0.4.1"
 setuptools = "^67.6.1"
 asgiref = "^3.8.1"
 pinecone = "^4.0.0"
+langchain-pinecone = "^0.1.1"
+langchain-huggingface = "^0.0.3"
 
 [build-system]
 requires = ["poetry-core"]
