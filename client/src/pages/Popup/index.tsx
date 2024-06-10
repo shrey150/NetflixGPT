@@ -10,12 +10,8 @@ const container = document.getElementById('app-container');
 const root = createRoot(container!); // createRoot(container!) if you use TypeScript
 
 const App = () => {
-    console.log(process.env.REACT_APP_AUTH0_DOMAIN);
-    // const firestoreInstance = getFirestore(useFirebaseApp());
     return (
-        // <FirestoreProvider sdk={firestoreInstance}>
         <Popup />
-        // </FirestoreProvider>
     )
 }
 
