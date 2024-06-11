@@ -17,7 +17,6 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, _) => {
 
 export async function initiateAuthFlow() {  
     const redirectUrl = chrome.identity.getRedirectURL() + 'auth0';
-    console.log('NetflixGPT> Redirect URL:', redirectUrl);
     
     const options = {
       client_id: process.env.REACT_APP_AUTH0_CLIENT_ID??'default',
@@ -28,24 +27,21 @@ export async function initiateAuthFlow() {
 
     const queryString = new URLSearchParams(options).toString();
     const url = `https://${process.env.REACT_APP_AUTH0_DOMAIN}/authorize?${queryString}`;
-    console.log('NetflixGPT> Auth0 URL:', url);
+
     const resultUrl: string = await new Promise((resolve, reject) => {
       chrome.identity.launchWebAuthFlow({ url, interactive: true }, (res) => resolve(res??'default'));
     });
-    console.log('NetflixGPT> Auth0 Result URL:', resultUrl);
-    const searchParams = new URLSearchParams(resultUrl)
-    
-    if (searchParams) {
-      const code = searchParams.get("code")
-  
+    const urlObject = new URL(resultUrl);
+
+    if (resultUrl) {
+      const code = urlObject.searchParams.get('code');
+
       const body = JSON.stringify({
         redirect_uri: redirectUrl,
         grant_type: "authorization_code",
         client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
         code: code
       });
-
-      console.log('NetflixGPT> Auth0 Body:', body);
 
       const response = await fetch(
         `https://${process.env.REACT_APP_AUTH0_DOMAIN}/oauth/token`,
@@ -55,7 +51,7 @@ export async function initiateAuthFlow() {
           body: body
         }
       );
-      console.log('NetflixGPT> Auth0 Response:', response);
+
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -63,6 +59,20 @@ export async function initiateAuthFlow() {
       const result = await response.json();
   
       if (result && result.access_token) {
+        console.log('NetflixGPT> Auth0 Access Token:', result.access_token);
+
+        const body = JSON.stringify({
+          auth_token: result.access_token
+        });
+
+        const user_info = await fetch('http://localhost:8000/signin', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: body
+        });
+        console.log('NetflixGPT> Auth0 User Info:', user_info);
         return result.access_token;
       } else {
         throw new Error("Auth0 Authentication Data was invalid");
@@ -71,4 +81,3 @@ export async function initiateAuthFlow() {
       throw new Error("Auth0 Cancelled or error");
     }
   }
-  

@@ -234,13 +234,8 @@ async def parse_metadata(
             raise HTTPException(status_code=400, detail="Unsupported streaming provider")
 
 
-# @app.post("/signin", response_model=Token)
-# async def signin(form_data: OAuth2PasswordRequestForm = Depends()):
-#     token_info = await verify_google_token(form_data.password)
-#     username = token_info['email']
+@app.post("/signin")
+async def signin(data):
+    user_info = await verify_google_token(data.auth_token)
+    return user_info
 
-#     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-#     access_token = create_access_token(
-#         data={"sub": username}, expires_delta=access_token_expires
-#     )
-#     return {"access_token": access_token, "token_type": "bearer"}

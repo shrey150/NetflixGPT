@@ -4,7 +4,9 @@
   "description": "A chatbot companion for Q&A during Netflix episodes",
   "host_permissions": [
     "https://www.netflix.com/watch/*",
-    "https://www.crunchyroll.com/watch/*"
+    "https://www.crunchyroll.com/watch/*",
+    "https://dev-ackj62fc7eqgx5sq.us.auth0.com/*",
+    "chrome-extension://kpifcefnbjlgambbiedokmiplacoidpa/*"
   ],
   "options_page": "options.html",
   "background": { 
