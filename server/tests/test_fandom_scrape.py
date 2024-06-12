@@ -11,7 +11,7 @@ config.family_files[custom_sub] = f'https://{custom_sub}.fandom.com/api.php'
 site = pywikibot.Site(custom_sub, custom_sub)
 
 # Search for the page
-search_results = pagegenerators.SearchPageGenerator(search_term, site=site, total=1)
+search_results = pagegenerators.SearchPageGenerator(search_term, site=site, total=1, namespaces=[0])
 
 print(search_results)
 

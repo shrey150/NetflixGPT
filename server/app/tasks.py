@@ -116,7 +116,8 @@ def scrape_episode_fandom(payload: dict, episode: dict) -> SummaryCreate:
                                 maybe `episodes.display_num` for edge case w/ 0.5s
     """
 
-    search_results = pagegenerators.SearchPageGenerator(episode.name, site=site, total=1)
+    # TODO: this may only work for Fandom
+    search_results = pagegenerators.SearchPageGenerator(episode.name, site=site, total=1, namespaces=[0])
 
     # Get the first page from the search results
     page = next(search_results)
