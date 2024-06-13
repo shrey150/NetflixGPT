@@ -33,6 +33,7 @@ async def ensure_all_episodes_in_db_crunchy(data: CrunchyPayload, db: AsyncSessi
         for ep_num, episode in enumerate(season.data):
             episode_name = episode.title
             if not await crud_episode.exists(db, name=episode_name, title_id=title_id):
+                print("Discovered episode", episode_name)
                 await crud_episode.create(db, object=EpisodeCreate(
                     name=episode_name,
                     synopsis=episode.description,
