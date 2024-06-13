@@ -12,7 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import os
 from langchain.memory import ConversationBufferMemory
 from langchain_core.prompts import PromptTemplate
-import re
+import requests
 import tldextract
 from logging import Logger
 
@@ -33,14 +33,15 @@ from .models.crunchyroll import EpisodeData as CrunchyrollEpisode
 from .models.title import Title, TitleBase, TitleCreate
 from .models.conversation import Conversation
 from .models.message import Message
-from .models.user import User
+from .models.user import User, UserBase, UserCreate
+from .models.auth import AuthRequest
 from .models.metadata import MetadataRequest
 from .tasks import find_fandom_sub, summarize_episode_fandom, scrape_episode_fandom
 
 from .scraper import Scraper
 from . import utils
 from config import settings
-from .crud import crud_episode, crud_title
+from .crud import crud_episode, crud_title, crud_user
 from .auth import verify_google_token, create_access_token, get_current_user, TokenData, Token
 
 import spacy
@@ -102,6 +103,14 @@ async def ask_question(
 
     title = await crud_title.get(db, id=question_req.title_id)
     episode = await crud_episode.get(db, id=question_req.episode_id)
+current_file_dir = os.path.dirname(os.path.realpath(__file__))
+env_path = os.path.join(current_file_dir, "..", ".env")
+config = Config(env_path)
+
+# @app.post("/titles/{title_id}/episodes/{episode_id}/questions")
+# async def ask_question(title_id: str, episode_id: str, question_req: QuestionRequest) -> TitleAnswer:
+    
+#     question = question_req.question
 
     print(f"Title: {title}")
     print(f"Episode: {episode}")
@@ -233,9 +242,20 @@ async def parse_metadata(
         case _:
             raise HTTPException(status_code=400, detail="Unsupported streaming provider")
 
-
 @app.post("/signin")
-async def signin(data):
-    user_info = await verify_google_token(data.auth_token)
-    return user_info
+async def signin(payload: AuthRequest):
+    response = requests.get(
+        url=f'https://{settings.REACT_APP_AUTH0_DOMAIN}/userinfo',
+        headers={'Authorization': f'Bearer {payload.auth_token}'},
+        timeout=5
+    )
+    response.raise_for_status()
+    data = response.json()
+    print(data)
+
+    crud_user.create(db, object=UserCreate(
+        id=data['sub'],
+        email=data['email']
+    ))
+
 

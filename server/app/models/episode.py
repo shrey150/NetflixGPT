@@ -19,6 +19,7 @@ class Episode(EpisodeBase, table=True):
     __tablename__ = "episodes"
     id: Optional[int] = Field(default=None, primary_key=True)
     title_id: Optional[int] = Field(default=None, foreign_key="titles.id")
+    
 
 class EpisodeCreate(EpisodeBase):
     title_id: int

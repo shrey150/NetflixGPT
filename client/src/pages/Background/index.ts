@@ -22,7 +22,7 @@ export async function initiateAuthFlow() {
       client_id: process.env.REACT_APP_AUTH0_CLIENT_ID??'default',
       redirect_uri: redirectUrl,
       response_type: "code",
-      scope: "openid",
+      scope: "openid profile email",
     };
 
     const queryString = new URLSearchParams(options).toString();
@@ -60,19 +60,24 @@ export async function initiateAuthFlow() {
   
       if (result && result.access_token) {
         console.log('NetflixGPT> Auth0 Access Token:', result.access_token);
+        
+        chrome.storage.local.set({ authToken: result.access_token }).then(() => {
+          console.log("Value is set");
+        });
 
         const body = JSON.stringify({
           auth_token: result.access_token
         });
-
-        const user_info = await fetch('http://localhost:8000/signin', {
+        
+        await fetch('http://localhost:8000/signin', {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: body
         });
-        console.log('NetflixGPT> Auth0 User Info:', user_info);
+
+        
         return result.access_token;
       } else {
         throw new Error("Auth0 Authentication Data was invalid");

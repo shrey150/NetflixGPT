@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Login } from '../../components/Login';
+import { Auth } from '../../components/Auth';
+import { ChatBox } from '../../components/ChatBox';
 import {useAutoAnimate} from '@formkit/auto-animate/react';
 import { TitleInfo, useWatchState } from '../../services/WatchState';
 
@@ -35,11 +36,10 @@ const Overflow = (): [React.RefObject<HTMLDivElement>, boolean] => {
 
 const Popup = () => {
   const watchState = useWatchState();
-  // const userRef = doc(useFirestore(), 'users/shrey');
-  // const { status, data } = useFirestoreDocData(userRef);
   const [divRef, isOver] = Overflow()
   const [firstClick, setFirstClick] = useState(false)
   const [parent, enableAnimations] = useAutoAnimate()
+  const [authToken, setAuthToken] = useState(null)
 
   // sync chrome storage -> React state
   useEffect(() => {
@@ -71,33 +71,12 @@ const Popup = () => {
     }
   }
 
-  const generatePrompt = (question: string, {title, season_num, ep_num, ep_title, summary}: TitleInfo) => (
-    `
-    You are NetflixGPT, a helpful movie and TV show assistant that can answer any question about a given title on Netflix. You have deep knowledge about plot, characters, actors, themes, and synopses that allow you to correctly answer any movie or TV show watcher's questions. You should aim to answer every question factually and objectively without any interpretations or subjectivity. If you do not know the answer to any question, you are to truthfully answer and say that you do not have enough information to answer their question. Reject any questions that are not within the scope of movies or TV shows.\n\n
-
-    For TV shows, you will be provided a season and episode number, as well as a brief synopsis of the current episode being watched by the user. You are to answer any questions by this user *without spoiling crucial plot points* that will come up later in the show. If the user asks you a question where truthfully answering will constitute a spoiler, say that you don't know the answer to that question based on the current point in the series. It may be helpful to imagine that you have only watched up to the same point in the show as the user, and therefore you do not possess any knowledge of plot points past this.\n\n
-
-    In your response, do not hallucinate any details that are factually incorrect or provide any opinions. Answer the question objectively and concisely to provide the user a clear answer to what they asked. Do not provide your own interpretation of plot points.\n\n
-
-    WARNING: DO NOT GIVE ANY SPOILERS. YOU WILL BE SHUT DOWN IF YOU DO\n\n
-
-    Here is your context:\n
-    - Show: "${ title }"\n
-    - Season/Episode: S${ season_num }E${ ep_num }: "${ ep_title }"\n
-    - Synopsis: "${ summary }"\n\n
-
-    Here is your question: "${ question }"\n\n
-
-    Your answer:\n\n
-    `
-  );
-  
   return (
       <div>
-        <div id='unauthorized' className='flex flex-col items-center justify-center bg-stone-900 h-screen overflow-hidden'>
-            <Login/>
-        </div>
-        {/* <div id='authorized'>
+        {!authToken ? (
+          <Auth/>
+        ) : (
+          <div id='authorized'>
           <div className={firstClick ? 'flex flex-col items-center bg-stone-900 h-screen overflow-hidden' : 'flex flex-col items-center bg-stone-900 h-screen overflow-hidden'}>
             <div className={firstClick ? 'flex flex-col items-center justify-center hover:scale-105 hover:ease-in-out scale-75 duration-500 max-h-1/2 max-w-1/2' : 'grow mt-10'}>
               <img src="NetflixGPT.png" alt="NetflixGPT Logo" />
@@ -131,7 +110,7 @@ const Popup = () => {
               <h1 color='white' className ={firstClick ? 'hidden' : 'text-xl font-bold text-white text-center p-4' }>Search anything about your favorite show and get an answer with ZERO spoilers!</h1>
             </div>
           </div>
-        </div> */}
+        </div>)}
     </div>
   );
 };
