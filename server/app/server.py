@@ -97,7 +97,8 @@ app.add_middleware(
 
 @app.post("/ask")
 async def ask_question(
-    question_req: QuestionRequest, db: AsyncSession = Depends(async_get_db)
+    question_req: QuestionRequest,
+    db: AsyncSession = Depends(async_get_db)
 ) -> QuestionResponse:
     print(f"Question: {question_req.question}")
 
