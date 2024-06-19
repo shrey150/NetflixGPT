@@ -19,7 +19,7 @@ export async function initiateAuthFlow() {
     const redirectUrl = chrome.identity.getRedirectURL() + 'auth0';
     
     const options = {
-      client_id: process.env.REACT_APP_AUTH0_CLIENT_ID??'default',
+      client_id: process.env.REACT_APP_AUTH0_CLIENT_ID ?? 'default',
       redirect_uri: redirectUrl,
       response_type: "code",
       scope: "openid profile email",
@@ -29,7 +29,7 @@ export async function initiateAuthFlow() {
     const url = `https://${process.env.REACT_APP_AUTH0_DOMAIN}/authorize?${queryString}`;
 
     const resultUrl: string = await new Promise((resolve, reject) => {
-      chrome.identity.launchWebAuthFlow({ url, interactive: true }, (res) => resolve(res??'default'));
+      chrome.identity.launchWebAuthFlow({ url, interactive: true }, (res) => resolve(res ?? 'default'));
     });
     const urlObject = new URL(resultUrl);
 

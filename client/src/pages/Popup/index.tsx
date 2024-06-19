@@ -20,7 +20,7 @@ root.render(
     domain="{process.env.REACT_APP_AUTH0_DOMAIN}"
     clientId="{process.env.REACT_APP_AUTH0_CLIENT_ID}"
     authorizationParams={{
-      redirect_uri:'https://kpifcefnbjlgambbiedokmiplacoidpa.chromiumapp.org/auth0'
+      redirect_uri:'https://ekhjedpggobiiijdmdmejbddfcobakpo.chromiumapp.org/auth0'
     }}
   >
         <App />

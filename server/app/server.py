@@ -253,9 +253,9 @@ async def signin(payload: AuthRequest):
     data = response.json()
     print(data)
 
-    crud_user.create(db, object=UserCreate(
-        id=data['sub'],
-        email=data['email']
-    ))
+    # crud_user.create(db, object=UserCreate(
+    #     id=data['sub'],
+    #     email=data['email']
+    # ))
 
 

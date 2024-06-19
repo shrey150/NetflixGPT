@@ -38,7 +38,6 @@ const Popup = () => {
   const watchState = useWatchState();
   const [divRef, isOver] = Overflow()
   const [firstClick, setFirstClick] = useState(false)
-  const [parent, enableAnimations] = useAutoAnimate()
   const [authToken, setAuthToken] = useState(null)
 
   // sync chrome storage -> React state
