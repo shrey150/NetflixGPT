@@ -9,4 +9,8 @@ class UserBase(SQLModel):
 class User(UserBase, table=True):
     '''Represents the `users` table.'''
     __tablename__ = "users"
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: Optional[str] = Field(default=None, primary_key=True)
+
+class UserCreate(UserBase):
+    '''Represents a user.'''
+    id: str

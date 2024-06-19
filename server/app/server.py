@@ -1,8 +1,10 @@
 from contextlib import asynccontextmanager
+from datetime import timedelta
 from typing import Optional
 from celery import chain, group
 from fastapi import BackgroundTasks, FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import ValidationError
 from starlette.config import Config
 from starlette.responses import RedirectResponse
@@ -10,7 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import os
 from langchain.memory import ConversationBufferMemory
 from langchain_core.prompts import PromptTemplate
-import re
+import requests
 import tldextract
 from logging import Logger
 
@@ -31,14 +33,16 @@ from .models.crunchyroll import EpisodeData as CrunchyrollEpisode
 from .models.title import Title, TitleBase, TitleCreate
 from .models.conversation import Conversation
 from .models.message import Message
-from .models.user import User
+from .models.user import User, UserBase, UserCreate
+from .models.auth import AuthRequest
 from .models.metadata import MetadataRequest
 from .tasks import find_fandom_sub, summarize_episode_fandom, scrape_episode_fandom
 
 from .scraper import Scraper
 from . import utils
 from config import settings
-from .crud import crud_episode, crud_title
+from .crud import crud_episode, crud_title, crud_user
+from .auth import verify_google_token, create_access_token, get_current_user, TokenData, Token
 
 import spacy
 import json
@@ -93,7 +97,8 @@ app.add_middleware(
 
 @app.post("/ask")
 async def ask_question(
-    question_req: QuestionRequest, db: AsyncSession = Depends(async_get_db)
+    question_req: QuestionRequest,
+    db: AsyncSession = Depends(async_get_db)
 ) -> QuestionResponse:
     print(f"Question: {question_req.question}")
 
@@ -135,6 +140,15 @@ async def ask_question(
     )
 
 
+def find_netflix_episode(data: NetflixPayload) -> (NetflixEpisode, int, int):
+    for season_num, season in enumerate(data.video.seasons):
+        for ep_num, episode in enumerate(season.episodes):
+            if episode.episodeId == data.video.currentEpisode:
+                # convert from zero-indexing to 1-indexing
+                return (episode, season_num+1, ep_num+1)
+
+    raise HTTPException(status_code=400, detail="Episode metadata not found in Netflix payload")
+
 async def generate_keywords(titleID: int, db: AsyncSession = Depends(async_get_db)):
     # get title
     title = await crud_title.get(db, id=titleID)
@@ -167,11 +181,47 @@ async def generate_keywords(titleID: int, db: AsyncSession = Depends(async_get_d
     return keywords  # for testing
 
 
+async def ensure_all_episodes_in_db(data: NetflixPayload, db: AsyncSession, title_id: int):
+    parallel_scraper_tasks = []
+    
+    print(f'Ensuring all episodes exist for title id {title_id}')
+    title = await crud_title.get(db, id=title_id)
+
+    for season_num, season in enumerate(data.video.seasons):
+        for ep_num, netflix_episode in enumerate(season.episodes):
+            episode_name = netflix_episode.title
+            if not await crud_episode.exists(db, name=episode_name, title_id=title_id):
+                print(f'Discovered episode {episode_name}')
+                episode = await crud_episode.create(db, object=EpisodeCreate(
+                    name=episode_name,
+                    synopsis=netflix_episode.synopsis,
+                    title_id=title_id,
+                    # account for zero-indexing -> 1-indexing
+                    season_num=season_num+1,
+                    ep_num=ep_num+1,
+                ))
+
+            episode = await crud_episode.get(db, name=episode_name, title_id=title_id)
+            parallel_scraper_tasks.append(process_episode(title, episode))
+
+    # execute all tasks in parallel    
+    chain(
+        find_fandom_sub.s(title),
+        group(parallel_scraper_tasks),
+    ).delay()
+
+def process_episode(title, episode):
+    return chain(
+        scrape_episode_fandom.s(episode),
+        summarize_episode_fandom.s()
+    )
+
 @app.post("/metadata")
 async def parse_metadata(
     payload: MetadataRequest,
     background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(async_get_db),
+    current_user: TokenData = Depends(get_current_user)
 ):
     site_info = tldextract.extract(payload.url)
 
@@ -183,6 +233,22 @@ async def parse_metadata(
             return await resolve_crunchyroll(payload, background_tasks, db)
 
         case _:
-            raise HTTPException(
-                status_code=400, detail="Unsupported streaming provider"
-            )
+            raise HTTPException(status_code=400, detail="Unsupported streaming provider")
+
+@app.post("/signin")
+async def signin(payload: AuthRequest):
+    response = requests.get(
+        url=f'https://{settings.REACT_APP_AUTH0_DOMAIN}/userinfo',
+        headers={'Authorization': f'Bearer {payload.auth_token}'},
+        timeout=5
+    )
+    response.raise_for_status()
+    data = response.json()
+    print(data)
+
+    # crud_user.create(db, object=UserCreate(
+    #     id=data['sub'],
+    #     email=data['email']
+    # ))
+
+

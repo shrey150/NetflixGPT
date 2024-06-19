@@ -44,6 +44,13 @@ asgiref = "^3.8.1"
 pinecone = "^4.0.0"
 langchain-pinecone = "^0.1.1"
 langchain-huggingface = "^0.0.3"
+python-jose = "^3.3.0"
+python-multipart = "^0.0.9"
+lxml = "^5.2.2"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.1"
+lxml = "^5.2.2"
 
 [build-system]
 requires = ["poetry-core"]
