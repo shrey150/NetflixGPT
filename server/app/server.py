@@ -103,14 +103,6 @@ async def ask_question(
 
     title = await crud_title.get(db, id=question_req.title_id)
     episode = await crud_episode.get(db, id=question_req.episode_id)
-current_file_dir = os.path.dirname(os.path.realpath(__file__))
-env_path = os.path.join(current_file_dir, "..", ".env")
-config = Config(env_path)
-
-# @app.post("/titles/{title_id}/episodes/{episode_id}/questions")
-# async def ask_question(title_id: str, episode_id: str, question_req: QuestionRequest) -> TitleAnswer:
-    
-#     question = question_req.question
 
     print(f"Title: {title}")
     print(f"Episode: {episode}")
