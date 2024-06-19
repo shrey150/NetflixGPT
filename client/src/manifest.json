@@ -6,7 +6,9 @@
   "host_permissions": [
     "https://www.netflix.com/watch/*",
     "https://www.crunchyroll.com/watch/*",
-    "https://dev-ackj62fc7eqgx5sq.us.auth0.com/*"
+    "https://dev-ackj62fc7eqgx5sq.us.auth0.com/*",
+    "http://localhost:8000/*",
+    "chrome-extension://ekhjedpggobiiijdmdmejbddfcobakpo/*"
   ],
   "options_page": "options.html",
   "background": {
