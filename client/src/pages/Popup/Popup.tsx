@@ -47,8 +47,15 @@ const Popup = () => {
   }, []);
 
   const handleSyncWatchState = (changes: any) => {
-    console.log('NetflixGPT> [DEBUG] updating popup watch state:', changes["watchState"].newValue);
-    useWatchState.setState(changes["watchState"].newValue as TitleInfo);
+    if ("watchState" in changes) {
+      console.log('NetflixGPT> [DEBUG] updating popup watch state:', changes["watchState"].newValue);
+      useWatchState.setState(changes["watchState"].newValue as TitleInfo);
+    }
+
+    if ("authToken" in changes) {
+      console.log('NetflixGPT> [DEBUG] updating auth state');
+      setAuthToken(changes["authToken"].newValue);
+    }
   }
 
   // fetch title info from memory on page load
@@ -73,7 +80,7 @@ const Popup = () => {
   return (
       <div>
         {!authToken ? (
-          <Auth/>
+          <Auth />
         ) : (
           <div id='authorized'>
           <div className={firstClick ? 'flex flex-col items-center bg-stone-900 h-screen overflow-hidden' : 'flex flex-col items-center bg-stone-900 h-screen overflow-hidden'}>
@@ -98,13 +105,13 @@ const Popup = () => {
               </div>
             </div>
             <h1 className={isOver ? 'peer-hover:opacity-100 opacity-0 peer-hover:animate-bounce text-xl text-white' : 'opacity-0' }>▼</h1>
-            <div ref={parent} className={firstClick ? 'flex flex-col justify-center items-center m-auto self-end duration-500' : 'absolute my-48'}>
+            <div className={firstClick ? 'flex flex-col justify-center items-center m-auto self-end duration-500' : 'absolute my-48'}>
               <hr className={firstClick ? 'w-48' : 'hidden'}/>
               <ChatBox 
                 onClick={(q: string) => fetchAnswer(q)} 
                 firstClick={firstClick} 
                 setFirstClick={setFirstClick}
-                enableAnimations ={enableAnimations}
+                enableAnimations={() => {}}
               />
               <h1 color='white' className ={firstClick ? 'hidden' : 'text-xl font-bold text-white text-center p-4' }>Search anything about your favorite show and get an answer with ZERO spoilers!</h1>
             </div>

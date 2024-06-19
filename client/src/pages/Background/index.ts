@@ -67,14 +67,14 @@ export async function initiateAuthFlow() {
 
     if (result && result.access_token) {
       chrome.storage.local.set({ authToken: result.access_token }).then(() => {
-        console.log('Value is set');
+        console.log('Auth token stored in local storage');
       });
 
       const body = JSON.stringify({
         auth_token: result.access_token,
       });
 
-      await fetch('http://localhost:8000/signin', {
+      const res = await fetch('http://localhost:8000/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -82,7 +82,9 @@ export async function initiateAuthFlow() {
         body: body,
       });
 
-      return result.access_token;
+      if (res.ok) {
+        console.log('User signed in');
+      }
     } else {
       throw new Error('Auth0 Authentication Data was invalid');
     }
