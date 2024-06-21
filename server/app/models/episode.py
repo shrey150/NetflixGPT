@@ -13,6 +13,7 @@ class EpisodeBase(SQLModel):
     synopsis: str # The high-level, one-line summary for an episode usually provided for TV networks. This is NOT the full summary.
     season_num: int = Field(nullable=False)
     ep_num: int = Field(nullable=False)
+    abs_ep_num: int = Field(nullable=False)
 
 class Episode(EpisodeBase, table=True):
     '''Represents the `episodes` table.'''

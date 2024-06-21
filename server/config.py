@@ -7,6 +7,8 @@ current_file_dir = os.path.dirname(os.path.realpath(__file__))
 env_path = os.path.join(current_file_dir, "..", ".env")
 config = Config(env_path)
 
+SUMMARY_RELIABILITY_THRESHOLD = 0.40
+
 class PromptSettings(BaseSettings):
     PROMPT_REG_TXT_PATH: str = os.path.join(current_file_dir, 'data/prompt.txt')
     PROMPT_REG_JSON_PATH: str = os.path.join(current_file_dir, 'data/prompt.txt')

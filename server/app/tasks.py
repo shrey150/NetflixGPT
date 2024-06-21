@@ -173,17 +173,7 @@ async def summarize_episode_fandom_async(payload: dict) -> Summary:
         is_primary=False,
     )
 
-    async_to_sync(write_summary_to_db)(summary_create)
-
-    return FandomSummaryPayload(
-        sub=payload.sub,
-        source_id=payload.source_id,
-        title_id=payload.title_id,
-        raw_text=payload.raw_text,
-        url=payload.url,
-        ep_id=payload.ep_id,
-        text=text,
-    ).model_dump()
+    return await write_summary_to_db(summary_create)
 
 async def write_summary_to_db(summary: SummaryCreate) -> Summary:
     async for db in async_get_db():

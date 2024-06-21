@@ -30,6 +30,7 @@ async def ensure_all_episodes_in_db(data: NetflixPayload, db: AsyncSession, titl
     print(f'Ensuring all episodes exist for title id {title_id}')
     title = await crud_title.get(db, id=title_id)
 
+    abs_ep_count = 1
     for season_num, season in enumerate(data.video.seasons):
         for ep_num, netflix_episode in enumerate(season.episodes):
             episode_name = netflix_episode.title
@@ -39,14 +40,15 @@ async def ensure_all_episodes_in_db(data: NetflixPayload, db: AsyncSession, titl
                     name=episode_name,
                     synopsis=netflix_episode.synopsis,
                     title_id=title_id,
+                    abs_ep_num = abs_ep_count,
                     # account for zero-indexing -> 1-indexing
                     season_num=season_num+1,
                     ep_num=ep_num+1,
                 ))
+                abs_ep_count += 1
 
             episode = await crud_episode.get(db, name=episode_name, title_id=title_id)
             parallel_scraper_tasks.append(process_episode(title, episode))
-            break
 
     await generate_keywords(title_id, db)
 
