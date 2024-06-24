@@ -31,6 +31,7 @@ def find_crunchyroll_episode(data: CrunchyPayload) -> (CrunchyrollEpisode, int, 
 async def ensure_all_episodes_in_db_crunchy(data: CrunchyPayload, db: AsyncSession, title_id: int):
     parallel_scraper_tasks = []
     title = await crud_title.get(db, id=title_id)
+    abs_ep_count = 1
     for season_num, season in enumerate(data.seasons):
         for ep_num, episode in enumerate(season.data):
             episode_name = episode.title
@@ -40,10 +41,12 @@ async def ensure_all_episodes_in_db_crunchy(data: CrunchyPayload, db: AsyncSessi
                     name=episode_name,
                     synopsis=episode.description,
                     title_id=title_id,
+                    abs_ep_num = abs_ep_count,
                     # account for zero-indexing -> 1-indexing
                     season_num=season_num+1,
                     ep_num=ep_num+1,
                 ))
+                abs_ep_count += 1
 
                 episode = await crud_episode.get(db, name=episode_name, title_id=title_id)
                 parallel_scraper_tasks.append(process_episode(title, episode))
@@ -88,6 +91,7 @@ async def resolve_crunchyroll(
             name=episode_name,
             synopsis=crunchyroll_episode.description,
             season_num=season_num,
+            abs_ep_num = -1, #TODO: how do we calculate the abs episode number for the first watched episode?
             ep_num=ep_num,
             title_id=title["id"])
         )

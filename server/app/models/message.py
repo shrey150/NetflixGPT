@@ -10,7 +10,7 @@ import enum
 class MessageBase(SQLModel):
     '''Represents a message in a conversation.'''
     conversation_id: int = Field(foreign_key="conversations.id", nullable=False)
-    user_id: int = Field(foreign_key="users.id", nullable=False)
+    user_id: str = Field(foreign_key="users.id", nullable=False)
     content: str = Field(nullable=False)
     role: str # CHECK (role IN ('user', 'bot'))
     created_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)

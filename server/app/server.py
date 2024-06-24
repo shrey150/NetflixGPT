@@ -36,7 +36,7 @@ from .models.message import Message
 from .models.user import User, UserBase, UserCreate
 from .models.auth import AuthRequest
 from .models.metadata import MetadataRequest
-from .tasks import find_fandom_sub, summarize_episode_fandom, scrape_episode_fandom
+from .tasks import find_fandom_sub, summarize_episode_fandom, scrape_episode_fandom, process_episode
 
 from .scraper import Scraper
 from . import utils
@@ -172,24 +172,18 @@ async def ensure_all_episodes_in_db(data: NetflixPayload, db: AsyncSession, titl
             episode = await crud_episode.get(db, name=episode_name, title_id=title_id)
             parallel_scraper_tasks.append(process_episode(title, episode))
 
-    # execute all tasks in parallel    
+    # execute all tasks in parallel
     chain(
         find_fandom_sub.s(title),
         group(parallel_scraper_tasks),
     ).delay()
-
-def process_episode(title, episode):
-    return chain(
-        scrape_episode_fandom.s(episode),
-        summarize_episode_fandom.s()
-    )
 
 @app.post("/metadata")
 async def parse_metadata(
     payload: MetadataRequest,
     background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(async_get_db),
-    current_user: TokenData = Depends(get_current_user)
+    #current_user: TokenData = Depends(get_current_user)
 ):
     site_info = tldextract.extract(payload.url)
 

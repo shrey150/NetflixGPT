@@ -9,7 +9,7 @@ import enum
 
 class ConversationBase(SQLModel):
     '''Represents a conversation.'''
-    user_id: int = Field(foreign_key="users.id", nullable=False)
+    user_id: str = Field(foreign_key="users.id", nullable=False)
     started_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
     updated_at: datetime = Field(default_factory=datetime.utcnow, nullable=False, 
                                  description="TODO eventually use a DB trigger to update this automatically")

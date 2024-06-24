@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from ..ner import search_rules_generator
 
 class FandomSubPayload(BaseModel):
     sub: str

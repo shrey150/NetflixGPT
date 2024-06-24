@@ -95,6 +95,7 @@ async def resolve_netflix(
             name=episode_name,
             synopsis=netflix_episode.synopsis,
             season_num=season_num,
+            abs_ep_num = -1, #TODO: how do we calculate the abs episode number for the first watched episode?
             ep_num=ep_num,
             title_id=title["id"])
         )
