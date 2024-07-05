@@ -71,6 +71,7 @@ def calculate_reliability_score(candidate_text: str, title_keywords: dict[str, f
     return intersection_weight / candidate_weight if candidate_weight > 0 else 0.0
 
 def search_rules_generator(episode: Episode, source: str, streaming_provider: str = "netflix"):
+    episode = Episode(**episode)
     # Crunchyroll overrides source rules
     if streaming_provider == "crunchyroll":
         search_sequence = [] # TODO: implement crunchyroll search rules

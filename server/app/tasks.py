@@ -33,6 +33,35 @@ from .vecstore import text_splitter, embeddings, index
 
 app = Celery('tasks', broker=settings.REDIS_QUEUE_URI)
 
+class SearchTermGenerator:
+    def __init__(self, episode, source):
+        self.episode = episode
+        self.source = source
+        self.search_terms = list(search_rules_generator(episode, source))
+        self.current_index = 0
+
+    def get_next(self):
+        if self.current_index < len(self.search_terms):
+            search_term = self.search_terms[self.current_index]
+            self.current_index += 1
+            return search_term
+        return None
+
+    def to_dict(self):
+        return {
+            'episode': self.episode,
+            'source': self.source,
+            'search_terms': self.search_terms,
+            'current_index': self.current_index,
+        }
+
+    @staticmethod
+    def from_dict(data):
+        obj = SearchTermGenerator(data['episode'], data['source'])
+        obj.search_terms = data['search_terms']
+        obj.current_index = data['current_index']
+        return obj
+
 @app.task
 def find_fandom_sub(
     title: dict,
@@ -220,11 +249,12 @@ def index_episode(payload: dict):
 
     return {"status": "indexed"}
 
-@app.task(bind=True)
-async def feedback_loop(title: dict, episode: dict, search_term_generator: tuple) -> Summary:
-    search_list, idx = search_term_generator
+@app.task
+async def feedback_loop(title: dict, episode: dict, search_term_generator: dict) -> Summary:
+    generator = SearchTermGenerator.from_dict(search_term_generator)
+    search_term = generator.get_next()
 
-    if idx >= len(search_list):
+    if search_term is None:
         print("All search attempts exhausted, using episode synopsis fallback...")
         summary_create = SummaryCreate(
             sub=None,
@@ -239,21 +269,20 @@ async def feedback_loop(title: dict, episode: dict, search_term_generator: tuple
         )
         return await write_summary_to_db(summary_create)
     
-    search_term = search_list[idx]
     print("Search term:", search_term)
 
     # Continue with the scraping, summarizing, and validation process
     return chain(
         scrape_episode_fandom.s(episode, search_term),
         summarize_episode_fandom.s(),
-        validate_summary.s(title, episode, search_term_generator)
+        validate_summary.s(title, episode, generator.to_dict())
     ).apply_async()
 
-@app.task(bind=True)
-def validate_summary(payload: dict, title: dict, episode: dict, search_term_generator: tuple) -> dict:
+@app.task
+def validate_summary(payload: dict, title: dict, episode: dict, search_term_generator: dict) -> dict:
     payload: SummaryCreate = SummaryCreate(**payload)
     reliability_score = payload.reliability_score
-    search_list, idx = search_term_generator
+    generator = SearchTermGenerator.from_dict(search_term_generator)
 
     if reliability_score >= SUMMARY_RELIABILITY_THRESHOLD:
         print(f'Indexing {episode.name} with score {reliability_score}...')
@@ -263,15 +292,12 @@ def validate_summary(payload: dict, title: dict, episode: dict, search_term_gene
         ).apply_async()
     else:
         print(f'Retrying {episode.name} with score {reliability_score}...')
-        return feedback_loop.s(title, episode, (search_list, idx + 1)).apply_async()
-
+        return feedback_loop.s(title, episode, generator.to_dict()).apply_async()
 
 # entry point for our processing pipeline
 def process_episode(title: dict, episode: dict):
-    search_term_list = list(search_rules_generator(Episode(**episode), 'fandom'))
-    search_term_generator = (search_term_list, 0)
-    print("Pseudo-generator:", search_term_generator)
-    return feedback_loop.s(title, episode, search_term_generator)
+    generator = SearchTermGenerator(episode, 'fandom')
+    return feedback_loop.s(title, episode, generator.to_dict())
     # return chain(
         # scrape_episode_fandom.s(episode),
         # summarize_episode_fandom.s(),
